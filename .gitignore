@@ -12,10 +12,9 @@
 # Do not ignore source, config and plugins dirs.
 !/Source/**
 !/Config/**
-!/Plugins/MineCore/Config**
-!/Plugins/MineCore/Content**
-!/Plugins/MineCore/Resources**
-!/Plugins/MineCore/Source**
+!/Plugins/**
+/Plugins/MineCore/Intermediate/**
+/Plugins/MineCore/Binaries/**
 
 # Only allow .uasset and .umap files from /Content dir.
 # They're tracked by git-lfs, don't forget to track other
