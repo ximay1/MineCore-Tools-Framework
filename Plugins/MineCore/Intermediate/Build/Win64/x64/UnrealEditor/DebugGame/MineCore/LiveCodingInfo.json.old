@@ -1,0 +1,14 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.MineCore.cpp.obj": [
+			"MC_ResourceNode.gen.cpp.obj",
+			"MC_ResourceNodeConfig.gen.cpp.obj",
+			"MineCore.init.gen.cpp.obj",
+			"PerModuleInline.gen.cpp.obj",
+			"MC_ResourceNode.cpp.obj",
+			"MC_ResourceNodeConfig.cpp.obj",
+			"MineCore.cpp.obj"
+		]
+	}
+}

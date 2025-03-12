@@ -1,0 +1,15 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-MineCore.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"D:\Work\UE5\UE5.5 Projects\Projects\MCTF\Intermediate\Build\Win64\x64\MCTFEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.obj"
+"D:\Work\UE5\UE5.5 Projects\Projects\MCTF\Plugins\MineCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\MineCore\Module.MineCore.cpp.obj"
+"D:\Work\UE5\UE5.5 Projects\Projects\MCTF\Plugins\MineCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\MineCore\MineCore.cpp.obj"
+"D:\Work\UE5\UE5.5 Projects\Projects\MCTF\Plugins\MineCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\MineCore\MC_ResourceNode.cpp.obj"
+"D:\Work\UE5\UE5.5 Projects\Projects\MCTF\Plugins\MineCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\MineCore\MC_ResourceNodeConfig.cpp.obj"
+"D:\Work\UE5\UE5.5 Projects\Projects\MCTF\Plugins\MineCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\MineCore\Default.rc2.res"
+/OUT:"D:\Work\UE5\UE5.5 Projects\Projects\MCTF\Plugins\MineCore\Intermediate\Build\Win64\x64\UnrealEditor\Development\MineCore\UnrealEditor-MineCore.lib"
