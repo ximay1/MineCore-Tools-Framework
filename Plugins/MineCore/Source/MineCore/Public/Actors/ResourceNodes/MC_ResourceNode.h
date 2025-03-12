@@ -42,12 +42,16 @@ public:
     AMC_ResourceNode();
 
     /** Starts the mining process on the node. */
-    UFUNCTION(Server, Unreliable, WithValidation)
+    UFUNCTION(Server, Unreliable)
     virtual void Server_StartMining(AActor* Miner);
 
     /** Stops the mining process on the node. */
     UFUNCTION(Server, Unreliable)
     virtual void Server_StopMining(AActor* Miner);
+
+    /** Shows the widget if the player is unable to mine */
+    UFUNCTION(Client, Unreliable)
+    virtual void Client_DisplayMiningDeniedWidget();
 
     /** Checks if the node can be mined. */
     virtual bool CanBeMined() const;	

@@ -5,16 +5,11 @@
 AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(1,4)))
 {
     PrimaryActorTick.bCanEverTick = false;
-
+    bReplicates = true;
+    
     // Create the static mesh component and set it as the root
     StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
     RootComponent = StaticMesh;
-}
-
-bool AMC_ResourceNode::Server_StartMining_Validate(AActor* Miner)
-{
-    //TODO: Check if player has a pickaxe
-    return true;
 }
 
 void AMC_ResourceNode::Server_StartMining_Implementation(AActor* Miner)
@@ -24,16 +19,28 @@ void AMC_ResourceNode::Server_StartMining_Implementation(AActor* Miner)
 
 void AMC_ResourceNode::Server_StopMining_Implementation(AActor* Miner)
 {
+    
+}
+
+void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation()
+{
+    //Get Player Controller
+    if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+    {
+        //TODO:Create Widget and show widget
+    }
 }
 
 bool AMC_ResourceNode::CanBeMined() const
 {
+    //TODO: Check if the player has a pickaxe
     return true;
 }
 
 float AMC_ResourceNode::GetMiningProgress() const
 {
-    return 1.0f;
+    //TODO: Update remain time in MiningComponent
+    return 1.0f; 
 }
 
 EResourceNodeType AMC_ResourceNode::GetMiningResourceType() const
