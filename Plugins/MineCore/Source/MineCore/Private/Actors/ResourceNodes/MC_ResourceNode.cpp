@@ -36,6 +36,11 @@ float AMC_ResourceNode::GetMiningProgress() const
     return 1.0f;
 }
 
+EResourceNodeType AMC_ResourceNode::GetMiningResourceType() const
+{
+    return ResourceNodeConfigPtr->ResourceNodeType;
+}
+
 void AMC_ResourceNode::BeginPlay()
 {
     Super::BeginPlay();

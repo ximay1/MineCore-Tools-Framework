@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Data/ResourceNode/MC_ResourceNodeConfig.h"
 #include "GameFramework/Actor.h"
 #include "MC_ResourceNode.generated.h"
 
@@ -57,7 +56,7 @@ public:
     virtual float GetMiningProgress() const;
 	
     /** Returns the type of resource the node yields. */
-    FORCEINLINE virtual EResourceNodeType GetMiningResourceType() const { return ResourceNodeConfigPtr->ResourceNodeType; }
+    virtual EResourceNodeType GetMiningResourceType() const;
     
 protected:
     /** Called when the game starts or when spawned */
