@@ -10,8 +10,7 @@ struct FStreamableHandle;
 UENUM(BlueprintType)
 enum class EResourceNodeState : uint8
 {
-    NONE        UMETA(DisplayName = "No Resources"), // No resources available
-    STATE_1     UMETA(DisplayName = "State 1"),
+    STATE_1     UMETA(DisplayName = "State 1"), // No resources available
     STATE_2     UMETA(DisplayName = "State 2"),
     STATE_3     UMETA(DisplayName = "State 3"),
     STATE_4     UMETA(DisplayName = "State 4")
@@ -42,23 +41,25 @@ public:
     AMC_ResourceNode();
 
     /** Starts the mining process on the node. */
-    UFUNCTION(Server, Unreliable)
-    virtual void Server_StartMining(AActor* Miner);
+    UFUNCTION(Server, Reliable)
+    virtual void Server_StartMining(APlayerController* PlayerController);
 
     /** Stops the mining process on the node. */
-    UFUNCTION(Server, Unreliable)
-    virtual void Server_StopMining(AActor* Miner);
+    UFUNCTION(Server, Reliable)
+    virtual void Server_StopMining(APlayerController* PlayerController);
 
     /** Shows the widget if the player is unable to mine */
-    UFUNCTION(Client, Unreliable)
-    virtual void Client_DisplayMiningDeniedWidget();
+    UFUNCTION(Client, Reliable)
+    virtual void Client_DisplayMiningDeniedWidget(APlayerController* PlayerController);
 
+//#if WITH_SERVER_CODE
     /** Checks if the node can be mined. */
-    virtual bool CanBeMined() const;	
-	
-    /** Returns the current mining progress (percentage). */
-    virtual float GetMiningProgress() const;
-	
+    virtual bool Server_CanBeMined() const;
+
+    /** Called when the player mines a resource */
+    void PlayerMineResource(APlayerController* PlayerController);
+//#endif
+    
     /** Returns the type of resource the node yields. */
     virtual EResourceNodeType GetMiningResourceType() const;
     
@@ -106,4 +107,7 @@ private:
     
     /** Handle for asynchronously loading the resource node configuration */
     TSharedPtr<FStreamableHandle> ResourceNodeConfigHandle;
+
+    /** Timer handle for managing the mining node */
+    FTimerHandle MineResourceNodeTimerHandle;
 };

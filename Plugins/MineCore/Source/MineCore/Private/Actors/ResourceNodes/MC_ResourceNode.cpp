@@ -12,36 +12,71 @@ AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNo
     RootComponent = StaticMesh;
 }
 
-void AMC_ResourceNode::Server_StartMining_Implementation(AActor* Miner)
+void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)
 {
-    
-}
-
-void AMC_ResourceNode::Server_StopMining_Implementation(AActor* Miner)
-{
-    
-}
-
-void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation()
-{
-    //Get Player Controller
-    if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+    //Check if the player is able to mine
+    if (!Server_CanBeMined())
     {
-        //TODO:Create Widget and show widget
+        //Create Delegate
+        FTimerDelegate MineResourceNodeDelegate = FTimerDelegate::CreateUObject(this, AMC_ResourceNode::PlayerMineResource, PlayerController);
+        
+        //Set timer
+        GetWorldTimerManager().SetTimer(MineResourceNodeTimerHandle, MineResourceNodeDelegate, ResourceNodeConfigPtr->MiningTime, true);
+        
+        //TODO: Create progress bar widget
+    }
+    else
+    {
+        //If the player can't mine, we have to show a error widget
+        Client_DisplayMiningDeniedWidget(PlayerController);
     }
 }
 
-bool AMC_ResourceNode::CanBeMined() const
+void AMC_ResourceNode::Server_StopMining_Implementation(APlayerController* PlayerController)
 {
-    //TODO: Check if the player has a pickaxe
+    
+}
+
+void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerController* PlayerController)
+{
+    //Get Player Controller
+    if (PlayerController)
+    {
+        //TODO:Create Widget and show widget
+        UE_LOG(LogTemp, Error, TEXT("Displaying mining denied widget from server"));
+    }
+}
+
+//#if WITH_SERVER_CODE
+bool AMC_ResourceNode::Server_CanBeMined() const
+{
     return true;
 }
 
-float AMC_ResourceNode::GetMiningProgress() const
+void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
 {
-    //TODO: Update remain time in MiningComponent
-    return 1.0f; 
+    //Check
+    checkf(PlayerController, TEXT("Player Controller is nullptr, AMC_ResourceNode::PlayerMineResource"))
+
+    //Clear Timer
+    GetWorldTimerManager().ClearTimer(MineResourceNodeTimerHandle);
+
+    //Check if ResourceNodeState isn't STATE_1
+    if (ResourceNodeState != EResourceNodeState::STATE_1)
+    {
+        //Decrease State of this Node
+        ResourceNodeState = static_cast<EResourceNodeState>(static_cast<uint8>(ResourceNodeState) - 1);
+
+        //Start again mining
+        Server_StartMining(PlayerController);
+    }
+    else
+    {
+        //Stop Mining
+        Server_StopMining(PlayerController);
+    }
 }
+//#endif
 
 EResourceNodeType AMC_ResourceNode::GetMiningResourceType() const
 {

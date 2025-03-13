@@ -22,6 +22,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
 	float TimeToIncreaseState = 5.0f;
 
+	// Time required to mine 1 resource from the node
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
+	float MiningTime = 5.0f;
+
 	//Type of the resource node
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
 	EResourceNodeType ResourceNodeType;
