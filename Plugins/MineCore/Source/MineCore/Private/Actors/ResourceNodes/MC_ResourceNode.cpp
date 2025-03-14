@@ -1,6 +1,7 @@
 #include "Actors/ResourceNodes/MC_ResourceNode.h"
 #include "Data/ResourceNode/MC_ResourceNodeConfig.h"
 #include "Engine/AssetManager.h"
+#include "Net/UnrealNetwork.h"
 
 AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(1,4)))
 {
@@ -10,6 +11,13 @@ AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNo
     // Create the static mesh component and set it as the root
     StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
     RootComponent = StaticMesh;
+}
+
+void AMC_ResourceNode::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    
+    DOREPLIFETIME(AMC_ResourceNode, StaticMesh);
 }
 
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)

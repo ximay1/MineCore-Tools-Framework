@@ -4,18 +4,25 @@
 #include "GameFramework/Actor.h"
 #include "MC_ResourceNode.generated.h"
 
+// Forward declarations
 class UMC_ResourceNodeConfig;
 struct FStreamableHandle;
 
+/**
+ * Enum representing the different states of a resource node.
+ */
 UENUM(BlueprintType)
 enum class EResourceNodeState : uint8
 {
-    STATE_1     UMETA(DisplayName = "State 1"), // No resources available
-    STATE_2     UMETA(DisplayName = "State 2"),
-    STATE_3     UMETA(DisplayName = "State 3"),
-    STATE_4     UMETA(DisplayName = "State 4")
+    STATE_1 UMETA(DisplayName = "State 1"), // No resources available
+    STATE_2 UMETA(DisplayName = "State 2"),
+    STATE_3 UMETA(DisplayName = "State 3"),
+    STATE_4 UMETA(DisplayName = "State 4")
 };
 
+/**
+ * Enum representing various types of resource nodes.
+ */
 UENUM(BlueprintType)
 enum class EResourceNodeType : uint8
 {
@@ -31,88 +38,130 @@ enum class EResourceNodeType : uint8
     TITANIUM   UMETA(DisplayName = "Titanium")
 };
 
-UCLASS(NotPlaceable)
+/**
+ * AMC_ResourceNode represents a resource node in the game world.
+ * It manages mining logic, UI feedback, state changes, and resource regeneration.
+ */
+UCLASS()
 class MINECORE_API AMC_ResourceNode : public AActor
 {
     GENERATED_BODY()
     
 public:
-    // Constructor
+    /** Constructor */
     AMC_ResourceNode();
 
-    /** Starts the mining process on the node. */
+    /** Events */
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    
+    /**
+     * Initiates the mining process on the node.
+     * Called on the server.
+     *
+     * @param PlayerController The controller of the player initiating mining.
+     */
     UFUNCTION(Server, Reliable)
     virtual void Server_StartMining(APlayerController* PlayerController);
 
-    /** Shows the widget with a progress bar for mining */
+//#if UE_SERVER
+    /**
+     * Displays the mining progress widget on the client.
+     *
+     * @param PlayerController The controller of the player.
+     */
     UFUNCTION(Client, Reliable)
     virtual void Client_DisplayMiningProgressWidget(APlayerController* PlayerController);
     
-    /** Shows the widget if the player is unable to mine */
+    /**
+     * Displays a widget informing the player that mining is denied.
+     *
+     * @param PlayerController The controller of the player.
+     */
     UFUNCTION(Client, Reliable)
     virtual void Client_DisplayMiningDeniedWidget(APlayerController* PlayerController);
 
-//#if UE_SERVER
-    /** Checks if the node can be mined. */
+    /**
+     * Checks if the resource node is in a state that allows mining.
+     *
+     * @return true if mining is allowed, false otherwise.
+     */
     virtual bool CanBeMined() const;
 
-    /** Stops the mining process on the node. */
+    /**
+     * Stops the mining process.
+     *
+     * @param IsPlayerControllerValid Indicates whether the PlayerController is valid.
+     */
     virtual void StopMining(bool IsPlayerControllerValid);
     
-    /** Called when the player mines a resource */
-    void PlayerMineResource(APlayerController* PlayerController);
+    /**
+     * Called when the player mines a resource.
+     *
+     * @param PlayerController The controller of the player.
+     */
+    virtual void PlayerMineResource(APlayerController* PlayerController);
     
 protected:
-    /** Called when the game starts or when spawned */
+    /** Called when the game starts or when spawned. */
     virtual void BeginPlay() override;
 
-    /** Function called by the timer to refresh the resource node and increment its state. */
+    /**
+     * Refreshes the resource node's state (e.g. for resource regeneration).
+     * This function is invoked periodically via a timer.
+     */
     UFUNCTION(BlueprintCallable)
     virtual void ResourceNode_Refresh();
 
-    /** Ensures PlayerController is valid, clears the timer if null */
+    /**
+     * Validates the PlayerController.
+     *
+     * @param PlayerController The controller to validate.
+     * @return true if valid, false otherwise.
+     */
     bool EnsureValidPlayerController(APlayerController* PlayerController);
     
 protected:
-    /** Current state of the resource node */
+    /** Current state of the resource node. */
     UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
     EResourceNodeState ResourceNodeState;
 
-    /** Asset Id for the resource node configuration */
+    /** Primary asset ID for the resource node configuration. */
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PrimaryAssetLoaderComponent")
     FPrimaryAssetId ResourceNodeConfigId;
     
-    /** Pointer to the resource node configuration */
+    /** Pointer to the resource node configuration asset. */
     UPROPERTY(BlueprintReadWrite, Category = "Resource Node | Config")
     TObjectPtr<UMC_ResourceNodeConfig> ResourceNodeConfigPtr;
+    
 //#endif
     
-    /** Static mesh component representing the resource node */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
+    /** Static mesh component representing the resource node. */
+    UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
     TObjectPtr<UStaticMeshComponent> StaticMesh;
-    
-private:
 
 //#if UE_SERVER
+private:
     /**
-    * Set the material for the current resource node state. 
-    * This function should be called whenever the resource node state changes.
-    */
+     * Updates the static mesh's material based on the current resource node state.
+     */
     void SetMaterialForCurrentState();
 
     /**
-    * Applies the loaded resource node configuration.
-    * Sets the refresh timer and set the material for the current state.
-    */
+     * Applies the loaded resource node configuration.
+     * Sets up timers for state refresh and initializes the material.
+     *
+     * @param LoadedConfig The loaded configuration asset.
+     */
     void ApplyResourceNodeConfig(UMC_ResourceNodeConfig* LoadedConfig);
-    
-    /** Timer handle for managing resource node updates */
+
+private:
+    /** Timer handle for refreshing the resource node state. */
     FTimerHandle ResourceNodeSpawnTimerHandle;
     
-    /** Handle for asynchronously loading the resource node configuration */
+    /** Handle for asynchronously loading the resource node configuration. */
     TSharedPtr<FStreamableHandle> ResourceNodeConfigHandle;
 
-    /** Timer handle for managing the mining node */
+    /** Timer handle for managing the mining process. */
     FTimerHandle MineResourceNodeTimerHandle;
 //#endif
 };
