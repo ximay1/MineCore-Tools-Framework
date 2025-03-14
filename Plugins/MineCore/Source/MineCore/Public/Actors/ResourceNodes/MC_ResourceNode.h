@@ -52,16 +52,12 @@ public:
     UFUNCTION(Client, Reliable)
     virtual void Client_DisplayMiningDeniedWidget(APlayerController* PlayerController);
 
-//#if WITH_SERVER_CODE
+//#if UE_SERVER
     /** Checks if the node can be mined. */
-    virtual bool Server_CanBeMined() const;
+    virtual bool CanBeMined() const;
 
     /** Called when the player mines a resource */
     void PlayerMineResource(APlayerController* PlayerController);
-//#endif
-    
-    /** Returns the type of resource the node yields. */
-    virtual EResourceNodeType GetMiningResourceType() const;
     
 protected:
     /** Called when the game starts or when spawned */
@@ -83,13 +79,15 @@ protected:
     /** Pointer to the resource node configuration */
     UPROPERTY(BlueprintReadWrite, Category = "Resource Node | Config")
     TObjectPtr<UMC_ResourceNodeConfig> ResourceNodeConfigPtr;
+//#endif
     
     /** Static mesh component representing the resource node */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
     TObjectPtr<UStaticMeshComponent> StaticMesh;
     
 private:
-    
+
+//#if UE_SERVER
     /**
     * Set the material for the current resource node state. 
     * This function should be called whenever the resource node state changes.
@@ -110,4 +108,5 @@ private:
 
     /** Timer handle for managing the mining node */
     FTimerHandle MineResourceNodeTimerHandle;
+//#endif
 };

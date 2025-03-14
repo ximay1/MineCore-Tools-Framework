@@ -15,7 +15,7 @@ AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNo
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)
 {
     //Check if the player is able to mine
-    if (!Server_CanBeMined())
+    if (!CanBeMined())
     {
         //Create Delegate
         FTimerDelegate MineResourceNodeDelegate = FTimerDelegate::CreateUObject(this, AMC_ResourceNode::PlayerMineResource, PlayerController);
@@ -47,8 +47,8 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerCo
     }
 }
 
-//#if WITH_SERVER_CODE
-bool AMC_ResourceNode::Server_CanBeMined() const
+//#if UE_SERVER
+bool AMC_ResourceNode::CanBeMined() const
 {
     return true;
 }
@@ -75,12 +75,6 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
         //Stop Mining
         Server_StopMining(PlayerController);
     }
-}
-//#endif
-
-EResourceNodeType AMC_ResourceNode::GetMiningResourceType() const
-{
-    return ResourceNodeConfigPtr->ResourceNodeType;
 }
 
 void AMC_ResourceNode::BeginPlay()
@@ -190,3 +184,4 @@ void AMC_ResourceNode::ApplyResourceNodeConfig(UMC_ResourceNodeConfig* LoadedCon
     // Set the initial material
     SetMaterialForCurrentState();
 }
+//#endif
