@@ -22,8 +22,9 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
         
         //Set timer
         GetWorldTimerManager().SetTimer(MineResourceNodeTimerHandle, MineResourceNodeDelegate, ResourceNodeConfigPtr->MiningTime, true);
-        
-        //TODO: Create progress bar widget
+
+        //Show progress bar
+        Client_DisplayMiningProgressWidget(PlayerController);
     }
     else
     {
@@ -32,9 +33,14 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
     }
 }
 
-void AMC_ResourceNode::Server_StopMining_Implementation(APlayerController* PlayerController)
+void AMC_ResourceNode::Client_DisplayMiningProgressWidget_Implementation(APlayerController* PlayerController)
 {
-    
+    //Get Player Controller
+    if (PlayerController)
+    {
+        //TODO:Create Progress bar Widget and show widget
+        UE_LOG(LogTemp, Error, TEXT("Displaying mining denied widget on the client - Player Controller - %s"), *PlayerController->GetName());
+    }
 }
 
 void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerController* PlayerController)
@@ -42,8 +48,8 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerCo
     //Get Player Controller
     if (PlayerController)
     {
-        //TODO:Create Widget and show widget
-        UE_LOG(LogTemp, Error, TEXT("Displaying mining denied widget from server"));
+        //TODO:Create Denied Widget and show widget
+        UE_LOG(LogTemp, Error, TEXT("Displaying mining denied widget on the client - Player Controller - %s"), *PlayerController->GetName());
     }
 }
 
@@ -53,16 +59,31 @@ bool AMC_ResourceNode::CanBeMined() const
     return true;
 }
 
+void AMC_ResourceNode::StopMining(bool IsPlayerControllerValid)
+{
+    /** TODO: Create logic */
+    //Check if the player controller is valid
+    if (IsPlayerControllerValid)
+    {
+        
+    }
+    else
+    {
+        
+    }
+}
+
 void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
 {
     //Check
-    checkf(PlayerController, TEXT("Player Controller is nullptr, AMC_ResourceNode::PlayerMineResource"))
-
+    checkf(PlayerController, TEXT("Player Controller is nullptr, AMC_ResourceNode::PlayerMineResource"));
+    UE_LOG(LogTemp, Log, TEXT("%s called PlayerMineResource"), *PlayerController->GetName());
+    
     //Clear Timer
     GetWorldTimerManager().ClearTimer(MineResourceNodeTimerHandle);
 
     //Check if ResourceNodeState isn't STATE_1
-    if (ResourceNodeState != EResourceNodeState::STATE_1)
+    if (ResourceNodeState != EResourceNodeState::STATE_1 && EnsureValidPlayerController(PlayerController))
     {
         //Decrease State of this Node
         ResourceNodeState = static_cast<EResourceNodeState>(static_cast<uint8>(ResourceNodeState) - 1);
@@ -73,7 +94,7 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
     else
     {
         //Stop Mining
-        Server_StopMining(PlayerController);
+        StopMining(PlayerController);
     }
 }
 
@@ -114,7 +135,7 @@ void AMC_ResourceNode::BeginPlay()
     else // If the asset is not yet loaded, request it asynchronously
     {
         // Define a delegate that will be called once the asset is loaded
-        FStreamableDelegate LoadConfigDelegate = FStreamableDelegate::CreateWeakLambda(this, [this]()
+        FStreamableDelegate LoadConfigDelegate = FStreamableDelegate::CreateLambda(this, [this]()
         {
             #if !UE_BUILD_SHIPPING
                 // Check if the asset loading handle is valid
@@ -151,6 +172,25 @@ void AMC_ResourceNode::ResourceNode_Refresh()
     //Set material 
     SetMaterialForCurrentState();
 }
+
+bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerController)
+{
+    //Check if the player controller is valid
+    if (IsValid(PlayerController))
+    {
+        // PlayerController is valid, return true.
+        return true;
+    }
+    else
+    {
+        //Log Error
+        UE_LOG(LogTemp, Error, TEXT("Player Controller isn't valid. File: %s, Line: %d"), *FString(__FILE__), __LINE__);
+        
+        // PlayerController is null, return false.
+        return false;
+    }
+}
+
 void AMC_ResourceNode::SetMaterialForCurrentState()
 {
     // Apply the material to the static mesh

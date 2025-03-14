@@ -44,10 +44,10 @@ public:
     UFUNCTION(Server, Reliable)
     virtual void Server_StartMining(APlayerController* PlayerController);
 
-    /** Stops the mining process on the node. */
-    UFUNCTION(Server, Reliable)
-    virtual void Server_StopMining(APlayerController* PlayerController);
-
+    /** Shows the widget with a progress bar for mining */
+    UFUNCTION(Client, Reliable)
+    virtual void Client_DisplayMiningProgressWidget(APlayerController* PlayerController);
+    
     /** Shows the widget if the player is unable to mine */
     UFUNCTION(Client, Reliable)
     virtual void Client_DisplayMiningDeniedWidget(APlayerController* PlayerController);
@@ -56,6 +56,9 @@ public:
     /** Checks if the node can be mined. */
     virtual bool CanBeMined() const;
 
+    /** Stops the mining process on the node. */
+    virtual void StopMining(bool IsPlayerControllerValid);
+    
     /** Called when the player mines a resource */
     void PlayerMineResource(APlayerController* PlayerController);
     
@@ -67,6 +70,9 @@ protected:
     UFUNCTION(BlueprintCallable)
     virtual void ResourceNode_Refresh();
 
+    /** Ensures PlayerController is valid, clears the timer if null */
+    bool EnsureValidPlayerController(APlayerController* PlayerController);
+    
 protected:
     /** Current state of the resource node */
     UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
