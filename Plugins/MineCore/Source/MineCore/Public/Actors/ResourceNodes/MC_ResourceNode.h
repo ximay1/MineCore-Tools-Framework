@@ -48,9 +48,7 @@ inline EResourceNodeState operator+(const EResourceNodeState NodeState, uint8 Nu
     uint8 NewValue = static_cast<uint8>(NodeState);
 
     // Check if the addition would exceed the maximum valid value for EResourceNodeState
-    const uint8 MaxValue = static_cast<uint8>(EResourceNodeState::STATE_4);
-
-    if (NewValue + Number > MaxValue)
+    if (NewValue + Number > static_cast<uint8>(EResourceNodeState::STATE_4))
     {
         // Log a warning about overflow
         UE_LOGFMT(LogResourceNode, Warning, "Overflow detected in EResourceNodeState addition! NodeState: {0}, Number: {1}", NewValue, Number);
