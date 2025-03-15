@@ -199,8 +199,8 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
     }
     else
     {
-        //Log Error
-        UE_LOGFMT(LogResourceNode, Error, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
+        //Log Warning
+        UE_LOGFMT(LogResourceNode, Warning, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
 
         //Clear timer
         GetWorldTimerManager().ClearTimer(MineResourceNodeTimerHandle);
@@ -221,9 +221,10 @@ void AMC_ResourceNode::OnRep_CurrentMaterial()
 
 void AMC_ResourceNode::SetMaterialForCurrentState()
 {
-    // Set the material
+    //Find and check
     if (UMaterial* Material = ResourceNodeConfigPtr->ResourceNodeMaterials.FindChecked(ResourceNodeState))
     {
+        // Set the material
         CurrentMaterial = Material;
     }
     else
@@ -237,6 +238,7 @@ void AMC_ResourceNode::ApplyResourceNodeConfig(UMC_ResourceNodeConfig* LoadedCon
 {
     if (!ensureAlways(LoadedConfig)) { return; }
 
+    //Set
     ResourceNodeConfigPtr = LoadedConfig;
 
     // Set the timer to refresh the resource node
