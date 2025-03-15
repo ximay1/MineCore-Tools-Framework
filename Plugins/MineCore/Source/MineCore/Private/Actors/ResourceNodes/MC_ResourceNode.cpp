@@ -65,6 +65,7 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerCo
 //#if UE_SERVER
 bool AMC_ResourceNode::CanBeMined() const
 {
+    /** Create Logic here */
     return true;
 }
 
@@ -84,10 +85,6 @@ void AMC_ResourceNode::StopMining(bool IsPlayerControllerValid)
 
 void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
 {
-    //Check
-    checkf(PlayerController, TEXT("Player Controller is nullptr, AMC_ResourceNode::PlayerMineResource"));
-    UE_LOGFMT(LogResourceNode, Log, "{0} called PlayerMineResource", PlayerController->GetName());
-    
     //Check if the player controller is valid
     bool IsPlayerControlerValid = EnsureValidPlayerController(PlayerController);
     
@@ -103,23 +100,19 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
             //Start again mining
             Server_StartMining(PlayerController);
         }
-        else
-        {
-            //Stop mining
-            StopMining(IsPlayerControlerValid);
-        }
+
+        return;
     }
-    else
-    {
-        //Stop Mining (Player Controller is false)
-        StopMining(IsPlayerControlerValid);
-    }
+
+    //Stop mining
+    StopMining(IsPlayerControlerValid);
 }
 
 void AMC_ResourceNode::BeginPlay()
 {
     Super::BeginPlay();
 
+    /** TODO: Change HasAuthority to #if UE_SERVER */
     if (HasAuthority())
     {
 #if !UE_BUILD_SHIPPING
@@ -205,6 +198,12 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
     {
         //Log Error
         UE_LOGFMT(LogResourceNode, Error, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
+
+        //Clear timer
+        GetWorldTimerManager().ClearTimer(MineResourceNodeTimerHandle);
+
+        //Set Player Controller to nullptr
+        PlayerController = nullptr;
         
         // PlayerController is null, return false.
         return false;
@@ -215,8 +214,6 @@ void AMC_ResourceNode::OnRep_CurrentMaterial()
 {
     //Set Material
     StaticMesh->SetMaterial(0, CurrentMaterial);
-    
-    UE_LOGFMT(LogResourceNode, Log, "OnRep_CurrentMaterial called from : {0}", HasAuthority());
 }
 
 void AMC_ResourceNode::SetMaterialForCurrentState()
