@@ -3,7 +3,7 @@
 #include "Engine/AssetManager.h"
 #include "Net/UnrealNetwork.h"
 
-AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(1,4)))
+AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(0,3)))
 {
     PrimaryActorTick.bCanEverTick = false;
     bReplicates = true;
@@ -18,6 +18,7 @@ void AMC_ResourceNode::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
     
     DOREPLIFETIME(AMC_ResourceNode, StaticMesh);
+    DOREPLIFETIME(AMC_ResourceNode, CurrentMaterial);
 }
 
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)
@@ -96,8 +97,17 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
         //Decrease State of this Node
         ResourceNodeState = ResourceNodeState - 1;
 
-        //Start again mining
-        Server_StartMining(PlayerController);
+        //Check if ResourceNodeState is STATE_1 now
+        if (ResourceNodeState != EResourceNodeState::STATE_1)
+        {
+            //Start again mining
+            Server_StartMining(PlayerController);
+        }
+        else
+        {
+            //Stop mining
+            StopMining(IsPlayerControlerValid);
+        }
     }
     else
     {
@@ -110,7 +120,9 @@ void AMC_ResourceNode::BeginPlay()
 {
     Super::BeginPlay();
 
-    #if !UE_BUILD_SHIPPING
+    if (HasAuthority())
+    {
+#if !UE_BUILD_SHIPPING
         // Valid if the ResourceNodeConfigId is set
         if (!ResourceNodeConfigId.IsValid())
         {
@@ -120,55 +132,55 @@ void AMC_ResourceNode::BeginPlay()
             Destroy(true);
             return;
         }
-    #endif
+#endif
 
-    // Get a reference to the global Asset Manager
-    UAssetManager& AssetManager = UAssetManager::Get();
+        // Get a reference to the global Asset Manager
+        UAssetManager& AssetManager = UAssetManager::Get();
 
-    // Check if the configuration asset is already loaded
-    if (UObject* AlreadyLoadedAsset = AssetManager.GetPrimaryAssetObject(ResourceNodeConfigId))
-    {
-        // Try to cast the loaded asset to the expected UMC_ResourceNodeConfig class
-        if (UMC_ResourceNodeConfig* LoadedConfig = Cast<UMC_ResourceNodeConfig>(AlreadyLoadedAsset))
+        // Check if the configuration asset is already loaded
+        if (UObject* AlreadyLoadedAsset = AssetManager.GetPrimaryAssetObject(ResourceNodeConfigId))
         {
-            // If the asset is valid and successfully cast, apply its configuration
-            ApplyResourceNodeConfig(LoadedConfig);
+            // Try to cast the loaded asset to the expected UMC_ResourceNodeConfig class
+            if (UMC_ResourceNodeConfig* LoadedConfig = Cast<UMC_ResourceNodeConfig>(AlreadyLoadedAsset))
+            {
+                // If the asset is valid and successfully cast, apply its configuration
+                ApplyResourceNodeConfig(LoadedConfig);
+            }
+            else
+            {
+                // Log a warning if the asset exists but isn't of the expected type
+                UE_LOGFMT(LogResourceNode, Warning, "Failed to cast already loaded asset to UMC_ResourceNodeConfig");
+            }
         }
-        else
+        else // If the asset is not yet loaded, request it asynchronously
         {
-            // Log a warning if the asset exists but isn't of the expected type
-            UE_LOGFMT(LogResourceNode, Warning, "Failed to cast already loaded asset to UMC_ResourceNodeConfig");
+            // Define a delegate that will be called once the asset is loaded
+            FStreamableDelegate LoadConfigDelegate = FStreamableDelegate::CreateLambda([this]()
+            {
+                #if !UE_BUILD_SHIPPING
+                    // Check if the asset loading handle is valid
+                    if (!ResourceNodeConfigHandle)
+                    {
+                        UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigHandle is null after async load!");
+                        return;
+                    }
+                #endif
+
+                // Attempt to retrieve the loaded asset from the handle
+                UMC_ResourceNodeConfig* LoadedConfig = Cast<UMC_ResourceNodeConfig>(ResourceNodeConfigHandle->GetLoadedAsset());
+
+                // Ensure that the asset was successfully loaded and cast
+                checkf(LoadedConfig, TEXT("Failed to load ResourceNodeConfig asset."));
+
+                // Apply the configuration once it's successfully loaded
+                ApplyResourceNodeConfig(LoadedConfig);
+            });
+
+            // Request the asset to be loaded asynchronously
+            ResourceNodeConfigHandle = AssetManager.LoadPrimaryAsset(ResourceNodeConfigId,{}, MoveTemp(LoadConfigDelegate));
         }
-    }
-    else // If the asset is not yet loaded, request it asynchronously
-    {
-        // Define a delegate that will be called once the asset is loaded
-        FStreamableDelegate LoadConfigDelegate = FStreamableDelegate::CreateLambda([this]()
-        {
-            #if !UE_BUILD_SHIPPING
-                // Check if the asset loading handle is valid
-                if (!ResourceNodeConfigHandle)
-                {
-                    UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigHandle is null after async load!");
-                    return;
-                }
-            #endif
-
-            // Attempt to retrieve the loaded asset from the handle
-            UMC_ResourceNodeConfig* LoadedConfig = Cast<UMC_ResourceNodeConfig>(ResourceNodeConfigHandle->GetLoadedAsset());
-
-            // Ensure that the asset was successfully loaded and cast
-            ensureAlwaysMsgf(LoadedConfig, TEXT("Failed to load ResourceNodeConfig asset."));
-
-            // Apply the configuration once it's successfully loaded
-            ApplyResourceNodeConfig(LoadedConfig);
-        });
-
-        // Request the asset to be loaded asynchronously
-        ResourceNodeConfigHandle = AssetManager.LoadPrimaryAsset(ResourceNodeConfigId,{}, MoveTemp(LoadConfigDelegate));
     }
 }
-
 void AMC_ResourceNode::ResourceNode_Refresh()
 {
     // If the node is already in the final state, exit the function
@@ -199,13 +211,20 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
     }
 }
 
+void AMC_ResourceNode::OnRep_CurrentMaterial()
+{
+    //Set Material
+    StaticMesh->SetMaterial(0, CurrentMaterial);
+    
+    UE_LOGFMT(LogResourceNode, Log, "OnRep_CurrentMaterial called from : {0}", HasAuthority());
+}
+
 void AMC_ResourceNode::SetMaterialForCurrentState()
 {
-    // Apply the material to the static mesh
-    if (UMaterial* Material = *ResourceNodeConfigPtr->ResourceNodeMaterials.Find(ResourceNodeState - 1))
+    // Set the material
+    if (UMaterial* Material = ResourceNodeConfigPtr->ResourceNodeMaterials.FindChecked(ResourceNodeState))
     {
-        //Set Material
-        StaticMesh->SetMaterial(0, Material);
+        CurrentMaterial = Material;
     }
     else
     {

@@ -181,6 +181,14 @@ protected:
     UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
     TObjectPtr<UStaticMeshComponent> StaticMesh;
 
+    /** The material currently applied to the Static Mesh */
+    UPROPERTY(ReplicatedUsing = OnRep_CurrentMaterial, BlueprintReadOnly, Category = "Resource Node")
+    TObjectPtr<UMaterial> CurrentMaterial;
+
+    /** Called when the CurrentMaterial property is replicated */
+    UFUNCTION()
+    void OnRep_CurrentMaterial();
+    
 //#if UE_SERVER
 private:
     /**
