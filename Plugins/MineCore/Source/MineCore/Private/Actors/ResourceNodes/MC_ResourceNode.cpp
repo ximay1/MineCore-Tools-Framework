@@ -47,7 +47,7 @@ void AMC_ResourceNode::Client_DisplayMiningProgressWidget_Implementation(APlayer
     if (PlayerController)
     {
         //TODO:Create Progress bar Widget and show widget
-        UE_LOG(LogTemp, Error, TEXT("Displaying mining denied widget on the client - Player Controller - %s"), *PlayerController->GetName());
+        UE_LOGFMT(LogResourceNode, Error, "Displaying mining denied widget on the client - Player Controller - {0}", PlayerController->GetName());
     }
 }
 
@@ -57,7 +57,7 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerCo
     if (PlayerController)
     {
         //TODO:Create Denied Widget and show widget
-        UE_LOG(LogTemp, Error, TEXT("Displaying mining denied widget on the client - Player Controller - %s"), *PlayerController->GetName());
+        UE_LOGFMT(LogResourceNode, Error, "Displaying mining denied widget on the client - Player Controller - {0}", PlayerController->GetName());
     }
 }
 
@@ -85,7 +85,7 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
 {
     //Check
     checkf(PlayerController, TEXT("Player Controller is nullptr, AMC_ResourceNode::PlayerMineResource"));
-    UE_LOG(LogTemp, Log, TEXT("%s called PlayerMineResource"), *PlayerController->GetName());
+    UE_LOGFMT(LogResourceNode, Log, "{0} called PlayerMineResource", PlayerController->GetName());
     
     //Check if the player controller is valid
     bool IsPlayerControlerValid = EnsureValidPlayerController(PlayerController);
@@ -114,7 +114,7 @@ void AMC_ResourceNode::BeginPlay()
         // Valid if the ResourceNodeConfigId is set
         if (!ResourceNodeConfigId.IsValid())
         {
-            UE_LOG(LogTemp, Warning, TEXT("ResourceNodeConfigId is not valid"));
+            UE_LOGFMT(LogResourceNode, Warning, "ResourceNodeConfigId is not valid");
             
             // If the config ID is invalid, destroy this actor to prevent issues
             Destroy(true);
@@ -137,7 +137,7 @@ void AMC_ResourceNode::BeginPlay()
         else
         {
             // Log a warning if the asset exists but isn't of the expected type
-            UE_LOG(LogTemp, Warning, TEXT("Failed to cast already loaded asset to UMC_ResourceNodeConfig"));
+            UE_LOGFMT(LogResourceNode, Warning, "Failed to cast already loaded asset to UMC_ResourceNodeConfig");
         }
     }
     else // If the asset is not yet loaded, request it asynchronously
@@ -149,7 +149,7 @@ void AMC_ResourceNode::BeginPlay()
                 // Check if the asset loading handle is valid
                 if (!ResourceNodeConfigHandle)
                 {
-                    UE_LOG(LogTemp, Error, TEXT("ResourceNodeConfigHandle is null after async load!"));
+                    UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigHandle is null after async load!");
                     return;
                 }
             #endif
@@ -192,7 +192,7 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
     else
     {
         //Log Error
-        UE_LOG(LogTemp, Error, TEXT("Player Controller isn't valid. File: %s, Line: %d"), *FString(__FILE__), __LINE__);
+        UE_LOGFMT(LogResourceNode, Error, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
         
         // PlayerController is null, return false.
         return false;
@@ -210,7 +210,7 @@ void AMC_ResourceNode::SetMaterialForCurrentState()
     else
     {
         //Log Error
-        UE_LOG(LogTemp, Error, TEXT("Material not found for ResourceNodeState: %d in AMC_ResourceNode::SetMaterialForCurrentState"), static_cast<uint8>(ResourceNodeState));
+        UE_LOGFMT(LogResourceNode, Error, "Material not found for ResourceNodeState: {0}. File: {0}, Line: {1}",  static_cast<uint8>(ResourceNodeState), __FILE__, __LINE__);
     }
 }
 

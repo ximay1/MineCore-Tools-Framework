@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MC_LogChannels.h"
 #include "MC_ResourceNode.generated.h"
 
 // Forward declarations
@@ -20,11 +21,6 @@ enum class EResourceNodeState : uint8
     STATE_4 UMETA(DisplayName = "State 4")
 };
 
-#include "Logging/LogMacros.h"
-
-// Define a log category for resource nodes
-DEFINE_LOG_CATEGORY_STATIC(LogResourceNode, Log, All);
-
 // Overloaded subtraction operator for EResourceNodeState
 inline EResourceNodeState operator-(const EResourceNodeState NodeState, uint8 Number)
 {
@@ -35,7 +31,7 @@ inline EResourceNodeState operator-(const EResourceNodeState NodeState, uint8 Nu
     if (NewValue < Number) 
     {
         // Log a warning about underflow
-        UE_LOG(LogResourceNode, Warning, TEXT("Underflow detected in EResourceNodeState subtraction! NodeState: %d, Number: %d"), NewValue, Number);
+        UE_LOGFMT(LogResourceNode, Warning, "Underflow detected in EResourceNodeState subtraction! NodeState: {0}, Number: {1}", NewValue, Number);
         
         // Return a fallback value (e.g., the first enum state)
         return EResourceNodeState::STATE_1; 
@@ -57,7 +53,7 @@ inline EResourceNodeState operator+(const EResourceNodeState NodeState, uint8 Nu
     if (NewValue + Number > MaxValue)
     {
         // Log a warning about overflow
-        UE_LOG(LogResourceNode, Warning, TEXT("Overflow detected in EResourceNodeState addition! NodeState: %d, Number: %d"), NewValue, Number);
+        UE_LOGFMT(LogResourceNode, Warning, "Overflow detected in EResourceNodeState addition! NodeState: {0}, Number: {1}", NewValue, Number);
         
         // Return a fallback value (e.g., the maximum enum state)
         return EResourceNodeState::STATE_4; 
