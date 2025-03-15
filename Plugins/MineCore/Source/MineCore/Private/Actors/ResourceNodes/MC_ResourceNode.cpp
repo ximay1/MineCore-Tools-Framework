@@ -23,10 +23,10 @@ void AMC_ResourceNode::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)
 {
     //Check if the player is able to mine
-    if (!CanBeMined())
+    if (CanBeMined())
     {
         //Create Delegate
-        FTimerDelegate MineResourceNodeDelegate = FTimerDelegate::CreateUObject(this, AMC_ResourceNode::PlayerMineResource, PlayerController);
+        FTimerDelegate MineResourceNodeDelegate = FTimerDelegate::CreateUObject(this, &AMC_ResourceNode::PlayerMineResource, PlayerController);
         
         //Set timer
         GetWorldTimerManager().SetTimer(MineResourceNodeTimerHandle, MineResourceNodeDelegate, ResourceNodeConfigPtr->MiningTime, true);
@@ -69,7 +69,7 @@ bool AMC_ResourceNode::CanBeMined() const
 
 void AMC_ResourceNode::StopMining(bool IsPlayerControllerValid)
 {
-    /** TODO: Create logic */
+    /** TODO: Create logic, IsPlayerControlerValid can be true */
     //Check if the player controller is valid
     if (IsPlayerControllerValid)
     {
@@ -87,22 +87,22 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
     checkf(PlayerController, TEXT("Player Controller is nullptr, AMC_ResourceNode::PlayerMineResource"));
     UE_LOG(LogTemp, Log, TEXT("%s called PlayerMineResource"), *PlayerController->GetName());
     
-    //Clear Timer
-    GetWorldTimerManager().ClearTimer(MineResourceNodeTimerHandle);
-
+    //Check if the player controller is valid
+    bool IsPlayerControlerValid = EnsureValidPlayerController(PlayerController);
+    
     //Check if ResourceNodeState isn't STATE_1
-    if (ResourceNodeState != EResourceNodeState::STATE_1 && EnsureValidPlayerController(PlayerController))
+    if (ResourceNodeState != EResourceNodeState::STATE_1 && IsPlayerControlerValid)
     {
         //Decrease State of this Node
-        ResourceNodeState = static_cast<EResourceNodeState>(static_cast<uint8>(ResourceNodeState) - 1);
+        ResourceNodeState = ResourceNodeState - 1;
 
         //Start again mining
         Server_StartMining(PlayerController);
     }
     else
     {
-        //Stop Mining
-        StopMining(PlayerController);
+        //Stop Mining (Player Controller is false)
+        StopMining(IsPlayerControlerValid);
     }
 }
 
@@ -143,7 +143,7 @@ void AMC_ResourceNode::BeginPlay()
     else // If the asset is not yet loaded, request it asynchronously
     {
         // Define a delegate that will be called once the asset is loaded
-        FStreamableDelegate LoadConfigDelegate = FStreamableDelegate::CreateLambda(this, [this]()
+        FStreamableDelegate LoadConfigDelegate = FStreamableDelegate::CreateLambda([this]()
         {
             #if !UE_BUILD_SHIPPING
                 // Check if the asset loading handle is valid
@@ -175,7 +175,7 @@ void AMC_ResourceNode::ResourceNode_Refresh()
     if (ResourceNodeState == EResourceNodeState::STATE_4) { return; }
 
     // Increment the resource node state by 1
-    ResourceNodeState = static_cast<EResourceNodeState>(static_cast<uint8>(ResourceNodeState) + 1);
+    ResourceNodeState = ResourceNodeState + 1;
 
     //Set material 
     SetMaterialForCurrentState();
@@ -202,7 +202,7 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
 void AMC_ResourceNode::SetMaterialForCurrentState()
 {
     // Apply the material to the static mesh
-    if (UMaterial* Material = *ResourceNodeConfigPtr->ResourceNodeMaterials.Find(ResourceNodeState))
+    if (UMaterial* Material = *ResourceNodeConfigPtr->ResourceNodeMaterials.Find(ResourceNodeState - 1))
     {
         //Set Material
         StaticMesh->SetMaterial(0, Material);

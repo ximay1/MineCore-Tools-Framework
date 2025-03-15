@@ -20,6 +20,53 @@ enum class EResourceNodeState : uint8
     STATE_4 UMETA(DisplayName = "State 4")
 };
 
+#include "Logging/LogMacros.h"
+
+// Define a log category for resource nodes
+DEFINE_LOG_CATEGORY_STATIC(LogResourceNode, Log, All);
+
+// Overloaded subtraction operator for EResourceNodeState
+inline EResourceNodeState operator-(const EResourceNodeState NodeState, uint8 Number)
+{
+    // Cast the enum to uint8 to perform arithmetic operations
+    uint8 NewValue = static_cast<uint8>(NodeState);
+
+    // Check if subtraction would cause an underflow (result below 0)
+    if (NewValue < Number) 
+    {
+        // Log a warning about underflow
+        UE_LOG(LogResourceNode, Warning, TEXT("Underflow detected in EResourceNodeState subtraction! NodeState: %d, Number: %d"), NewValue, Number);
+        
+        // Return a fallback value (e.g., the first enum state)
+        return EResourceNodeState::STATE_1; 
+    }
+
+    // Return the new enum value after subtraction
+    return static_cast<EResourceNodeState>(NewValue - Number);
+}
+
+// Overloaded addition operator for EResourceNodeState
+inline EResourceNodeState operator+(const EResourceNodeState NodeState, uint8 Number)
+{
+    // Cast the enum to uint8 to perform arithmetic operations
+    uint8 NewValue = static_cast<uint8>(NodeState);
+
+    // Check if the addition would exceed the maximum valid value for EResourceNodeState
+    const uint8 MaxValue = static_cast<uint8>(EResourceNodeState::STATE_4);
+
+    if (NewValue + Number > MaxValue)
+    {
+        // Log a warning about overflow
+        UE_LOG(LogResourceNode, Warning, TEXT("Overflow detected in EResourceNodeState addition! NodeState: %d, Number: %d"), NewValue, Number);
+        
+        // Return a fallback value (e.g., the maximum enum state)
+        return EResourceNodeState::STATE_4; 
+    }
+
+    // Return the new enum value after addition
+    return static_cast<EResourceNodeState>(NewValue + Number);
+}
+
 /**
  * Enum representing various types of resource nodes.
  */
@@ -60,7 +107,7 @@ public:
      *
      * @param PlayerController The controller of the player initiating mining.
      */
-    UFUNCTION(Server, Reliable)
+    UFUNCTION(Server, Reliable, BlueprintCallable)
     virtual void Server_StartMining(APlayerController* PlayerController);
 
 //#if UE_SERVER
@@ -120,7 +167,6 @@ protected:
      */
     bool EnsureValidPlayerController(APlayerController* PlayerController);
     
-protected:
     /** Current state of the resource node. */
     UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
     EResourceNodeState ResourceNodeState;
