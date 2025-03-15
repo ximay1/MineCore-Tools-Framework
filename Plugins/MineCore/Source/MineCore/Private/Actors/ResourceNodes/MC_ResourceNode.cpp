@@ -94,6 +94,9 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
         //Decrease State of this Node
         ResourceNodeState = ResourceNodeState - 1;
 
+        //Set Material
+        SetMaterialForCurrentState();
+
         //Check if ResourceNodeState is STATE_1 now
         if (ResourceNodeState != EResourceNodeState::STATE_1)
         {
