@@ -1,65 +1,43 @@
-# Ignore all files by default, but scan all directories.
-*
-!*/
-
-# Do not ignore git files in the root of the repo.
-!/.git*
-
-# Do not ignore current project's `.uproject`.
-!/*.uproject
-!/*.uplugin
-
-# Do not ignore source, config and plugins dirs.
-!/Source/**
-!/Config/**
-Plugins/**/Binaries/*
-Plugins/**/Intermediate/*
-
-# Only allow .uasset and .umap files from /Content dir.
-# They're tracked by git-lfs, don't forget to track other
-# files if adding them here.
-!/Content/**/*.uasset
-!/Content/**/*.umap
-
-# Allow any files from /RawContent dir.
-# Any file in /RawContent dir will be managed by git lfs.
-!/RawContent/**/*
-
-# OS/platform generated files.
-
-# Windows
-ehthumbs.db
+# System plików
+.DS_Store
 Thumbs.db
 
-# Mac OS X
-.DS_Store
-.DS_Store?
-.AppleDouble
-.LSOverride
-._*
+# Foldery generowane przez UE5
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
 
-# Linux
-*~
-.directory
+# Pliki konfiguracyjne UE5
+*.vsconfig
+.vscode/
+.idea/
 
-# vim
-[._]*.s[a-w][a-z]
-[._]s[a-w][a-z]
-*.un~
-Session.vim
-.netrwhist
+# Pliki tymczasowe
+*.log
+*.log.*
+*.bak
 
-# Visual Studio
-.vs
+# Wyklucz katalogi specyficzne dla użytkownika
+.vs/
+.vscode/
 
-###################################
-# JetBrains Rider Generated Files #
-###################################
-# Cache Directory
-.idea
-
-# Solution and Project Files
+# Ignoruj pliki tworzone przez Unreal Engine dla buildów
+*.user
+*.userprefs
+*.autosave
+*.suo
+*.sdf
 *.sln
-*.csproj
-*.sln.DotSettings
-*.sln.DotSettings.user
+*.vcxproj
+*.vcxproj.filters
+*.xcodeproj
+
+# Pliki pakietów, które nie powinny być śledzone
+*.pak
+*.ubulk
+*.uexp
+*.utoc
+
+# Pluginy UE5
+!YourPluginFolderName/  # Zastąp "YourPluginFolderName" nazwą folderu pluginu, który chcesz śledzić
