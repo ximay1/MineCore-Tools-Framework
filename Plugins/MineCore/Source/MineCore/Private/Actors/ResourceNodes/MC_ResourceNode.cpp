@@ -48,7 +48,7 @@ void AMC_ResourceNode::Client_DisplayMiningProgressWidget_Implementation(APlayer
     if (PlayerController)
     {
         //TODO:Create Progress bar Widget and show widget
-        UE_LOGFMT(LogResourceNode, Error, "Displaying mining denied widget on the client - Player Controller - {0}", PlayerController->GetName());
+        UE_LOGFMT(LogResourceNode, Error, "Displaying progress bar widget on the client - Player Controller - {0}", PlayerController->GetName());
     }
 }
 
