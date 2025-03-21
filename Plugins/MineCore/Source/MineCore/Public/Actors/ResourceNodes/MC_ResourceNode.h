@@ -196,9 +196,6 @@ private:
     /** Timer handle for refreshing the resource node state. */
     FTimerHandle ResourceNodeSpawnTimerHandle;
     
-    /** Handle for asynchronously loading the resource node configuration. */
-    TSharedPtr<FStreamableHandle> ResourceNodeConfigHandle;
-
     /** Timer handle for managing the mining process. */
     FTimerHandle MineResourceNodeTimerHandle;
 };
