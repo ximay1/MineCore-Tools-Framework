@@ -12,6 +12,9 @@ enum class EItemAction : uint8
 	IA_Drop    UMETA(DisplayName = "Drop"),     // Player wants to drop the item
 };
 
+/** Triggered when an item is added (Slot number, Item). */  
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAddedToInventory, uint8, Slot, UMC_Item*, Item);
+
 UCLASS( ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent) )
 class MINECORE_API UMC_InventoryComponent : public UActorComponent
 {
@@ -23,6 +26,9 @@ public:
 	// Sets default values for this component's properties
 	UMC_InventoryComponent();
 
+	//Events
+	virtual void BeginPlay() override;
+	
 	/** Creates the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	void CreateInventory();
@@ -53,6 +59,13 @@ public:
 	/** Get Max Slots */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
 	FORCEINLINE uint8 GetMaxSlots() const { return MaxSlots; }
+
+public:
+	//Delegates
+	FOnItemAddedToInventory OnItemAddedToInventory;
+
+	//Functions to bind
+	UFUNCTION() void OnItemAddedToInventory_Delegate(uint8 Slot, UMC_Item* Item);
 
 protected:
 	/** Widget class representing the Inventory */ 

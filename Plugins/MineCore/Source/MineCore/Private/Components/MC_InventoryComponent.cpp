@@ -6,6 +6,14 @@ UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+void UMC_InventoryComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//Bind delegates
+	OnItemAddedToInventory.AddDynamic(this, &UMC_InventoryComponent::OnItemAddedToInventory_Delegate);
+}
+
 void UMC_InventoryComponent::CreateInventory()
 {
 	//TODO: Create Inventory
@@ -46,6 +54,10 @@ bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot)
 	return false;
 }
 
+void UMC_InventoryComponent::OnItemAddedToInventory_Delegate(uint8 Slot, UMC_Item* Item)
+{
+}
+
 void UMC_InventoryComponent::AddItemToInventory_Implementation(uint8 Slot, UMC_Item* Item)
 {
 #if !UE_BUILD_SHIPPING
@@ -68,6 +80,9 @@ void UMC_InventoryComponent::AddItemToInventory_Implementation(uint8 Slot, UMC_I
 		{
 			//Add to the inventory
 			Items.Add(Slot, Item);
+
+			//Call delegate
+			OnItemAddedToInventory.Broadcast(Slot, Item);
 		}
 		else
 		{
