@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Items/MC_Item.h"
 #include "MC_InventoryComponent.generated.h"
 
 UCLASS( ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent) )
@@ -25,5 +26,5 @@ protected:
 
 	/** Map of items in the inventory. uint8 represents the number of slots. */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
-	TMap<uint8, UObject*> Items;
+	TMap<uint8, TObjectPtr<UMC_Item>> Items;
 };
