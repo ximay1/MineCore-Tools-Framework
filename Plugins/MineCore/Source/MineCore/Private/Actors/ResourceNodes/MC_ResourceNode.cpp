@@ -30,7 +30,7 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
         FTimerDelegate MineResourceNodeDelegate = FTimerDelegate::CreateUObject(this, &AMC_ResourceNode::PlayerMineResource, PlayerController);
         
         //Set timer
-        GetWorldTimerManager().SetTimer(MineResourceNodeTimerHandle, MineResourceNodeDelegate, ResourceNodeConfigPtr->MiningTime, true);
+        GetWorldTimerManager().SetTimer(MineResourceNodeTimerHandle, MineResourceNodeDelegate, ResourceNodeConfig->MiningTime, true);
 
         //Show progress bar
         Client_DisplayMiningProgressWidget(PlayerController);
@@ -62,7 +62,6 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerCo
     }
 }
 
-//#if UE_SERVER
 bool AMC_ResourceNode::CanBeMined() const
 {
     /** Create Logic here */
@@ -114,67 +113,23 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
 void AMC_ResourceNode::BeginPlay()
 {
     Super::BeginPlay();
-
-    /** TODO: Change HasAuthority to #if UE_SERVER */
+    
     if (HasAuthority())
     {
 #if !UE_BUILD_SHIPPING
         // Valid if the ResourceNodeConfigId is set
-        if (!ResourceNodeConfigId.IsValid())
+        if (!IsValid(ResourceNodeConfig))
         {
             UE_LOGFMT(LogResourceNode, Warning, "ResourceNodeConfigId is not valid");
             
-            // If the config ID is invalid, destroy this actor to prevent issues
+            // If the config is invalid, destroy this actor to prevent issues
             Destroy(true);
             return;
         }
 #endif
 
-        // Get a reference to the global Asset Manager
-        UAssetManager& AssetManager = UAssetManager::Get();
-
-        // Check if the configuration asset is already loaded
-        if (UObject* AlreadyLoadedAsset = AssetManager.GetPrimaryAssetObject(ResourceNodeConfigId))
-        {
-            // Try to cast the loaded asset to the expected UMC_ResourceNodeConfig class
-            if (UMC_ResourceNodeConfig* LoadedConfig = Cast<UMC_ResourceNodeConfig>(AlreadyLoadedAsset))
-            {
-                // If the asset is valid and successfully cast, apply its configuration
-                ApplyResourceNodeConfig(LoadedConfig);
-            }
-            else
-            {
-                // Log a warning if the asset exists but isn't of the expected type
-                UE_LOGFMT(LogResourceNode, Warning, "Failed to cast already loaded asset to UMC_ResourceNodeConfig");
-            }
-        }
-        else // If the asset is not yet loaded, request it asynchronously
-        {
-            // Define a delegate that will be called once the asset is loaded
-            FStreamableDelegate LoadConfigDelegate = FStreamableDelegate::CreateLambda([this]()
-            {
-                #if !UE_BUILD_SHIPPING
-                    // Check if the asset loading handle is valid
-                    if (!ResourceNodeConfigHandle)
-                    {
-                        UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigHandle is null after async load!");
-                        return;
-                    }
-                #endif
-
-                // Attempt to retrieve the loaded asset from the handle
-                UMC_ResourceNodeConfig* LoadedConfig = Cast<UMC_ResourceNodeConfig>(ResourceNodeConfigHandle->GetLoadedAsset());
-
-                // Ensure that the asset was successfully loaded and cast
-                checkf(LoadedConfig, TEXT("Failed to load ResourceNodeConfig asset."));
-
-                // Apply the configuration once it's successfully loaded
-                ApplyResourceNodeConfig(LoadedConfig);
-            });
-
-            // Request the asset to be loaded asynchronously
-            ResourceNodeConfigHandle = AssetManager.LoadPrimaryAsset(ResourceNodeConfigId,{}, MoveTemp(LoadConfigDelegate));
-        }
+        //"Start" Node
+        ApplyResourceNodeConfig();
     }
 }
 
@@ -223,7 +178,7 @@ void AMC_ResourceNode::OnRep_CurrentMaterial()
 void AMC_ResourceNode::SetMaterialForCurrentState()
 {
     //Find and check
-    if (UMaterial* Material = ResourceNodeConfigPtr->ResourceNodeMaterials.FindChecked(ResourceNodeState))
+    if (UMaterial* Material = ResourceNodeConfig->ResourceNodeMaterials.FindChecked(ResourceNodeState))
     {
         // Set the material
         CurrentMaterial = Material;
@@ -235,23 +190,17 @@ void AMC_ResourceNode::SetMaterialForCurrentState()
     }
 }
 
-void AMC_ResourceNode::ApplyResourceNodeConfig(UMC_ResourceNodeConfig* LoadedConfig)
+void AMC_ResourceNode::ApplyResourceNodeConfig()
 {
-    if (!ensureAlways(LoadedConfig)) { return; }
-
-    //Set
-    ResourceNodeConfigPtr = LoadedConfig;
-
     // Set the timer to refresh the resource node
     GetWorldTimerManager().SetTimer(
         ResourceNodeSpawnTimerHandle,
         this,
         &AMC_ResourceNode::ResourceNode_Refresh,
-        ResourceNodeConfigPtr->TimeToIncreaseState,
+        ResourceNodeConfig->TimeToIncreaseState,
         true
     );
 
     // Set the initial material
     SetMaterialForCurrentState();
 }
-//#endif

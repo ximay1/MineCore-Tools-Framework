@@ -6,13 +6,11 @@
 #include "MC_ResourceNodeConfig.generated.h"
 
 UCLASS()
-class MINECORE_API UMC_ResourceNodeConfig : public UPrimaryDataAsset
+class MINECORE_API UMC_ResourceNodeConfig : public UDataAsset
 {
 	GENERATED_BODY()
 
 public:
-	virtual FPrimaryAssetId GetPrimaryAssetId() const override { return FPrimaryAssetId("ResourceNodeConfig", GetFName()); }
-
 	// A TMap that associates each resource node state (EResourceNodeState) with a material (UMaterial*).  
 	// Used to dynamically assign the appropriate material based on the resource node's current state.  
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")

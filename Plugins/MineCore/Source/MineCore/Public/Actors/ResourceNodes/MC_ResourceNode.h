@@ -96,16 +96,6 @@ public:
     virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
     
     /**
-     * Initiates the mining process on the node.
-     * Called on the server.
-     *
-     * @param PlayerController The controller of the player initiating mining.
-     */
-    UFUNCTION(Server, Reliable, BlueprintCallable)
-    virtual void Server_StartMining(APlayerController* PlayerController);
-
-//#if UE_SERVER
-    /**
      * Displays the mining progress widget on the client.
      *
      * @param PlayerController The controller of the player.
@@ -120,7 +110,16 @@ public:
      */
     UFUNCTION(Client, Reliable)
     virtual void Client_DisplayMiningDeniedWidget(APlayerController* PlayerController);
-
+    
+    /**
+     * Initiates the mining process on the node.
+     * Called on the server.
+     *
+     * @param PlayerController The controller of the player initiating mining.
+     */
+    UFUNCTION(Server, Reliable, BlueprintCallable)
+    virtual void Server_StartMining(APlayerController* PlayerController);
+    
     /**
      * Checks if the resource node is in a state that allows mining.
      *
@@ -164,16 +163,10 @@ protected:
     /** Current state of the resource node. */
     UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
     EResourceNodeState ResourceNodeState;
-
-    /** Primary asset ID for the resource node configuration. */
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "PrimaryAssetLoaderComponent")
-    FPrimaryAssetId ResourceNodeConfigId;
     
-    /** Pointer to the resource node configuration asset. */
-    UPROPERTY(BlueprintReadWrite, Category = "Resource Node | Config")
-    TObjectPtr<UMC_ResourceNodeConfig> ResourceNodeConfigPtr;
-    
-//#endif
+    /** Pointer to the resource node config asset. */
+    UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Resource Node | Config")
+    TObjectPtr<UMC_ResourceNodeConfig> ResourceNodeConfig;
     
     /** Static mesh component representing the resource node. */
     UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
@@ -186,8 +179,7 @@ protected:
     /** Called when the CurrentMaterial property is replicated */
     UFUNCTION()
     void OnRep_CurrentMaterial();
-    
-//#if UE_SERVER
+
 private:
     /**
      * Updates the static mesh's material based on the current resource node state.
@@ -195,12 +187,10 @@ private:
     void SetMaterialForCurrentState();
 
     /**
-     * Applies the loaded resource node configuration.
+     * Applies resource node config.
      * Sets up timers for state refresh and initializes the material.
-     *
-     * @param LoadedConfig The loaded configuration asset.
      */
-    void ApplyResourceNodeConfig(UMC_ResourceNodeConfig* LoadedConfig);
+    void ApplyResourceNodeConfig();
 
 private:
     /** Timer handle for refreshing the resource node state. */
@@ -211,5 +201,4 @@ private:
 
     /** Timer handle for managing the mining process. */
     FTimerHandle MineResourceNodeTimerHandle;
-//#endif
 };
