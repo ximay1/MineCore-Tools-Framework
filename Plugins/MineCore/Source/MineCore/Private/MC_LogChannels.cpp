@@ -1,3 +1,4 @@
 #include "MC_LogChannels.h"
 
 DEFINE_LOG_CATEGORY(LogResourceNode);
+DEFINE_LOG_CATEGORY(LogInventory);

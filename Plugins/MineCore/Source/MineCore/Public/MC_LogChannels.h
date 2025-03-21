@@ -4,3 +4,4 @@
 #include "Logging/StructuredLog.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogResourceNode, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogInventory, Log, All);
