@@ -185,7 +185,7 @@ void AMC_ResourceNode::SetStaticMeshForCurrentState()
     else
     {
         //Log Error
-        UE_LOGFMT(LogResourceNode, Error, "Material not found for ResourceNodeState: {0}. File: {0}, Line: {1}",  static_cast<uint8>(ResourceNodeState), __FILE__, __LINE__);
+        UE_LOGFMT(LogResourceNode, Error, "Material not found for ResourceNodeState: {0}. File: {1}, Line: {2}",  UEnum::GetValueAsString(ResourceNodeState), __FILE__, __LINE__);
     }
 }
 
