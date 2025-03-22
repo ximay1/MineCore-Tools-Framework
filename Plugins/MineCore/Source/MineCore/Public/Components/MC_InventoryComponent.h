@@ -63,10 +63,7 @@ public:
 public:
 	//Delegates
 	FOnItemAddedToInventory OnItemAddedToInventory;
-
-	//Functions to bind
-	UFUNCTION() void OnItemAddedToInventory_Delegate(uint8 Slot, UMC_Item* Item);
-
+	
 protected:
 	/** Widget class representing the Inventory */ 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Component")

@@ -9,9 +9,6 @@ UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 void UMC_InventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//Bind delegates
-	OnItemAddedToInventory.AddDynamic(this, &UMC_InventoryComponent::OnItemAddedToInventory_Delegate);
 }
 
 void UMC_InventoryComponent::CreateInventory()
@@ -52,10 +49,6 @@ bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot)
 
 	// Return false if no empty slot was found
 	return false;
-}
-
-void UMC_InventoryComponent::OnItemAddedToInventory_Delegate(uint8 Slot, UMC_Item* Item)
-{
 }
 
 void UMC_InventoryComponent::AddItemToInventory_Implementation(uint8 Slot, UMC_Item* Item)

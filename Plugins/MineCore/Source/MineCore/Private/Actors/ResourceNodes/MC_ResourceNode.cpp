@@ -63,7 +63,7 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerCo
 
 bool AMC_ResourceNode::CanBeMined() const
 {
-    /** Create Logic here */
+    /** TODO:Create Logic here */
     return true;
 }
 
@@ -199,7 +199,7 @@ void AMC_ResourceNode::ApplyResourceNodeConfig()
         ResourceNodeConfig->TimeToIncreaseState,
         true
     );
-
+    
     // Set the initial StaticMesh
     SetStaticMeshForCurrentState();
 }
