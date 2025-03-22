@@ -170,21 +170,21 @@ protected:
     
     /** Static mesh component representing the resource node. */
     UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
-    TObjectPtr<UStaticMeshComponent> StaticMesh;
+    TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 
-    /** The material currently applied to the Static Mesh */
-    UPROPERTY(ReplicatedUsing = OnRep_CurrentMaterial, BlueprintReadOnly, Category = "Resource Node")
-    TObjectPtr<UMaterial> CurrentMaterial;
+    /** The StaticMesh currently applied to the Static Mesh Component */
+    UPROPERTY(ReplicatedUsing = OnRep_CurrentStaticMesh, BlueprintReadOnly, Category = "Resource Node")
+    TObjectPtr<UStaticMesh> CurrentStaticMesh;
 
-    /** Called when the CurrentMaterial property is replicated */
+    /** Called when the CurrentStaticMesh property is replicated */
     UFUNCTION()
-    void OnRep_CurrentMaterial();
+    void OnRep_CurrentStaticMesh();
 
 private:
     /**
      * Updates the static mesh's material based on the current resource node state.
      */
-    void SetMaterialForCurrentState();
+    void SetStaticMeshForCurrentState();
 
     /**
      * Applies resource node config.

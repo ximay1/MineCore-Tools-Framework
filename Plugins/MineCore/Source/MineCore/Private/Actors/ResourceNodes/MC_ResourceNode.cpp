@@ -1,6 +1,5 @@
 #include "Actors/ResourceNodes/MC_ResourceNode.h"
 #include "Data/ResourceNode/MC_ResourceNodeConfig.h"
-#include "Engine/AssetManager.h"
 #include "Net/UnrealNetwork.h"
 
 AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(0,3)))
@@ -9,16 +8,16 @@ AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNo
     bReplicates = true;
     
     // Create the static mesh component and set it as the root
-    StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-    RootComponent = StaticMesh;
+    StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+    RootComponent = StaticMeshComponent;
 }
 
 void AMC_ResourceNode::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
     
-    DOREPLIFETIME(AMC_ResourceNode, StaticMesh);
-    DOREPLIFETIME(AMC_ResourceNode, CurrentMaterial);
+    DOREPLIFETIME(AMC_ResourceNode, StaticMeshComponent);
+    DOREPLIFETIME(AMC_ResourceNode, CurrentStaticMesh);
 }
 
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)
@@ -93,8 +92,8 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
         //Decrease State of this Node
         ResourceNodeState = ResourceNodeState - 1;
 
-        //Set Material
-        SetMaterialForCurrentState();
+        //Set StaticMesh
+        SetStaticMeshForCurrentState();
 
         //Check if ResourceNodeState is STATE_1 now
         if (ResourceNodeState != EResourceNodeState::STATE_1)
@@ -141,8 +140,8 @@ void AMC_ResourceNode::ResourceNode_Refresh()
     // Increment the resource node state by 1
     ResourceNodeState = ResourceNodeState + 1;
 
-    //Set material 
-    SetMaterialForCurrentState();
+    //Set StaticMesh 
+    SetStaticMeshForCurrentState();
 }
 
 bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerController)
@@ -169,19 +168,19 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
     }
 }
 
-void AMC_ResourceNode::OnRep_CurrentMaterial()
+void AMC_ResourceNode::OnRep_CurrentStaticMesh()
 {
-    //Set Material
-    StaticMesh->SetMaterial(0, CurrentMaterial);
+    //Set StaticMesh
+    StaticMeshComponent->SetStaticMesh(CurrentStaticMesh);
 }
 
-void AMC_ResourceNode::SetMaterialForCurrentState()
+void AMC_ResourceNode::SetStaticMeshForCurrentState()
 {
     //Find and check
-    if (UMaterial* Material = ResourceNodeConfig->ResourceNodeMaterials.FindChecked(ResourceNodeState))
+    if (UStaticMesh* StaticMesh = ResourceNodeConfig->ResourceNodeMaterials.FindChecked(ResourceNodeState))
     {
-        // Set the material
-        CurrentMaterial = Material;
+        // Set the current static mesh
+        CurrentStaticMesh = StaticMesh;
     }
     else
     {
@@ -201,6 +200,6 @@ void AMC_ResourceNode::ApplyResourceNodeConfig()
         true
     );
 
-    // Set the initial material
-    SetMaterialForCurrentState();
+    // Set the initial StaticMesh
+    SetStaticMeshForCurrentState();
 }
