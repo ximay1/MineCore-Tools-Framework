@@ -19,13 +19,13 @@ public:
 	/** Events */
 	virtual void BeginPlay() override;
 	
-	/** This function attempts to find the inventory component. Returns true if the inventory is found, otherwise false. */
+	/** This function attempts to find the inventory component. */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
-	bool FindInventory();
+	UMC_InventoryComponent* FindInventory() const;
 	
-	/** This function attempts to find a Pickaxe in the Inventory. Returns true if the Pickaxe is found, otherwise false. */
+	/** This function attempts to find a Pickaxe in the Inventory. */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
-	bool FindPickaxeInInventory();
+	UMC_Pickaxe* FindPickaxeInInventory() const;
 
 protected:
 	/** Cached pointer to pickaxe (the best pickaxe in the inventory). It can be nullptr when player doesn't have any pickaxe in the inventory */

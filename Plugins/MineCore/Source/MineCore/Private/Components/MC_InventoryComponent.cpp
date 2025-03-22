@@ -25,6 +25,26 @@ void UMC_InventoryComponent::RefreshInventoryWidget()
 	}*/
 }
 
+void UMC_InventoryComponent::FindItemsByClass(TSubclassOf<UMC_Item> ItemClass, TArray<UMC_Item*>& OutItems)
+{
+	// Clear the result array to avoid adding to any old data
+	OutItems.Empty();
+
+	// Iterate through all items in the inventory
+	for (const auto& Pair : Items)
+	{
+		// Check if the item is of the specified class or derived class
+		if (UMC_Item* Item = Pair.Value)
+		{
+			if (Item->IsA(ItemClass))
+			{
+				// If true, add the item to the result array
+				OutItems.Add(Item);
+			}
+		}
+	}
+}
+
 void UMC_InventoryComponent::DropItem(uint8 Slot)
 {
 	//TODO: Create a bag at player's location

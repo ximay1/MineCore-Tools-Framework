@@ -12,22 +12,19 @@ void UMC_MiningSystemComponent::BeginPlay()
 	Super::BeginPlay();
 
 	//Find Inventory
-	FindInventory();
+	InventoryComponent = FindInventory();
 
 	//Find the best Pickaxe in the inventory
 	FindPickaxeInInventory();
 }
 
-bool UMC_MiningSystemComponent::FindInventory()
+UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const
 {
 	//Get Owner
 	if (APawn* Owner = Cast<APawn>(GetOwner()))
 	{
-		//Find Inventory
-		InventoryComponent = Owner->FindComponentByClass<UMC_InventoryComponent>();
-
-		//Return value
-		return (InventoryComponent ? true : false);
+		//Return Inventory
+		return Owner->FindComponentByClass<UMC_InventoryComponent>();
 	}
 	else
 	{
@@ -35,13 +32,13 @@ bool UMC_MiningSystemComponent::FindInventory()
 		UE_LOGFMT(LogMiningSystem, Error, "You attempted to use MC_MiningSystemComponent on an actor that is not a Pawn or a class derived from it.");
 
 		//Return value
-		return false;
+		return nullptr;
 	}
 }
 
-bool UMC_MiningSystemComponent::FindPickaxeInInventory()
+UMC_Pickaxe* UMC_MiningSystemComponent::FindPickaxeInInventory() const
 {
 	//Inventory shouldn't be nullptr!!!
 	
-	return true;
+	return nullptr;
 }
