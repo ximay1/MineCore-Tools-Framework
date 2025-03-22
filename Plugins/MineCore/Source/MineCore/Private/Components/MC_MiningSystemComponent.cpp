@@ -1,6 +1,6 @@
 #include "Components/MC_MiningSystemComponent.h"
-#include "MC_LogChannels.h"
-#include "Components/MC_InventoryComponent.h"
+#include "Data/Item/MC_ItemConfig.h"
+#include "Items/Pickaxe/MC_Pickaxe.h"
 
 UMC_MiningSystemComponent::UMC_MiningSystemComponent()
 {
@@ -15,7 +15,7 @@ void UMC_MiningSystemComponent::BeginPlay()
 	InventoryComponent = FindInventory();
 
 	//Find the best Pickaxe in the inventory
-	CachedPickaxe = FindPickaxeInInventory();
+	CachedPickaxe = FindBestItemInInventory<UMC_Pickaxe>();
 }
 
 UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const
@@ -34,11 +34,4 @@ UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const
 		//Return value
 		return nullptr;
 	}
-}
-
-UMC_Pickaxe* UMC_MiningSystemComponent::FindPickaxeInInventory() const
-{
-	//Inventory shouldn't be nullptr!!!
-	
-	return nullptr;
 }
