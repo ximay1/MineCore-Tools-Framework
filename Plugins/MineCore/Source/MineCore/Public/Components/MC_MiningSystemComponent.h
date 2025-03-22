@@ -5,6 +5,7 @@
 #include "MC_MiningSystemComponent.generated.h"
 
 class UMC_Pickaxe;
+class UMC_InventoryComponent;
 
 UCLASS( ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent) )
 class MINECORE_API UMC_MiningSystemComponent : public UActorComponent
@@ -15,7 +16,21 @@ public:
 	//Constructor
 	UMC_MiningSystemComponent();
 
+	/** Events */
+	virtual void BeginPlay() override;
+	
+	/** This function attempts to find the inventory component. Returns true if the inventory is found, otherwise false. */
+	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
+	bool FindInventory();
+	
+	/** This function attempts to find a Pickaxe in the Inventory. Returns true if the Pickaxe is found, otherwise false. */
+	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
+	bool FindPickaxeInInventory();
+
 protected:
-	/** Cached pickaxe (the best pickaxe in the inventory). It can be nullptr when player doesn't have any pickaxe in the inventory */
+	/** Cached pointer to pickaxe (the best pickaxe in the inventory). It can be nullptr when player doesn't have any pickaxe in the inventory */
 	TWeakObjectPtr<UMC_Pickaxe> CachedPickaxe;
+	
+	/** Cached pointer to the inventory component. It should never be nullptr. */
+	TObjectPtr<UMC_InventoryComponent> InventoryComponent;
 };
