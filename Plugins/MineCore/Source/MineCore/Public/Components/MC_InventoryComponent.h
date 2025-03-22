@@ -2,8 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Items/MC_Item.h"
 #include "MC_InventoryComponent.generated.h"
+
+class UMC_Item;
 
 UENUM(BlueprintType)
 enum class EItemAction : uint8

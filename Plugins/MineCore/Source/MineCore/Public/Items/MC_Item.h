@@ -2,8 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "Data/Item/MC_ItemConfig.h"
 #include "MC_Item.generated.h"
+
+class UMC_ItemConfig;
 
 UCLASS()
 class MINECORE_API UMC_Item : public UObject
