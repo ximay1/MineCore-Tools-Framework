@@ -5,3 +5,4 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogResourceNode, Log, All);
 DECLARE_LOG_CATEGORY_EXTERN(LogInventory, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogMiningSystem, Log, All);
