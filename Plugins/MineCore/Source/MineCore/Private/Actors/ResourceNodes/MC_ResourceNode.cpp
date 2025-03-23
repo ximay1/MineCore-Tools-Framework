@@ -111,9 +111,7 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
 void AMC_ResourceNode::BeginPlay()
 {
     Super::BeginPlay();
-    
-    if (HasAuthority())
-    {
+
 #if !UE_BUILD_SHIPPING
         // Valid if the ResourceNodeConfigId is set
         if (!IsValid(ResourceNodeConfig))
@@ -128,7 +126,6 @@ void AMC_ResourceNode::BeginPlay()
 
         //"Start" Node
         ApplyResourceNodeConfig();
-    }
 }
 
 void AMC_ResourceNode::ResourceNode_Refresh()
