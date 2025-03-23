@@ -49,13 +49,13 @@ void UMC_InventoryComponent::FindItemsByClass(const TSubclassOf<UMC_Item>& ItemC
 UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const
 {
 	// Inventory should never be nullptr!
-	TArray<UMC_Item*> Items;
+	TArray<UMC_Item*> OutItems;
 
 	// Retrieve all Items of given class from the inventory
-	FindItemsByClass(ItemClass, Items);
+	FindItemsByClass(ItemClass, OutItems);
 
 	// If no items are found, return nullptr
-	if (Items.Num() == 0)
+	if (OutItems.Num() == 0)
 	{
 		UE_LOGFMT(LogMiningSystem, Warning, "Inventory doesn't contain the requested item. File: {0}, Line: {1}", __FILE__, __LINE__);
 		return nullptr;
@@ -66,7 +66,7 @@ UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_
 	EItemTier HighestTier = EItemTier::Tier1;
 	
 	// Iterate through all items to find the one with the highest tier
-	for (UMC_Item* Item : Items)
+	for (UMC_Item* Item : OutItems)
 	{
 		if (Item->GetItemConfig()->ItemTier > HighestTier)
 		{
