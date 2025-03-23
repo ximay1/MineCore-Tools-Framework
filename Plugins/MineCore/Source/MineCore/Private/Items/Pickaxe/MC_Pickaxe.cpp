@@ -1,2 +1,1 @@
-#include "Items/Pickaxe/MC_Pickaxe.h"
-
+#include "Items/MiningTools/Pickaxe/MC_Pickaxe.h"

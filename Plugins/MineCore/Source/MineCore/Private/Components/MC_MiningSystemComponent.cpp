@@ -1,6 +1,6 @@
 #include "Components/MC_MiningSystemComponent.h"
 #include "Data/Item/MC_ItemConfig.h"
-#include "Items/Pickaxe/MC_Pickaxe.h"
+#include "Items/MiningTools/Pickaxe/MC_Pickaxe.h"
 
 UMC_MiningSystemComponent::UMC_MiningSystemComponent()
 {

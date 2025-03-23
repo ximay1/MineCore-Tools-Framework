@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Items/MC_Item.h"
-#include "MC_Pickaxe.generated.h"
+#include "MC_MiningTool.generated.h"
 
 UCLASS()
-class MINECORE_API UMC_Pickaxe : public UMC_Item
+class MINECORE_API UMC_MiningTool : public UMC_Item
 {
 	GENERATED_BODY()
 	
