@@ -3,13 +3,10 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Components/MC_InventoryComponent.h"
-#include "Data/Item/MC_ItemConfig.h"
-#include "MC_LogChannels.h"
 #include "MC_MiningSystemComponent.generated.h"
 
 class UMC_Pickaxe;
 class UMC_MiningTools;
-enum class EItemTier : uint8;
 
 UCLASS( ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent) )
 class MINECORE_API UMC_MiningSystemComponent : public UActorComponent

@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Items/MC_Item.h"
+#include "MC_LogChannels.h"
+#include "Data/Item/MC_ItemConfig.h"
 #include "MC_InventoryComponent.generated.h"
 
 class UMC_Item;
@@ -53,9 +55,17 @@ public:
 	/** This function finds the items of given class in the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Componenet")
 	void FindItemsByClass(const TSubclassOf<UMC_Item>& ItemClass, TArray<UMC_Item*>& OutItems) const;
+
+	/** This function finds the items of given class in the inventory */
+	template<typename ItemClass>
+	void FindItemsByClass(TArray<ItemClass*>& OutItems) const;
 	
 	/** This function attempts to find the best item in the Inventory. */
 	UMC_Item* FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const;
+
+	/** This function attempts to find the best item in the Inventory. */
+	template<typename ItemClass>
+	ItemClass* FindBestItemInInventory() const;
 	
 	/** Drops the item as a bag at the player's location */
 	void DropItem(uint8 Slot);
@@ -90,3 +100,60 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))
 	uint8 MaxSlots;
 };
+
+template <typename ItemClass>
+void UMC_InventoryComponent::FindItemsByClass(TArray<ItemClass*>& OutItems) const
+{
+	// Ensure that ItemClass is derived from UMC_Item
+	static_assert(TPointerIsConvertibleFromTo<ItemClass, const UMC_Item>::Value, "'T' template parameter to FindItemsByClass must be derived from UMC_Item");
+
+	// Clear the result array to avoid adding to any old data
+	OutItems.Empty();
+
+	// Iterate through all items in the inventory
+	for (const auto& Pair : Items)
+	{
+		// Check if the item is of the specified class or derived class
+		if (Pair.Value)
+		{
+			if (ItemClass* Item = Cast<ItemClass>(Pair.Value))
+			{
+				// If true, add the item to the result array
+				OutItems.Add(Item);
+			}
+		}
+	}
+}
+
+template <typename ItemClass>
+ItemClass* UMC_InventoryComponent::FindBestItemInInventory() const
+{
+	// Inventory should never be nullptr!
+    TArray<ItemClass*> Items;
+
+    // Retrieve all Items of given class from the inventory
+    FindItemsByClass<ItemClass>(Items);
+
+    // If no items are found, return nullptr
+    if (Items.Num() == 0)
+    {
+    	UE_LOGFMT(LogMiningSystem, Warning, "Inventory doesn't contain the requested item. File: {0}, Line: {1}", __FILE__, __LINE__);
+    	return nullptr;
+    }
+
+    // Assuming Tier1 is the lowest tier
+    ItemClass* BestItem = nullptr;
+    EItemTier HighestTier = EItemTier::Tier1;
+    
+    // Iterate through all items to find the one with the highest tier
+    for (ItemClass* Item : Items)
+    {
+    	if (Item->GetItemConfig()->ItemTier > HighestTier)
+    	{
+    		BestItem = Item;
+    		HighestTier = BestItem->GetItemConfig()->ItemTier;
+    	}
+    }
+    
+    return BestItem;
+}
