@@ -38,11 +38,13 @@ enum class EItemCategory : uint8
 };
 
 UCLASS()
-class MINECORE_API UMC_ItemConfig : public UDataAsset
+class MINECORE_API UMC_ItemConfig : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
-	
+
 public:
+	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override { return FPrimaryAssetId("ItemConfig", GetFName()); }
+
 	/** Item tier */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
 	EItemTier ItemTier;

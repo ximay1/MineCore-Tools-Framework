@@ -22,6 +22,13 @@ public:
 	/** Attempts to cast the ItemConfig to the specified type */
 	template<typename ItemConfigClass = UMC_ItemConfig>
 	ItemConfigClass* GetItemConfig() const;
+
+	// === UObject Interface ===
+	virtual void PostInitProperties() override;
+	// === End UObject Interface ===
+
+	/** Called in PostInitProperties to simulate a true BeginPlay from a actor. */
+	virtual void BeginPlay();	
 	
 protected:
 	/** Data Item Config */

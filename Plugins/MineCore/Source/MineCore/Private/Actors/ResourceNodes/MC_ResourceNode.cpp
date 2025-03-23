@@ -1,5 +1,4 @@
 #include "Actors/ResourceNodes/MC_ResourceNode.h"
-#include "Data/ResourceNode/MC_ResourceNodeConfig.h"
 #include "Net/UnrealNetwork.h"
 
 AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(0,3)))
