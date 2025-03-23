@@ -30,6 +30,10 @@ public:
 	template<typename ItemClass>
 	ItemClass* FindBestItemInInventory() const;
 
+	/** This function checks if the player is able to mine the resource node */
+	//UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
+	//bool CanPlayerMine()
+
 protected:
 	/** Cached pointer to pickaxe (the best pickaxe in the inventory). It can be nullptr when player doesn't have any pickaxe in the inventory */
 	UPROPERTY(BlueprintReadOnly, Category = "Mining System Component")
