@@ -71,11 +71,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (AssetBundles = "UI"))
 	FText ItemName;
 
-	/** Icon representing the item. */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (AssetBundles = "UI"))
-	TSoftObjectPtr<UTexture2D> ItemIcon;
-
 	/** A short description of the item. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (AssetBundles = "UI", MultiLine))
 	FText ItemDescription;
+	
+	/** Icon representing the item. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (AssetBundles = "UI"))
+	TSoftObjectPtr<UTexture2D> ItemIcon;
 };
