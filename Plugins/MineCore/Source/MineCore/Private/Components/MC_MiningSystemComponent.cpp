@@ -1,6 +1,6 @@
 #include "Components/MC_MiningSystemComponent.h"
 #include "Data/Item/MC_ItemConfig.h"
-#include "Items/MiningTools/Pickaxe/MC_Pickaxe.h"
+#include "Items/MiningTools/MC_Pickaxe.h"
 
 UMC_MiningSystemComponent::UMC_MiningSystemComponent()
 {
@@ -15,7 +15,7 @@ void UMC_MiningSystemComponent::BeginPlay()
 	InventoryComponent = FindInventory();
 
 	//Find the best Pickaxe in the inventory
-	CachedPickaxe = InventoryComponent->FindBestItemInInventory(UMC_Pickaxe::StaticClass());
+	CachedPickaxe = Cast<UMC_Pickaxe>(InventoryComponent->FindBestItemInInventory(UMC_Pickaxe::StaticClass()));
 }
 
 UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const
