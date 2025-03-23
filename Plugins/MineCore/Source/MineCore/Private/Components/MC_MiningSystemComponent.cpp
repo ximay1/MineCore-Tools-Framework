@@ -16,7 +16,7 @@ void UMC_MiningSystemComponent::BeginPlay()
 	InventoryComponent = FindInventory();
 
 	//Find the best Pickaxe in the inventory
-	CachedPickaxe = Cast<UMC_Pickaxe>(InventoryComponent->FindBestItemInInventory(UMC_Pickaxe::StaticClass()));
+	CachedPickaxe = InventoryComponent->FindBestItemInInventory<UMC_Pickaxe>();
 }
 
 UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const
