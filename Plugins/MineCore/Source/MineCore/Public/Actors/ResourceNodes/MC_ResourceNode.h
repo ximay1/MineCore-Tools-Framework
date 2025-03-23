@@ -57,23 +57,19 @@ protected:
     /** Current state of the resource node. */
     UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
     EResourceNodeState ResourceNodeState;
-    
-    /** Pointer to the resource node config asset. */
+
+    /** Resource Node config primary asset id */
     UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Resource Node | Config")
+    FPrimaryAssetId ResourceNodeConfigID;    
+
+    /** Pointer to the resource node config asset. */
+    UPROPERTY(BlueprintReadWrite, Category = "Resource Node | Config")
     TObjectPtr<UMC_ResourceNodeConfig> ResourceNodeConfig;
     
     /** Static mesh component representing the resource node. */
-    UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
     TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
-
-    /** The StaticMesh currently applied to the Static Mesh Component */
-    UPROPERTY(ReplicatedUsing = OnRep_CurrentStaticMesh, BlueprintReadOnly, Category = "Resource Node")
-    TObjectPtr<UStaticMesh> CurrentStaticMesh;
-
-    /** Called when the CurrentStaticMesh property is replicated */
-    UFUNCTION()
-    void OnRep_CurrentStaticMesh();
-   
+    
     /** Updates the static mesh's material based on the current resource node state. */
     void SetStaticMeshForCurrentState();
 

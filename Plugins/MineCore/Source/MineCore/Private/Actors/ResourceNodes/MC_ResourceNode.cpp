@@ -1,22 +1,22 @@
 #include "Actors/ResourceNodes/MC_ResourceNode.h"
+
+#include "Engine/AssetManager.h"
 #include "Net/UnrealNetwork.h"
 
 AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(0,3)))
 {
-    PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bCanEverTick = true;
     bReplicates = true;
     
     // Create the static mesh component and set it as the root
     StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+    StaticMeshComponent->SetIsReplicated(true);
     RootComponent = StaticMeshComponent;
 }
 
 void AMC_ResourceNode::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-    
-    DOREPLIFETIME(AMC_ResourceNode, StaticMeshComponent);
-    DOREPLIFETIME(AMC_ResourceNode, CurrentStaticMesh);
 }
 
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)
@@ -112,20 +112,34 @@ void AMC_ResourceNode::BeginPlay()
 {
     Super::BeginPlay();
 
+    if (HasAuthority())
+    {
 #if !UE_BUILD_SHIPPING
         // Valid if the ResourceNodeConfigId is set
-        if (!IsValid(ResourceNodeConfig))
+        if (!ResourceNodeConfigID.IsValid())
         {
             UE_LOGFMT(LogResourceNode, Warning, "ResourceNodeConfigId is not valid");
-            
+        
             // If the config is invalid, destroy this actor to prevent issues
             Destroy(true);
             return;
         }
 #endif
-
-        //"Start" Node
-        ApplyResourceNodeConfig();
+    
+        //Create delegate
+        FStreamableDelegate PrimaryDataAssetDelegate = FStreamableDelegate::CreateLambda([this]()
+        {
+            ResourceNodeConfig = Cast<UMC_ResourceNodeConfig>(UAssetManager::Get().GetPrimaryAssetObject(ResourceNodeConfigID));
+            if (ResourceNodeConfig)
+            {
+                //"Start" Node
+                ApplyResourceNodeConfig();
+            }
+        });
+    
+        //Load Primary Data Asset
+        UAssetManager::Get().LoadPrimaryAsset(ResourceNodeConfigID, {}, PrimaryDataAssetDelegate);
+    }
 }
 
 void AMC_ResourceNode::ResourceNode_Refresh()
@@ -164,19 +178,13 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
     }
 }
 
-void AMC_ResourceNode::OnRep_CurrentStaticMesh()
-{
-    //Set StaticMesh
-    StaticMeshComponent->SetStaticMesh(CurrentStaticMesh);
-}
-
 void AMC_ResourceNode::SetStaticMeshForCurrentState()
 {
     //Find and check
-    if (UStaticMesh* StaticMesh = ResourceNodeConfig->ResourceNodeMaterials.FindChecked(ResourceNodeState))
+    if (UStaticMesh* StaticMesh = ResourceNodeConfig->ResourceNodeMaterials.FindChecked(ResourceNodeState).Get())
     {
         // Set the current static mesh
-        CurrentStaticMesh = StaticMesh;
+        StaticMeshComponent->SetStaticMesh(StaticMesh);
     }
     else
     {
