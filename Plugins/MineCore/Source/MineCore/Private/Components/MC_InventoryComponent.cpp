@@ -1,6 +1,7 @@
 #include "Components/MC_InventoryComponent.h"
 #include "MC_LogChannels.h"
 #include "Items/MC_Item.h"
+#include "Data/Item/MC_ItemConfig.h"
 
 UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 {
@@ -25,7 +26,7 @@ void UMC_InventoryComponent::RefreshInventoryWidget()
 	}*/
 }
 
-void UMC_InventoryComponent::FindItemsByClass(TSubclassOf<UMC_Item> ItemClass, TArray<UMC_Item*>& OutItems) const
+void UMC_InventoryComponent::FindItemsByClass(const TSubclassOf<UMC_Item>& ItemClass, TArray<UMC_Item*>& OutItems) const
 {
 	// Clear the result array to avoid adding to any old data
 	OutItems.Empty();
@@ -43,6 +44,38 @@ void UMC_InventoryComponent::FindItemsByClass(TSubclassOf<UMC_Item> ItemClass, T
 			}
 		}
 	}
+}
+
+UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const
+{
+	// Inventory should never be nullptr!
+	TArray<UMC_Item*> Items;
+
+	// Retrieve all Items of given class from the inventory
+	FindItemsByClass(ItemClass, Items);
+
+	// If no items are found, return nullptr
+	if (Items.Num() == 0)
+	{
+		UE_LOGFMT(LogMiningSystem, Warning, "Inventory doesn't contain the requested item. File: {0}, Line: {1}", __FILE__, __LINE__);
+		return nullptr;
+	}
+
+	// Assuming Tier1 is the lowest tier
+	UMC_Item* BestItem = nullptr;
+	EItemTier HighestTier = EItemTier::Tier1;
+	
+	// Iterate through all items to find the one with the highest tier
+	for (UMC_Item* Item : Items)
+	{
+		if (Item->GetItemConfig()->ItemTier > HighestTier)
+		{
+			BestItem = Item;
+			HighestTier = BestItem->GetItemConfig()->ItemTier;
+		}
+	}
+	
+	return BestItem;
 }
 
 void UMC_InventoryComponent::DropItem(uint8 Slot)

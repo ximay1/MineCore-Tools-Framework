@@ -51,12 +51,11 @@ public:
 	FORCEINLINE UMC_Item* GetItemFromInventory(uint8 Slot) const { return Items.FindRef(Slot); }
 
 	/** This function finds the items of given class in the inventory */
-	template<typename ItemClass>
-	void FindItemsByClass(TArray<ItemClass*>& OutItems) const;
-
-	/** Blueprint version of FindItemsByClass */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Componenet")
-	void FindItemsByClass(TSubclassOf<UMC_Item> ItemClass, TArray<UMC_Item*>& OutItems) const;
+	void FindItemsByClass(const TSubclassOf<UMC_Item>& ItemClass, TArray<UMC_Item*>& OutItems) const;
+	
+	/** This function attempts to find the best item in the Inventory. */
+	UMC_Item* FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const;
 	
 	/** Drops the item as a bag at the player's location */
 	void DropItem(uint8 Slot);
@@ -79,39 +78,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Component")
 	TSubclassOf<UUserWidget> InventoryClass;
 
+	/** Cached Pointer to the Inventory widget */
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
+	TObjectPtr<UUserWidget> InventoryWidget;
+
 	/** Map of items in the inventory. uint8 represents a number of slot. */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
 	TMap<uint8, TObjectPtr<UMC_Item>> Items;
-
-	/** Cached Pointer to the Inventory widget */
-	 UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
-	TObjectPtr<UUserWidget> InventoryWidget;
-
+	
 	/** Maximum number of slots in the inventory */
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))
 	uint8 MaxSlots;
 };
-
-template <typename ItemClass>
-void UMC_InventoryComponent::FindItemsByClass(TArray<ItemClass*>& OutItems) const
-{
-	// Ensure that ItemClass is derived from UMC_Item
-	static_assert(TPointerIsConvertibleFromTo<ItemClass, const UMC_Item>::Value, "'T' template parameter to FindItemsByClass must be derived from UMC_Item");
-
-	// Clear the result array to avoid adding to any old data
-	OutItems.Empty();
-
-	// Iterate through all items in the inventory
-	for (const auto& Pair : Items)
-	{
-		// Check if the item is of the specified class or derived class
-		if (Pair.Value)
-		{
-			if (ItemClass* Item = Cast<ItemClass>(Pair.Value))
-			{
-				// If true, add the item to the result array
-				OutItems.Add(Item);
-			}
-		}
-	}
-}
