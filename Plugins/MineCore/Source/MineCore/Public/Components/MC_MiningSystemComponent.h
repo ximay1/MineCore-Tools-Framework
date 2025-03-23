@@ -8,7 +8,7 @@
 #include "MC_MiningSystemComponent.generated.h"
 
 class UMC_Pickaxe;
-enum class EItemTier;
+enum class EItemTier : uint8;
 
 UCLASS( ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent) )
 class MINECORE_API UMC_MiningSystemComponent : public UActorComponent
