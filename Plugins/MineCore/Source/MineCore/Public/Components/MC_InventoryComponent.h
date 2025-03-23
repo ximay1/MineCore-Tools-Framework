@@ -129,13 +129,13 @@ template <typename ItemClass>
 ItemClass* UMC_InventoryComponent::FindBestItemInInventory() const
 {
 	// Inventory should never be nullptr!
-    TArray<ItemClass*> Items;
+    TArray<ItemClass*> OutItems;
 
     // Retrieve all Items of given class from the inventory
-    FindItemsByClass<ItemClass>(Items);
+    FindItemsByClass<ItemClass>(OutItems);
 
     // If no items are found, return nullptr
-    if (Items.Num() == 0)
+    if (OutItems.Num() == 0)
     {
     	UE_LOGFMT(LogMiningSystem, Warning, "Inventory doesn't contain the requested item. File: {0}, Line: {1}", __FILE__, __LINE__);
     	return nullptr;
@@ -143,10 +143,10 @@ ItemClass* UMC_InventoryComponent::FindBestItemInInventory() const
 
     // Assuming Tier1 is the lowest tier
     ItemClass* BestItem = nullptr;
-    EItemTier HighestTier = EItemTier::Tier1;
+    EItemTier HighestTier = EItemTier::IT_Tier1;
     
     // Iterate through all items to find the one with the highest tier
-    for (ItemClass* Item : Items)
+    for (ItemClass* Item : OutItems)
     {
     	if (Item->GetItemConfig()->ItemTier > HighestTier)
     	{
