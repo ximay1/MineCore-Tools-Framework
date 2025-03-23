@@ -48,15 +48,15 @@ public:
 
 	/** Checks if an item exists in the inventory. Returns UMC_Item if found, otherwise nullptr */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	FORCEINLINE UMC_Item* GetItemFromInventory(uint8 Slot) { return Items.FindRef(Slot); }
+	FORCEINLINE UMC_Item* GetItemFromInventory(uint8 Slot) const { return Items.FindRef(Slot); }
 
 	/** This function finds the items of given class in the inventory */
 	template<typename ItemClass>
-	void FindItemsByClass(TArray<ItemClass*>& OutItems);
+	void FindItemsByClass(TArray<ItemClass*>& OutItems) const;
 
 	/** Blueprint version of FindItemsByClass */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Componenet")
-	void FindItemsByClass(TSubclassOf<UMC_Item> ItemClass, TArray<UMC_Item*>& OutItems);
+	void FindItemsByClass(TSubclassOf<UMC_Item> ItemClass, TArray<UMC_Item*>& OutItems) const;
 	
 	/** Drops the item as a bag at the player's location */
 	void DropItem(uint8 Slot);
@@ -64,7 +64,7 @@ public:
 	
 	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	bool FindValidSlot(uint8& OutSlot);
+	bool FindValidSlot(uint8& OutSlot) const;
 	
 	/** Get Max Slots */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
@@ -93,7 +93,7 @@ protected:
 };
 
 template <typename ItemClass>
-void UMC_InventoryComponent::FindItemsByClass(TArray<ItemClass*>& OutItems)
+void UMC_InventoryComponent::FindItemsByClass(TArray<ItemClass*>& OutItems) const
 {
 	// Ensure that ItemClass is derived from UMC_Item
 	static_assert(TPointerIsConvertibleFromTo<ItemClass, const UMC_Item>::Value, "'T' template parameter to FindItemsByClass must be derived from UMC_Item");

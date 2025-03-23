@@ -25,7 +25,7 @@ void UMC_InventoryComponent::RefreshInventoryWidget()
 	}*/
 }
 
-void UMC_InventoryComponent::FindItemsByClass(TSubclassOf<UMC_Item> ItemClass, TArray<UMC_Item*>& OutItems)
+void UMC_InventoryComponent::FindItemsByClass(TSubclassOf<UMC_Item> ItemClass, TArray<UMC_Item*>& OutItems) const
 {
 	// Clear the result array to avoid adding to any old data
 	OutItems.Empty();
@@ -55,7 +55,7 @@ void UMC_InventoryComponent::DropItem(UMC_Item* Item)
 	//TODO: Create a bag at player's location
 }
 
-bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot)
+bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
 {
 	// Iterate through all the slots in the inventory
 	for (uint8 CurrentSlot = 0; CurrentSlot < MaxSlots; CurrentSlot++)
