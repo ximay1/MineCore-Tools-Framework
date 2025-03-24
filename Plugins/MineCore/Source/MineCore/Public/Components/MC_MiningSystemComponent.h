@@ -6,7 +6,8 @@
 #include "MC_MiningSystemComponent.generated.h"
 
 class UMC_Pickaxe;
-class UMC_MiningTools;
+class UMC_MiningTool;
+class UMC_InventoryComponent;
 
 UCLASS( ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent) )
 class MINECORE_API UMC_MiningSystemComponent : public UActorComponent
@@ -20,9 +21,12 @@ public:
 	/** Events */
 	virtual void BeginPlay() override;
 	
-	/** This function checks if the player is able to mine the resource node */
-	//UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
-	//bool CanPlayerMine(UMC_MiningTools* MiningTool, )
+	/** This function checks if the player is able to mine the resource node. Always called on the server! */
+	bool CanPlayerMine(UMC_MiningTool* MiningTool);
+
+	/** Get Pickaxe */
+	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
+	FORCEINLINE UMC_Pickaxe* GetPickaxe() { return CachedPickaxe.Get(); }
 
 protected:
 	/** Cached pointer to pickaxe (the best pickaxe in the inventory). It can be nullptr when player doesn't have any pickaxe in the inventory */

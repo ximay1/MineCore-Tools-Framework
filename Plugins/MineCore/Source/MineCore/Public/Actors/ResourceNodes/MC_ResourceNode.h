@@ -35,7 +35,7 @@ public:
     virtual void Server_StartMining(APlayerController* PlayerController);
     
     /** Checks if the resource node is in a state that allows mining. */
-    virtual bool CanBeMined() const;
+    virtual bool CanBeMined(APlayerController* PlayerController);
 
     /** Stops the mining process. */
     virtual void StopMining(bool IsPlayerControllerValid);

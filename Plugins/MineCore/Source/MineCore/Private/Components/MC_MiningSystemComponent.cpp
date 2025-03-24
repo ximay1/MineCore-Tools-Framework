@@ -1,6 +1,7 @@
 #include "Components/MC_MiningSystemComponent.h"
-#include "Data/Item/MC_ItemConfig.h"
+#include "Data/Item/MC_UsableItemConfig.h"
 #include "Items/MiningTools/MC_Pickaxe.h"
+#include "Items/MiningTools/MC_MiningTool.h"
 #include "MC_LogChannels.h"
 
 UMC_MiningSystemComponent::UMC_MiningSystemComponent()
@@ -17,6 +18,14 @@ void UMC_MiningSystemComponent::BeginPlay()
 
 	//Find the best Pickaxe in the inventory
 	CachedPickaxe = InventoryComponent->FindBestItemInInventory<UMC_Pickaxe>();
+}
+
+bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
+{
+	if (MiningTool->GetDurability() > 0.0f && MiningTool->GetDurability() <= MiningTool->GetItemConfig<UMC_UsableItemConfig>()->MaxDurability)
+		return true;
+	
+	return false;
 }
 
 UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const

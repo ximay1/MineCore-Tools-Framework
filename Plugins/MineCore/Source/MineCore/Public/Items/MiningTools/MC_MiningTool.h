@@ -9,6 +9,7 @@ class MINECORE_API UMC_MiningTool : public UMC_Item
 {
 	GENERATED_BODY()
 
+public:
 	/** Get Durablity */
 	UFUNCTION(BlueprintCallable,Category = "Mining Tool")
 	FORCEINLINE float GetDurability() const { return Durability; }
