@@ -45,7 +45,7 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
         //If the player can't mine, we have to show a error widget
         Client_DisplayMiningDeniedWidget(PlayerController);
 
-        //Stop Mining
+        //Stop Mining. Timer won't be set here.
         MiningSystemComponent->StopMining();
     }
 }
