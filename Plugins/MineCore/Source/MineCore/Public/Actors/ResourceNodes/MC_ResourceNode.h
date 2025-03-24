@@ -38,7 +38,7 @@ public:
     virtual bool CanBeMined(APlayerController* PlayerController);
 
     /** Stops the mining process. */
-    virtual void StopMining(bool IsPlayerControllerValid);
+    virtual void StopMining(APlayerController* PlayerController);
     
     /** Called when the player mines a resource. */
     virtual void PlayerMineResource(APlayerController* PlayerController);
@@ -53,6 +53,9 @@ protected:
 
     /** Validates the PlayerController. */
     bool EnsureValidPlayerController(APlayerController* PlayerController);
+
+    /** Try to claer MineResourceNodeTimerHandle */
+    void TryToClearTimerHandle(FTimerHandle TimerHandle);
     
     /** Current state of the resource node. */
     UPROPERTY(BlueprintReadOnly, Category = "Resource Node")

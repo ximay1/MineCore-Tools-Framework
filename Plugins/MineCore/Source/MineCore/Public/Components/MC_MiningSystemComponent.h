@@ -20,6 +20,7 @@ public:
 
 	/** Events */
 	virtual void BeginPlay() override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	/** This function checks if the player is able to mine the resource node. Always called on the server! */
 	bool CanPlayerMine(UMC_MiningTool* MiningTool);
@@ -39,7 +40,7 @@ public:
 protected:
 
 	/** Is Player Mining */
-	UPROPERTY()
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Mining System Component")
 	bool IsPlayerMining;
 	
 	/** Cached pointer to pickaxe (the best pickaxe in the inventory). It can be nullptr when player doesn't have any pickaxe in the inventory */

@@ -1,7 +1,8 @@
 #include "Actors/ResourceNodes/MC_ResourceNode.h"
-
+#include "Components/MC_MiningSystemComponent.h"
 #include "Engine/AssetManager.h"
-#include "Net/UnrealNetwork.h"
+#include "Player/MC_PlayerCharacter.h"
+#include "Items/MiningTools/MC_Pickaxe.h"
 
 AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(0,3)))
 {
@@ -21,8 +22,11 @@ void AMC_ResourceNode::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)
 {
+    //Get MiningSystemComponent
+    UMC_MiningSystemComponent* MiningSystemComponent = Cast<AMC_PlayerCharacter>(PlayerController->GetPawn())->GetMiningSystemComponent();
+    
     //Check if the player is able to mine
-    if (CanBeMined())
+    if (CanBeMined(PlayerController))
     {
         //Create Delegate
         FTimerDelegate MineResourceNodeDelegate = FTimerDelegate::CreateUObject(this, &AMC_ResourceNode::PlayerMineResource, PlayerController);
@@ -30,6 +34,9 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
         //Set timer
         GetWorldTimerManager().SetTimer(MineResourceNodeTimerHandle, MineResourceNodeDelegate, ResourceNodeConfig->MiningTime, true);
 
+        //Start Mining
+        MiningSystemComponent->StartMining();
+        
         //Show progress bar
         Client_DisplayMiningProgressWidget(PlayerController);
     }
@@ -37,6 +44,9 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
     {
         //If the player can't mine, we have to show a error widget
         Client_DisplayMiningDeniedWidget(PlayerController);
+
+        //Stop Mining
+        MiningSystemComponent->StopMining();
     }
 }
 
@@ -60,33 +70,49 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerCo
     }
 }
 
-bool AMC_ResourceNode::CanBeMined() const
+bool AMC_ResourceNode::CanBeMined(APlayerController* PlayerController)
 {
-    /** TODO:Create Logic here */
-    return true;
+    // Validate the player controller
+    if (EnsureValidPlayerController(PlayerController))
+    {
+        // Check if the MineResourceNodeTimerHandle isn't cleared for the given player controller
+        // Check if the resource node is in a minable state
+        if (ResourceNodeState != EResourceNodeState::STATE_1 && MineResourceNodeTimerHandle.IsValid())
+        {
+            // Get the player character associated with the controller
+            if (AMC_PlayerCharacter* PlayerCharacter = PlayerController->GetPawn<AMC_PlayerCharacter>())
+            {
+                // Get the player's pickaxe from the mining system component
+                if (UMC_Pickaxe* Pickaxe = PlayerCharacter->GetMiningSystemComponent()->GetPickaxe())
+                {
+                    // Check if the player can mine using the retrieved pickaxe
+                    return PlayerCharacter->GetMiningSystemComponent()->CanPlayerMine(Pickaxe);
+                }
+            }
+        }
+    }
+    
+    // Return false if any condition fails
+    return false; 
 }
 
-void AMC_ResourceNode::StopMining(bool IsPlayerControllerValid)
+void AMC_ResourceNode::StopMining(APlayerController* PlayerController)
 {
-    /** TODO: Create logic, IsPlayerControlerValid can be true */
     //Check if the player controller is valid
-    if (IsPlayerControllerValid)
+    if (IsValid(PlayerController))
     {
-        
+        //Stop Mining
+        Cast<AMC_PlayerCharacter>(PlayerController->GetPawn())->GetMiningSystemComponent()->StopMining();
     }
-    else
-    {
-        
-    }
+    
+    //Try to clear timer
+    TryToClearTimerHandle(MineResourceNodeTimerHandle);
 }
 
 void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
 {
-    //Check if the player controller is valid
-    bool IsPlayerControlerValid = EnsureValidPlayerController(PlayerController);
-    
-    //Check if ResourceNodeState isn't STATE_1
-    if (ResourceNodeState != EResourceNodeState::STATE_1 && IsPlayerControlerValid)
+    //Check if ResourceNodeState can be mined
+    if (CanBeMined(PlayerController))
     {
         //Decrease State of this Node
         ResourceNodeState = ResourceNodeState - 1;
@@ -99,13 +125,13 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
         {
             //Start again mining
             Server_StartMining(PlayerController);
+            
+            return;
         }
-
-        return;
     }
 
-    //Stop mining
-    StopMining(IsPlayerControlerValid);
+    //Stop Mining
+    StopMining(PlayerController);
 }
 
 void AMC_ResourceNode::BeginPlay()
@@ -175,6 +201,15 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
         
         // PlayerController is null, return false.
         return false;
+    }
+}
+
+void AMC_ResourceNode::TryToClearTimerHandle(FTimerHandle TimerHandle)
+{
+    //Try to clear timer
+    if (TimerHandle.IsValid())
+    {
+        GetWorldTimerManager().ClearTimer(TimerHandle);
     }
 }
 

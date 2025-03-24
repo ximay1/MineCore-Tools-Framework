@@ -3,8 +3,9 @@
 #include "Items/MiningTools/MC_Pickaxe.h"
 #include "Items/MiningTools/MC_MiningTool.h"
 #include "MC_LogChannels.h"
+#include "Net/UnrealNetwork.h"
 
-UMC_MiningSystemComponent::UMC_MiningSystemComponent()
+UMC_MiningSystemComponent::UMC_MiningSystemComponent() : IsPlayerMining(false)
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
@@ -18,6 +19,13 @@ void UMC_MiningSystemComponent::BeginPlay()
 
 	//Find the best Pickaxe in the inventory
 	CachedPickaxe = InventoryComponent->FindBestItemInInventory<UMC_Pickaxe>();
+}
+
+void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION(UMC_MiningSystemComponent, IsPlayerMining, COND_OwnerOnly);
 }
 
 bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
@@ -38,8 +46,11 @@ void UMC_MiningSystemComponent::StartMining_Implementation()
 
 void UMC_MiningSystemComponent::StopMining_Implementation()
 {
-	//TODO:Stop animation or something else idk
-
+	if (IsPlayerMining)
+	{
+		//TODO:Stop animation or something else idk
+	}
+	
 	//Set Is Player Mining to false
 	IsPlayerMining = false;
 }
