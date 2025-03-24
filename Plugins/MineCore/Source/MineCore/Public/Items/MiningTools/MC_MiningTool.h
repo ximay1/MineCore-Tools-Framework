@@ -8,5 +8,13 @@ UCLASS()
 class MINECORE_API UMC_MiningTool : public UMC_Item
 {
 	GENERATED_BODY()
+
+	/** Get Durablity */
+	UFUNCTION(BlueprintCallable,Category = "Mining Tool")
+	FORCEINLINE float GetDurability() const { return Durability; }
 	
+protected:
+	/** The durability of the item. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mining Tool", meta = (ClampMin = "0.01"))
+	float Durability = 1.0f;
 };
