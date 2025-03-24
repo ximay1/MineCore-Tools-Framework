@@ -28,6 +28,22 @@ bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
 	return false;
 }
 
+void UMC_MiningSystemComponent::StartMining_Implementation()
+{
+	//TODO: Start animation or something else idk
+
+	//Set Is Player Mining to true
+	IsPlayerMining = true;
+}
+
+void UMC_MiningSystemComponent::StopMining_Implementation()
+{
+	//TODO:Stop animation or something else idk
+
+	//Set Is Player Mining to false
+	IsPlayerMining = false;
+}
+
 UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const
 {
 	//Get Owner

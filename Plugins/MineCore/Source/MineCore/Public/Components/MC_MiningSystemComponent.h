@@ -28,7 +28,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
 	FORCEINLINE UMC_Pickaxe* GetPickaxe() { return CachedPickaxe.Get(); }
 
+	/** Start Mining */
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
+	virtual void StartMining(); 
+	
+	/** Stop Mining */
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
+	virtual void StopMining(); 
+	
 protected:
+
+	/** Is Player Mining */
+	UPROPERTY()
+	bool IsPlayerMining;
+	
 	/** Cached pointer to pickaxe (the best pickaxe in the inventory). It can be nullptr when player doesn't have any pickaxe in the inventory */
 	UPROPERTY(BlueprintReadOnly, Category = "Mining System Component")
 	TWeakObjectPtr<UMC_Pickaxe> CachedPickaxe;
