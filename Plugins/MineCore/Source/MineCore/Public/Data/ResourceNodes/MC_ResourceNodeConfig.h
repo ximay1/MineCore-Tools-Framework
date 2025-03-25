@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Items/MC_Item.h"
+#include "Items/MiningTools/MC_MiningTool.h"
 #include "MC_LogChannels.h"
 #include "MC_ResourceNodeConfig.generated.h"
 
@@ -74,6 +74,10 @@ public:
 	//Tier of the resource node
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
 	EItemTier ResourceNodeTier;
+
+	// Class of tools that can mine this resource node
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
+	TSubclassOf<UMC_MiningTool> AllowedTool;
 	
 	// Time interval (in seconds) to increase the state by 1.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
