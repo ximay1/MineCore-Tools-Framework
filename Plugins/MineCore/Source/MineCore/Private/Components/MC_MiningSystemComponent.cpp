@@ -1,7 +1,10 @@
 #include "Components/MC_MiningSystemComponent.h"
 #include "MineCore/Public/Data/Items//UsableItems/MC_UsableItemConfig.h"
 #include "Items/MiningTools/MC_Pickaxe.h"
-#include "Items/MiningTools/MC_MiningTool.h"
+#include "Items/MiningTools/MC_Axe.h"
+#include "Items/MiningTools/MC_Knife.h"
+#include "Items/MiningTools/MC_Hammer.h"
+#include "Items/MiningTools/MC_Sickle.h"
 #include "MC_LogChannels.h"
 #include "Net/UnrealNetwork.h"
 
@@ -18,8 +21,8 @@ void UMC_MiningSystemComponent::BeginPlay()
 	//Find Inventory
 	InventoryComponent = FindInventory();
 
-	//Find the best Pickaxe in the inventory
-	CachedPickaxe = InventoryComponent->FindBestItemInInventory<UMC_Pickaxe>();
+	//Update cache
+	CacheMiningToolsFromInventory();
 }
 
 void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -27,14 +30,6 @@ void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION(UMC_MiningSystemComponent, IsPlayerMining, COND_OwnerOnly);
-}
-
-bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
-{
-	if (MiningTool->GetDurability() > 0.0f && MiningTool->GetDurability() <= MiningTool->GetItemConfig<UMC_UsableItemConfig>()->MaxDurability)
-		return true;
-	
-	return false;
 }
 
 void UMC_MiningSystemComponent::StartMining_Implementation()
@@ -54,6 +49,59 @@ void UMC_MiningSystemComponent::StopMining_Implementation()
 	
 	//Set Is Player Mining to false
 	IsPlayerMining = false;
+}
+
+bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
+{
+	if (MiningTool->GetDurability() > 0.0f && MiningTool->GetDurability() <= MiningTool->GetItemConfig<UMC_UsableItemConfig>()->MaxDurability)
+		return true;
+	
+	return false;
+}
+
+void UMC_MiningSystemComponent::CacheMiningToolsFromInventory()
+{
+	// List of tool classes we're interested in
+	const TSet<TSubclassOf<UMC_MiningTool>> ToolClasses = {
+		UMC_Pickaxe::StaticClass(),
+		UMC_Hammer::StaticClass(),
+		UMC_Axe::StaticClass(),
+		UMC_Knife::StaticClass(),
+		UMC_Sickle::StaticClass()
+	};
+
+	TMap<TSubclassOf<UMC_MiningTool>, UMC_MiningTool*> BestToolsMap;
+
+	// Process each inventory item only once
+	for (const auto& Pair : InventoryComponent->GetItems())
+	{
+		//Get Item
+		UMC_Item* Item = Pair.Value;
+		
+		// Check if the item is a mining tool
+		if (UMC_MiningTool* Tool = Cast<UMC_MiningTool>(Item))
+		{
+			TSubclassOf<UMC_MiningTool> ToolClass = Tool->GetClass();
+            
+			// Check if this is one of the tool types we're looking for
+			if (ToolClasses.Contains(ToolClass))
+			{
+				// Compare tiers with current best tool of this type
+				UMC_MiningTool*& CurrentBestTool = BestToolsMap.FindOrAdd(ToolClass);
+				if (!CurrentBestTool || Tool->IsBetterThan(CurrentBestTool))
+				{
+					CurrentBestTool = Tool;
+				}
+			}
+		}
+	}
+
+	// Update cache: clear old entries and add new ones
+	CachedMiningTools.Empty();
+	for (const auto& ToolPair : BestToolsMap)
+	{
+		CachedMiningTools.Add(ToolPair.Key, ToolPair.Value);
+	}
 }
 
 UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const

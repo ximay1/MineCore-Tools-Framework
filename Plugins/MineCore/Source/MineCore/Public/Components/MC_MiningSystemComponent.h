@@ -26,9 +26,9 @@ public:
 	/** This function checks if the player is able to mine the resource node. Always called on the server! */
 	bool CanPlayerMine(UMC_MiningTool* MiningTool);
 
-	/** Get Pickaxe */
+	/** Get Mining Tool */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
-	FORCEINLINE UMC_Pickaxe* GetPickaxe() { return CachedPickaxe.Get(); }
+	FORCEINLINE UMC_MiningTool* GetMiningTool(TSubclassOf<UMC_MiningTool> Class) { return CachedMiningTools.FindChecked(Class); }
 
 	/** Start Mining */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
@@ -37,16 +37,21 @@ public:
 	/** Stop Mining */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
 	virtual void StopMining(); 
-	
+
+	/** Caches mining tools from the player's inventory */
+	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
+	void CacheMiningToolsFromInventory();
 protected:
 
 	/** Is Player Mining */
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Mining System Component")
 	bool IsPlayerMining;
 	
-	/** Cached pointer to pickaxe (the best pickaxe in the inventory). It can be nullptr when player doesn't have any pickaxe in the inventory */
+	/** Cached pointers to mining tools in the inventory (key = tool class).
+	 * Value can be nullptr if the player doesn't have any mining tool of the given class.
+	 */
 	UPROPERTY(BlueprintReadOnly, Category = "Mining System Component")
-	TWeakObjectPtr<UMC_Pickaxe> CachedPickaxe;
+	TMap<TSubclassOf<UMC_MiningTool>, UMC_MiningTool*> CachedMiningTools;
 	
 	/** Cached pointer to the inventory component. It should never be nullptr. */
 	UPROPERTY(BlueprintReadOnly, Category = "Mining System Component")
