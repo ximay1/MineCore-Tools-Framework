@@ -49,7 +49,7 @@ public:
 
 	/** Get Items */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	const TMap<uint8, TObjectPtr<UMC_Item>>& GetItems() const { return Items; }
+	void GetItems(TArray<UMC_Item*>& ValuesArray) const { Items.GenerateValueArray(ValuesArray); }
 	
 	/** Checks if an item exists in the inventory. Returns UMC_Item if found, otherwise nullptr */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
@@ -97,7 +97,7 @@ protected:
 
 	/** Map of items in the inventory. uint8 represents a number of slot. */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
-	TMap<uint8, TObjectPtr<UMC_Item>> Items;
+	TMap<uint8, UMC_Item*> Items;
 	
 	/** Maximum number of slots in the inventory */
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))
