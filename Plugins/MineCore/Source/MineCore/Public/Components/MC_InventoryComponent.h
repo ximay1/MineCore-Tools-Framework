@@ -47,6 +47,10 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
 	void RemoveItemFromInventory(uint8 Slot, EItemAction ItemAction);
 
+	/** Get Items */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	const TMap<uint8, TObjectPtr<UMC_Item>>& GetItems() const { return Items; }
+	
 	/** Checks if an item exists in the inventory. Returns UMC_Item if found, otherwise nullptr */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	FORCEINLINE UMC_Item* GetItemFromInventory(uint8 Slot) const { return Items.FindRef(Slot); }
