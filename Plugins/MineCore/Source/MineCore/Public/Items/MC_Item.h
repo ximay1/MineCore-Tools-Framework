@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Data/Item/MC_ItemConfig.h"
+#include "MineCore/Public/Data/Items/MC_ItemConfig.h"
 #include "UObject/NoExportTypes.h"
 #include "MC_LogChannels.h"
 #include "MC_Item.generated.h"

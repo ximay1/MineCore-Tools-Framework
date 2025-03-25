@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Data/ResourceNode/MC_ResourceNodeConfig.h"
+#include "MineCore/Public/Data/ResourceNodes/MC_ResourceNodeConfig.h"
 #include "MC_ResourceNode.generated.h"
 
 class UMC_ResourceNodeConfig;

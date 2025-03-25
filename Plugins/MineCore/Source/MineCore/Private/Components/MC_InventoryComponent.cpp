@@ -1,7 +1,7 @@
 #include "Components/MC_InventoryComponent.h"
 #include "MC_LogChannels.h"
 #include "Items/MC_Item.h"
-#include "Data/Item/MC_ItemConfig.h"
+#include "MineCore/Public/Data/Items/MC_ItemConfig.h"
 
 UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 {

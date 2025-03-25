@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MC_ItemConfig.h"
+#include "Data/Items/MC_ItemConfig.h"
 #include "MC_UsableItemConfig.generated.h"
 
 /** Base class for usable items that have durability, such as weapons, tools, and armors. */

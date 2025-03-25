@@ -1,5 +1,5 @@
 #include "Components/MC_MiningSystemComponent.h"
-#include "Data/Item/MC_UsableItemConfig.h"
+#include "MineCore/Public/Data/Items//UsableItems/MC_UsableItemConfig.h"
 #include "Items/MiningTools/MC_Pickaxe.h"
 #include "Items/MiningTools/MC_MiningTool.h"
 #include "MC_LogChannels.h"

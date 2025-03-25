@@ -4,7 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "Items/MC_Item.h"
 #include "MC_LogChannels.h"
-#include "Data/Item/MC_ItemConfig.h"
+#include "MineCore/Public/Data/Items/MC_ItemConfig.h"
 #include "MC_InventoryComponent.generated.h"
 
 class UMC_Item;
