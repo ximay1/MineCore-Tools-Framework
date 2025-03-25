@@ -63,7 +63,7 @@ UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_
 
 	// Assuming Tier1 is the lowest tier
 	UMC_Item* BestItem = nullptr;
-	EItemTier HighestTier = EItemTier::IT_Tier1;
+	EItemTier HighestTier = EItemTier::Tier1;
 	
 	// Iterate through all items to find the one with the highest tier
 	for (UMC_Item* Item : OutItems)

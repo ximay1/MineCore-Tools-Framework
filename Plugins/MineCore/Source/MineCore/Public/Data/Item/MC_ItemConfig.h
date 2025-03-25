@@ -4,37 +4,40 @@
 #include "Engine/DataAsset.h"
 #include "MC_ItemConfig.generated.h"
 
+/** Enum representing the tier of an item or resource node. */
 UENUM(BlueprintType)
 enum class EItemTier : uint8
 {
-	IT_Tier1 UMETA(DisplayName = "Tier 1"),
-	IT_Tier2 UMETA(DisplayName = "Tier 2"),
-	IT_Tier3 UMETA(DisplayName = "Tier 3"),
-	IT_Tier4 UMETA(DisplayName = "Tier 4"),
-	IT_Tier5 UMETA(DisplayName = "Tier 5"),
-	IT_Tier6 UMETA(DisplayName = "Tier 6"),
-	IT_Tier7 UMETA(DisplayName = "Tier 7"),
-	IT_Tier8 UMETA(DisplayName = "Tier 8"),
-	IT_Tier9 UMETA(DisplayName = "Tier 9"),
-	IT_Tier10 UMETA(DisplayName = "Tier 10"),
+	Tier1	UMETA(DisplayName = "Tier 1"),
+	Tier2	UMETA(DisplayName = "Tier 2"),
+	Tier3	UMETA(DisplayName = "Tier 3"),
+	Tier4	UMETA(DisplayName = "Tier 4"),
+	Tier5	UMETA(DisplayName = "Tier 5"),
+	Tier6	UMETA(DisplayName = "Tier 6"),
+	Tier7	UMETA(DisplayName = "Tier 7"),
+	Tier8	UMETA(DisplayName = "Tier 8"),
+	Tier9	UMETA(DisplayName = "Tier 9"),
+	Tier10	UMETA(DisplayName = "Tier 10"),
 };
 
+/** Enum representing the rarity of an item */
 UENUM(BlueprintType)
 enum class EItemRarity : uint8
 {
-	IR_Common		UMETA(DisplayName = "Common"),
-	IR_Uncommon		UMETA(DisplayName = "Uncommon"),
-	IR_Rare			UMETA(DisplayName = "Rare"),
-	IR_Epic			UMETA(DisplayName = "Epic"),
-	IR_Legendary	UMETA(DisplayName = "Legendary"),
-	IR_Mythic		UMETA(DisplayName = "Mythic"),
+	Common		UMETA(DisplayName = "Common"),
+	Uncommon	UMETA(DisplayName = "Uncommon"),
+	Rare		UMETA(DisplayName = "Rare"),
+	Epic		UMETA(DisplayName = "Epic"),
+	Legendary	UMETA(DisplayName = "Legendary"),
+	Mythic		UMETA(DisplayName = "Mythic"),
 };
 
+/** Item representing the category of an item */
 UENUM(BlueprintType)
 enum class EItemCategory : uint8
 {
-	IC_Resources	 UMETA(DisplayName = "Resources"),
-	IC_Tools		 UMETA(DisplayName = "Tools"),         
+	Resource	UMETA(DisplayName = "Resource"),
+	Tool		UMETA(DisplayName = "Tools"),         
 };
 
 UCLASS()
@@ -79,5 +82,5 @@ public:
 	
 	/** Icon representing the item. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (AssetBundles = "UI"))
-	TSoftObjectPtr<UTexture2D> ItemIcon;
+	TObjectPtr<UTexture2D> ItemIcon;
 };

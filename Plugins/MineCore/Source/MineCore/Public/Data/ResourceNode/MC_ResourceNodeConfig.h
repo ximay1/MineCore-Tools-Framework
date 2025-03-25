@@ -1,17 +1,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/DataAsset.h"
+#include "Items/MC_Item.h"
 #include "MC_LogChannels.h"
 #include "MC_ResourceNodeConfig.generated.h"
 
-/** Enum representing various types of resource nodes. */
-UENUM(BlueprintType)
-enum class EResourceNodeType : uint8
-{
-	DEFAULT    UMETA(DisplayName = "Default"),
-	STONE      UMETA(DisplayName = "Stone"),
-};
+//TODO: Create here a comment which describe what kind of the resource is for the given tier (ResourceNodeTier) : Tier1 - Stone etc.
 
 /** Enum representing the different states of a resource node. */
 UENUM(BlueprintType)
@@ -75,7 +69,11 @@ public:
 	// Used to dynamically assign the appropriate static mesh based on the resource node's current state.  
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
 	TMap<EResourceNodeState, UStaticMesh*> ResourceNodeMaterials;
-
+	
+	//Tier of the resource node
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
+	EItemTier ResourceNodeTier;
+	
 	// Time interval (in seconds) to increase the state by 1.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
 	float TimeToIncreaseState = 5.0f;
@@ -83,8 +81,4 @@ public:
 	// Time required to mine 1 resource from the node
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
 	float MiningTime = 5.0f;
-
-	//Type of the resource node
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
-	EResourceNodeType ResourceNodeType;
 };
