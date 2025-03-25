@@ -59,7 +59,7 @@ inline EResourceNodeState operator+(const EResourceNodeState NodeState, uint8 Nu
 
 /** Base class for defining the parameters of a resource node. Contains configuration data related to resource nodes. */
 UCLASS()
-class MINECORE_API UMC_ResourceNodeConfig : public UDataAsset
+class MINECORE_API UMC_ResourceNodeConfig : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 

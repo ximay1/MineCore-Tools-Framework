@@ -9,5 +9,7 @@ UCLASS()
 class MINECORE_API UMC_MiningToolItemConfig : public UMC_UsableItemConfig
 {
 	GENERATED_BODY()
-	
+
+public:
+	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override { return FPrimaryAssetId("MiningToolItemConfig", GetFName()); }
 };

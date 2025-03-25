@@ -30,10 +30,10 @@ public:
 	
 protected:
 	/** Inventory Component */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Component")
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
 	TObjectPtr<UMC_InventoryComponent> InventoryComponent;
 
 	/** Mining System Component */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Mining System Component")
+	UPROPERTY(BlueprintReadOnly, Category = "Mining System Component")
 	TObjectPtr<UMC_MiningSystemComponent> MiningSystemComponent;
 };

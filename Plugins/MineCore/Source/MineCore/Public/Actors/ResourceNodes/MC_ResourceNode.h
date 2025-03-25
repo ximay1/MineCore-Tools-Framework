@@ -41,19 +41,7 @@ public:
     virtual void PlayerMineResource(APlayerController* PlayerController);
     
 protected:
-    /** Called when the game starts or when spawned. */
-    virtual void BeginPlay() override;
 
-    /** Refreshes the resource node's state (e.g. for resource regeneration). This function is invoked periodically via a timer. */
-    UFUNCTION(BlueprintCallable)
-    virtual void ResourceNode_Refresh();
-
-    /** Validates the PlayerController. */
-    bool EnsureValidPlayerController(APlayerController* PlayerController);
-
-    /** Try to claer MineResourceNodeTimerHandle */
-    void TryToClearTimerHandle(FTimerHandle TimerHandle);
-    
     /** Current state of the resource node. */
     UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
     EResourceNodeState ResourceNodeState;
@@ -69,6 +57,19 @@ protected:
     /** Static mesh component representing the resource node. */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
     TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
+    
+    /** Called when the game starts or when spawned. */
+    virtual void BeginPlay() override;
+
+    /** Refreshes the resource node's state (e.g. for resource regeneration). This function is invoked periodically via a timer. */
+    UFUNCTION(BlueprintCallable)
+    virtual void ResourceNode_Refresh();
+
+    /** Validates the PlayerController. */
+    bool EnsureValidPlayerController(APlayerController* PlayerController);
+
+    /** Try to claer MineResourceNodeTimerHandle */
+    void TryToClearTimerHandle(FTimerHandle TimerHandle);
     
     /** Updates the static mesh's material based on the current resource node state. */
     void SetStaticMeshForCurrentState();
