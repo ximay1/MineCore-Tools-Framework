@@ -70,32 +70,6 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerCo
     }
 }
 
-bool AMC_ResourceNode::CanBeMined(APlayerController* PlayerController)
-{
-    // Validate the player controller
-    if (EnsureValidPlayerController(PlayerController))
-    {
-        // Check if the MineResourceNodeTimerHandle isn't cleared for the given player controller
-        // Check if the resource node is in a minable state
-        if (ResourceNodeState != EResourceNodeState::STATE_1)
-        {
-            // Get the player character associated with the controller
-            if (AMC_PlayerCharacter* PlayerCharacter = PlayerController->GetPawn<AMC_PlayerCharacter>())
-            {
-                // Get the player's pickaxe from the mining system component
-                if (UMC_Pickaxe* Pickaxe = PlayerCharacter->GetMiningSystemComponent()->GetPickaxe())
-                {
-                    // Check if the player can mine using the retrieved pickaxe
-                    return PlayerCharacter->GetMiningSystemComponent()->CanPlayerMine(Pickaxe);
-                }
-            }
-        }
-    }
-    
-    // Return false if any condition fails
-    return false; 
-}
-
 void AMC_ResourceNode::StopMining(APlayerController* PlayerController)
 {
     //Check if the player controller is valid
@@ -107,26 +81,6 @@ void AMC_ResourceNode::StopMining(APlayerController* PlayerController)
     
     //Try to clear timer
     TryToClearTimerHandle(MineResourceNodeTimerHandle);
-}
-
-void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
-{
-    //Check if ResourceNodeState can be mined
-    if (CanBeMined(PlayerController))
-    {
-        //Decrease State of this Node
-        ResourceNodeState = ResourceNodeState - 1;
-
-        //Set StaticMesh
-        SetStaticMeshForCurrentState();
-
-        //Check if ResourceNodeState is STATE_1 now
-        if (ResourceNodeState == EResourceNodeState::STATE_1)
-        {
-            //Stop Mining
-            StopMining(PlayerController);
-        }
-    }
 }
 
 void AMC_ResourceNode::BeginPlay()
@@ -174,6 +128,52 @@ void AMC_ResourceNode::ResourceNode_Refresh()
 
     //Set StaticMesh 
     SetStaticMeshForCurrentState();
+}
+
+bool AMC_ResourceNode::CanBeMined(APlayerController* PlayerController)
+{
+    // Validate the player controller
+    if (EnsureValidPlayerController(PlayerController))
+    {
+        // Check if the MineResourceNodeTimerHandle isn't cleared for the given player controller
+        // Check if the resource node is in a minable state
+        if (ResourceNodeState != EResourceNodeState::STATE_1)
+        {
+            // Get the player character associated with the controller
+            if (AMC_PlayerCharacter* PlayerCharacter = PlayerController->GetPawn<AMC_PlayerCharacter>())
+            {
+                // Get the player's pickaxe from the mining system component
+                if (UMC_Pickaxe* Pickaxe = PlayerCharacter->GetMiningSystemComponent()->GetPickaxe())
+                {
+                    // Check if the player can mine using the retrieved pickaxe
+                    return PlayerCharacter->GetMiningSystemComponent()->CanPlayerMine(Pickaxe);
+                }
+            }
+        }
+    }
+    
+    // Return false if any condition fails
+    return false; 
+}
+
+void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
+{
+    //Check if ResourceNodeState can be mined
+    if (CanBeMined(PlayerController))
+    {
+        //Decrease State of this Node
+        ResourceNodeState = ResourceNodeState - 1;
+
+        //Set StaticMesh
+        SetStaticMeshForCurrentState();
+
+        //Check if ResourceNodeState is STATE_1 now
+        if (ResourceNodeState == EResourceNodeState::STATE_1)
+        {
+            //Stop Mining
+            StopMining(PlayerController);
+        }
+    }
 }
 
 bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerController)

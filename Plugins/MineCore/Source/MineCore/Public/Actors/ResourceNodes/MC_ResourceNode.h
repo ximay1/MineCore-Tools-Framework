@@ -31,15 +31,9 @@ public:
     UFUNCTION(Server, Reliable, BlueprintCallable)
     virtual void Server_StartMining(APlayerController* PlayerController);
     
-    /** Checks if the resource node is in a state that allows mining. */
-    virtual bool CanBeMined(APlayerController* PlayerController);
-
     /** Stops the mining process. */
     virtual void StopMining(APlayerController* PlayerController);
-    
-    /** Called when the player mines a resource. */
-    virtual void PlayerMineResource(APlayerController* PlayerController);
-    
+
 protected:
 
     /** Current state of the resource node. */
@@ -65,17 +59,23 @@ protected:
     UFUNCTION(BlueprintCallable)
     virtual void ResourceNode_Refresh();
 
+    /** Checks if the resource node is in a state that allows mining. */
+    virtual bool CanBeMined(APlayerController* PlayerController);
+
+    /** Called when the player mines a resource. */
+    virtual void PlayerMineResource(APlayerController* PlayerController);
+    
     /** Validates the PlayerController. */
-    bool EnsureValidPlayerController(APlayerController* PlayerController);
+    virtual bool EnsureValidPlayerController(APlayerController* PlayerController);
 
     /** Try to claer MineResourceNodeTimerHandle */
     void TryToClearTimerHandle(FTimerHandle TimerHandle);
     
     /** Updates the static mesh's material based on the current resource node state. */
-    void SetStaticMeshForCurrentState();
+    virtual void SetStaticMeshForCurrentState();
 
     /** Applies resource node config. Sets up timers for state refresh and initializes the material. */
-    void ApplyResourceNodeConfig();
+    virtual void ApplyResourceNodeConfig();
 
 private:
     /** Timer handle for refreshing the resource node state. */
