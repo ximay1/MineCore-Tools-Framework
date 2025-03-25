@@ -74,7 +74,7 @@ public:
 	// A TMap that associates each resource node state (EResourceNodeState) with a static mesh (UStaticMesh*).  
 	// Used to dynamically assign the appropriate static mesh based on the resource node's current state.  
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
-	TMap<EResourceNodeState, TSoftObjectPtr<UStaticMesh>> ResourceNodeMaterials;
+	TMap<EResourceNodeState, UStaticMesh*> ResourceNodeMaterials;
 
 	// Time interval (in seconds) to increase the state by 1.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node | Config")
