@@ -8,6 +8,7 @@
 
 class UMC_ItemConfig;
 
+/** Base class for an item object. */
 UCLASS()
 class MINECORE_API UMC_Item : public UObject
 {
@@ -23,13 +24,6 @@ public:
 	template<typename ItemConfigClass = UMC_ItemConfig>
 	ItemConfigClass* GetItemConfig() const;
 
-	// === UObject Interface ===
-	virtual void PostInitProperties() override;
-	// === End UObject Interface ===
-
-	/** Called in PostInitProperties to simulate a true BeginPlay from a actor. */
-	virtual void BeginPlay();	
-	
 protected:
 	/** Data Item Config */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item")

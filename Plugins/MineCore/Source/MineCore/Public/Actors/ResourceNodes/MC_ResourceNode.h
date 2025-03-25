@@ -17,9 +17,6 @@ class MINECORE_API AMC_ResourceNode : public AActor
 public:
     /** Constructor */
     AMC_ResourceNode();
-
-    /** Events */
-    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
     
     /** Displays the mining progress widget on the client. */
     UFUNCTION(Client, Reliable)

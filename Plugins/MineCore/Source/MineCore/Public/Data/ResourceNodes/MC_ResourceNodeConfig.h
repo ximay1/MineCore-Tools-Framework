@@ -57,6 +57,7 @@ inline EResourceNodeState operator+(const EResourceNodeState NodeState, uint8 Nu
 	return static_cast<EResourceNodeState>(NewValue + Number);
 }
 
+/** Base class for defining the parameters of a resource node. Contains configuration data related to resource nodes. */
 UCLASS()
 class MINECORE_API UMC_ResourceNodeConfig : public UDataAsset
 {

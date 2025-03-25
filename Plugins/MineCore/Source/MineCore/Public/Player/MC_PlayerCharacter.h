@@ -7,6 +7,7 @@
 class UMC_InventoryComponent;
 class UMC_MiningSystemComponent;
 
+/** Base class for characters used in MineCore. */
 UCLASS()
 class MINECORE_API AMC_PlayerCharacter : public ACharacter
 {

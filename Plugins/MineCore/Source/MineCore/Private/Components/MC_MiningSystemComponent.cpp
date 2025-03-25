@@ -7,6 +7,7 @@
 
 UMC_MiningSystemComponent::UMC_MiningSystemComponent() : IsPlayerMining(false)
 {
+	//Set Parameters
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
@@ -19,7 +20,6 @@ void UMC_MiningSystemComponent::BeginPlay()
 
 	//Find the best Pickaxe in the inventory
 	CachedPickaxe = InventoryComponent->FindBestItemInInventory<UMC_Pickaxe>();
-	CachedPickaxe = NewObject<UMC_Pickaxe>();
 }
 
 void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -5,12 +5,8 @@
 
 UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 {
+	//Set Parameters
 	PrimaryComponentTick.bCanEverTick = false;
-}
-
-void UMC_InventoryComponent::BeginPlay()
-{
-	Super::BeginPlay();
 }
 
 void UMC_InventoryComponent::CreateInventory()
@@ -57,6 +53,7 @@ UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_
 	// If no items are found, return nullptr
 	if (OutItems.Num() == 0)
 	{
+		//Log Warning
 		UE_LOGFMT(LogMiningSystem, Warning, "Inventory doesn't contain the requested item. File: {0}, Line: {1}", __FILE__, __LINE__);
 		return nullptr;
 	}
@@ -111,10 +108,12 @@ void UMC_InventoryComponent::AddItemToInventory_Implementation(uint8 Slot, UMC_I
 	// Check if the slot number is valid (Slot should be less than or equal to MaxSlots)
 	if (Slot > MaxSlots)
 	{
+		//Log Error
 		UE_LOGFMT(LogInventory, Error, "Invalid slot number. Slot exceeds MaxSlots. File - {0}, Line - {1}.", __FILE__, __LINE__);
 	}
 	if (Item == nullptr)
 	{
+		//Log Error
 		UE_LOGFMT(LogInventory, Error, "Item is nullptr. File - {0}, Line - {1}.", __FILE__, __LINE__);
 	}
 #endif
@@ -151,6 +150,7 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 	// Check if the slot number is valid (Slot should be less than or equal to MaxSlots)
 	if (Slot > MaxSlots)
 	{
+		//Log Error
 		UE_LOGFMT(LogInventory, Error, "Invalid slot number. Slot exceeds MaxSlots. File - {0}, Line - {1}.", __FILE__, __LINE__);
 	}
 #endif
@@ -158,7 +158,7 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 	// Perform the assigned action based on the ItemAction enum
 	switch (ItemAction)
 	{
-		case EItemAction::IA_Destroy:
+		case EItemAction::Destroy:
 			{
 				// Find the item in the inventory map using the given slot
 				if (UMC_Item* ItemToDestroy = Items.FindRef(Slot))
@@ -174,13 +174,13 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 				}
 				else
 				{
-					// Log an error if the item is nullptr (doesn't exist) in the inventory
+					// Log Error
 					UE_LOGFMT(LogInventory, Error, "We wanted to destroy the item which doesn't exist in the inventory, we passed an invalid slot. File - {0}, Line - {1}", __FILE__, __LINE__);
 				}
 
 				break;
 			}
-		case EItemAction::IA_Drop:
+		case EItemAction::Drop:
 			{
 				// Drop the item from the inventory using the given slot
 				DropItem(Slot);

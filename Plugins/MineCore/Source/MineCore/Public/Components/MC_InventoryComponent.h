@@ -9,16 +9,18 @@
 
 class UMC_Item;
 
+/** Enum representing possible actions that can be performed on an item. */
 UENUM(BlueprintType)
 enum class EItemAction : uint8
 {
-	IA_Destroy UMETA(DisplayName = "Destroy"),  // Player wants to destroy the item
-	IA_Drop    UMETA(DisplayName = "Drop"),     // Player wants to drop the item
+	Destroy UMETA(DisplayName = "Destroy"),  // Player wants to destroy the item
+	Drop    UMETA(DisplayName = "Drop"),     // Player wants to drop the item
 };
 
 /** Triggered when an item is added (Slot number, Item). */  
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAddedToInventory, uint8, Slot, UMC_Item*, Item);
 
+/** Base class for the inventory system used in MineCore. */
 UCLASS( ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent) )
 class MINECORE_API UMC_InventoryComponent : public UActorComponent
 {
@@ -29,9 +31,6 @@ class MINECORE_API UMC_InventoryComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UMC_InventoryComponent();
-
-	//Events
-	virtual void BeginPlay() override;
 	
 	/** Creates the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")

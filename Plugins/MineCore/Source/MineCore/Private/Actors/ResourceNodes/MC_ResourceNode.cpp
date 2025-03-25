@@ -6,18 +6,14 @@
 
 AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(0,3)))
 {
-    PrimaryActorTick.bCanEverTick = true;
+    //Set Parameters
+    PrimaryActorTick.bCanEverTick = false;
     bReplicates = true;
     
     // Create the static mesh component and set it as the root
     StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
     StaticMeshComponent->SetIsReplicated(true);
     RootComponent = StaticMeshComponent;
-}
-
-void AMC_ResourceNode::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)
@@ -143,7 +139,8 @@ void AMC_ResourceNode::BeginPlay()
         // Valid if the ResourceNodeConfigId is set
         if (!ResourceNodeConfigID.IsValid())
         {
-            UE_LOGFMT(LogResourceNode, Warning, "ResourceNodeConfigId is not valid");
+            //Log Error
+            UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigID is not valid. File - {0}, Line - {1}", __FILE__, __LINE__);
         
             // If the config is invalid, destroy this actor to prevent issues
             Destroy(true);
@@ -190,7 +187,7 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
     else
     {
         //Log Warning
-        UE_LOGFMT(LogResourceNode, Warning, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
+        UE_LOGFMT(LogResourceNode, Error, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
 
         //Clear timer
         TryToClearTimerHandle(MineResourceNodeTimerHandle);
@@ -223,7 +220,7 @@ void AMC_ResourceNode::SetStaticMeshForCurrentState()
     else
     {
         //Log Error
-        UE_LOGFMT(LogResourceNode, Error, "Material not found for ResourceNodeState: {0}. File: {1}, Line: {2}",  UEnum::GetValueAsString(ResourceNodeState), __FILE__, __LINE__);
+        UE_LOGFMT(LogResourceNode, Error, "Static Mesh not found for ResourceNodeState: {0}. File: {1}, Line: {2}",  UEnum::GetValueAsString(ResourceNodeState), __FILE__, __LINE__);
     }
 }
 

@@ -40,6 +40,7 @@ enum class EItemCategory : uint8
 	Tool		UMETA(DisplayName = "Tools"),         
 };
 
+/** Base class for item configurations. Defines common properties for all items. */
 UCLASS()
 class MINECORE_API UMC_ItemConfig : public UPrimaryDataAsset
 {
@@ -55,13 +56,9 @@ public:
 	/** The category of the item (e.g., weapon, resource, armor, etc.) */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
 	EItemCategory ItemCategory;
-	
-	/** Does item supports ItemRarity */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (InlineEditConditionToggle))
-	bool SupportsItemRarity;
-    
+
 	/** Rarity of the item */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (EditCondition = SupportsItemRarity))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (InlineEditConditionToggle))
 	EItemRarity ItemRarity;
 
 	/** Weight */

@@ -4,6 +4,7 @@
 #include "Items/MC_Item.h"
 #include "MC_MiningTool.generated.h"
 
+/** Base class for mining tools such as pickaxes, axes, and knives. */
 UCLASS()
 class MINECORE_API UMC_MiningTool : public UMC_Item
 {
