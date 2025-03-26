@@ -9,6 +9,60 @@
 
 class UMC_Item;
 
+/** 
+ * This struct defines the filter criteria for searching items in the inventory.
+ */
+USTRUCT(BlueprintType)
+struct FInventoryItemFilter
+{
+	GENERATED_BODY()
+
+	/** Constructors */
+	FInventoryItemFilter();
+	FInventoryItemFilter(TSubclassOf<UMC_Item> InItemClass, EItemTier InMinTier, EItemTier InMaxTier, EItemCategory InItemCategory, EItemRarity InItemRarity);
+
+#pragma region INCLUSION_FILTERS
+	/** The class type of the item to search for */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Filter")
+	TSubclassOf<UMC_Item> ItemClass;
+
+	/** The minimum tier required for the item */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Filter")
+	EItemTier MinTier;
+
+	/** The maximum tier allowed for the item */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Filter")
+	EItemTier MaxTier;
+
+	/** The category of the item (e.g., Weapon, Armor, etc.) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Filter")
+	EItemCategory ItemCategory;
+
+	/** The rarity of the item (e.g., Common, Rare, Epic) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Filter")
+	EItemRarity ItemRarity;
+#pragma endregion
+
+#pragma region FILTER_FLAGS
+	
+	/** Flag indicating whether to filter by item class */
+	bool bUseItemClass = false;
+	
+	/** Flag indicating whether to filter by minimum tier */
+	bool bUseMinTier = false;
+	
+	/** Flag indicating whether to filter by maximum tier */
+	bool bUseMaxTier = false;
+	
+	/** Flag indicating whether to apply the category filter */
+	bool bUseCategoryFilter = false;
+	
+	/** Flag indicating whether to apply the rarity filter */
+	bool bUseRarityFilter = false;
+	
+#pragma endregion
+};
+
 /** Enum representing possible actions that can be performed on an item. */
 UENUM(BlueprintType)
 enum class EItemAction : uint8
@@ -49,19 +103,15 @@ public:
 
 	/** Get Items */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void GetItems(TArray<UMC_Item*>& ValuesArray) const { Items.GenerateValueArray(ValuesArray); }
+	void GetItems(TArray<UMC_Item*>& OutItems) const { Items.GenerateValueArray(OutItems); }
 	
 	/** Checks if an item exists in the inventory. Returns UMC_Item if found, otherwise nullptr */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	FORCEINLINE UMC_Item* GetItemFromInventory(uint8 Slot) const { return Items.FindRef(Slot); }
 
-	/** This function finds the items of given class in the inventory */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Componenet")
-	void FindItemsByClass(const TSubclassOf<UMC_Item>& ItemClass, TArray<UMC_Item*>& OutItems) const;
-
-	/** This function finds the items of given class in the inventory */
-	template<typename ItemClass>
-	void FindItemsByClass(TArray<ItemClass*>& OutItems) const;
+	/** Finds items in the inventory based on the given filter criteria. */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	void FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const;
 	
 	/** This function attempts to find the best item in the Inventory. */
 	UMC_Item* FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const;
@@ -103,30 +153,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))
 	uint8 MaxSlots;
 };
-
-template <typename ItemClass>
-void UMC_InventoryComponent::FindItemsByClass(TArray<ItemClass*>& OutItems) const
-{
-	// Ensure that ItemClass is derived from UMC_Item
-	static_assert(TPointerIsConvertibleFromTo<ItemClass, const UMC_Item>::Value, "'T' template parameter to FindItemsByClass must be derived from UMC_Item");
-
-	// Clear the result array to avoid adding to any old data
-	OutItems.Empty();
-
-	// Iterate through all items in the inventory
-	for (const auto& Pair : Items)
-	{
-		// Check if the item is of the specified class or derived class
-		if (Pair.Value)
-		{
-			if (ItemClass* Item = Cast<ItemClass>(Pair.Value))
-			{
-				// If true, add the item to the result array
-				OutItems.Add(Item);
-			}
-		}
-	}
-}
 
 template <typename ItemClass>
 ItemClass* UMC_InventoryComponent::FindBestItemInInventory() const

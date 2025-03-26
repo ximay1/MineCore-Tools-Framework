@@ -3,6 +3,34 @@
 #include "Items/MC_Item.h"
 #include "MineCore/Public/Data/Items/MC_ItemConfig.h"
 
+FInventoryItemFilter::FInventoryItemFilter()
+	: ItemClass(nullptr)
+	, MinTier((EItemTier)0)
+	, MaxTier((EItemTier)0)
+	, ItemCategory((EItemCategory)0)
+	, ItemRarity((EItemRarity)0)
+	, bUseItemClass(false)
+	, bUseMinTier(false)
+	, bUseMaxTier(false)
+	, bUseCategoryFilter(false)
+	, bUseRarityFilter(false)
+{
+}
+
+FInventoryItemFilter::FInventoryItemFilter(TSubclassOf<UMC_Item> InItemClass, EItemTier InMinTier, EItemTier InMaxTier, EItemCategory InItemCategory, EItemRarity InItemRarity)
+	: ItemClass(InItemClass)
+	, MinTier(InMinTier)
+	, MaxTier(InMaxTier)
+	, ItemCategory(InItemCategory)
+	, ItemRarity(InItemRarity)
+	, bUseItemClass(true)
+	, bUseMinTier(true)
+	, bUseMaxTier(true)
+	, bUseCategoryFilter(true)
+	, bUseRarityFilter(true)
+{
+}
+
 UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 {
 	//Set Parameters
@@ -22,24 +50,66 @@ void UMC_InventoryComponent::RefreshInventoryWidget()
 	}*/
 }
 
-void UMC_InventoryComponent::FindItemsByClass(const TSubclassOf<UMC_Item>& ItemClass, TArray<UMC_Item*>& OutItems) const
+void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const
 {
-	// Clear the result array to avoid adding to any old data
-	OutItems.Empty();
+#if !UE_BUILD_SHIPPING
+	// Define expected number of conditions (update this when modifying FInventoryItemFilter)
+	constexpr uint16 ExpectedConditionCount = 5;  
+	uint16 PropertyCount = 0;
 
-	// Iterate through all items in the inventory
-	for (const auto& Pair : Items)
+	// Get the struct definition of FInventoryItemFilter
+	UStruct* InventoryItemFilterStruct = FInventoryItemFilter::StaticStruct();
+
+	// Count the number of properties in the struct
+	for (TFieldIterator<FProperty> PropertyIt(InventoryItemFilterStruct); PropertyIt; ++PropertyIt)
 	{
-		// Check if the item is of the specified class or derived class
-		if (UMC_Item* Item = Pair.Value)
-		{
-			if (Item->IsA(ItemClass))
-			{
-				// If true, add the item to the result array
-				OutItems.Add(Item);
-			}
-		}
+		PropertyCount++;
 	}
+
+	// Ensure that the expected condition count matches the actual number of properties
+	checkf(PropertyCount == ExpectedConditionCount, TEXT("The number of conditions and number of properties in FInventoryItemFilter are not the same."));
+    
+    // Warn if no filter criteria are enabled
+    if (!(InventoryItemFilter.bUseCategoryFilter || 
+          InventoryItemFilter.bUseItemClass		 || 
+          InventoryItemFilter.bUseMaxTier		 || 
+          InventoryItemFilter.bUseMinTier		 || 
+          InventoryItemFilter.bUseRarityFilter))
+    {
+        UE_LOGFMT(LogInventory, Error, "All inclusive filters are disabled");
+
+    	//Clear OutItems and return
+    	OutItems.Empty();
+    	return;
+    }
+#endif
+	
+    // Get all items from inventory
+    TArray<UMC_Item*> Items;
+    GetItems(Items);
+
+    // Process each item in the inventory
+    for (UMC_Item* Item : Items)
+    {
+        // Basic validity checks
+        if (!IsValid(Item)) continue;
+    	
+        UMC_ItemConfig* ItemConfig = Item->GetItemConfig();
+        if (!IsValid(ItemConfig)) continue;
+
+        // Inclusive filters
+        if (InventoryItemFilter.bUseItemClass && InventoryItemFilter.ItemClass && Item->GetClass() != InventoryItemFilter.ItemClass) continue;
+
+        if ((InventoryItemFilter.bUseMinTier && (ItemConfig->ItemTier < InventoryItemFilter.MinTier)) ||
+			(InventoryItemFilter.bUseMaxTier && (ItemConfig->ItemTier > InventoryItemFilter.MaxTier))) continue;
+
+        if (InventoryItemFilter.bUseRarityFilter && ItemConfig->ItemRarity > InventoryItemFilter.ItemRarity) continue;
+
+        if (InventoryItemFilter.bUseCategoryFilter && InventoryItemFilter.ItemCategory != ItemConfig->ItemCategory) continue;
+
+        // Passed all filters
+        OutItems.Add(Item);
+    }
 }
 
 UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const
@@ -47,8 +117,15 @@ UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_
 	// Inventory should never be nullptr!
 	TArray<UMC_Item*> OutItems;
 
-	// Retrieve all Items of given class from the inventory
-	FindItemsByClass(ItemClass, OutItems);
+	//Create Filter
+	FInventoryItemFilter InventoryItemFilter;
+
+	//Set Filters
+	InventoryItemFilter.ItemClass = ItemClass;
+	InventoryItemFilter.bUseItemClass = true;
+
+	// Get all Items of given class from the inventory
+	FindItemsByFilter(InventoryItemFilter, OutItems);
 
 	// If no items are found, return nullptr
 	if (OutItems.Num() == 0)
