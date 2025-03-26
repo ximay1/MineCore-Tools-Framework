@@ -85,11 +85,11 @@ void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& Inven
 #endif
 	
     // Get all items from inventory
-    TArray<UMC_Item*> Items;
-    GetItems(Items);
+    TArray<UMC_Item*> TempItems;
+    GetItems(TempItems);
 
     // Process each item in the inventory
-    for (UMC_Item* Item : Items)
+    for (UMC_Item* Item : TempItems)
     {
         // Basic validity checks
         if (!IsValid(Item)) continue;
