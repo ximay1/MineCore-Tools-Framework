@@ -115,10 +115,6 @@ public:
 	
 	/** This function attempts to find the best item in the Inventory. */
 	UMC_Item* FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const;
-
-	/** This function attempts to find the best item in the Inventory. */
-	template<typename ItemClass>
-	ItemClass* FindBestItemInInventory() const;
 	
 	/** Drops the item as a bag at the player's location */
 	void DropItem(uint8 Slot);
@@ -153,36 +149,3 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))
 	uint8 MaxSlots;
 };
-
-template <typename ItemClass>
-ItemClass* UMC_InventoryComponent::FindBestItemInInventory() const
-{
-	// Inventory should never be nullptr!
-    TArray<ItemClass*> OutItems;
-
-    // Retrieve all Items of given class from the inventory
-    FindItemsByClass<ItemClass>(OutItems);
-
-    // If no items are found, return nullptr
-    if (OutItems.Num() == 0)
-    {
-    	UE_LOGFMT(LogMiningSystem, Warning, "Inventory doesn't contain the requested item. File: {0}, Line: {1}", __FILE__, __LINE__);
-    	return nullptr;
-    }
-
-    // Assuming Tier1 is the lowest tier
-    ItemClass* BestItem = nullptr;
-    EItemTier HighestTier = EItemTier::Tier1;
-    
-    // Iterate through all items to find the one with the highest tier
-    for (ItemClass* Item : OutItems)
-    {
-    	if (Item->GetItemConfig()->ItemTier > HighestTier)
-    	{
-    		BestItem = Item;
-    		HighestTier = BestItem->GetItemConfig()->ItemTier;
-    	}
-    }
-    
-    return BestItem;
-}
