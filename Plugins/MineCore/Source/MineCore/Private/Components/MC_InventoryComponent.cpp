@@ -59,8 +59,8 @@ void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* 
 	// Validate both the slot and the item using the macro. If invalid, it will set bIsValid to false and log errors.
 	VALIDATE_ITEM_AND_SLOT_RETURN(Slot, MaxSlots, Item, bIsValid)
 
-	// If both slot and item are valid (bIsValid is still true), exit the function early.
-	if (bIsValid)
+	// If both slot and item aren't valid, exit the function early.
+	if (!bIsValid)
 		return;
 #endif
 	
@@ -83,10 +83,18 @@ void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* 
 			
 			UE_LOGFMT(LogInventory, Log, "We need to create a bag of items at the player's location when attempting to add an item to the inventory");
 		}
-		
-		// Refresh the inventory widget to reflect the changes
-		RefreshInventoryWidget();
 	}
+	else
+	{
+		//Add to the inventory
+		Items.Add(Slot, Item);
+
+		//Call delegate
+		OnItemAddedToInventory.Broadcast(Slot, Item);
+	}
+	
+	// Refresh the inventory widget to reflect the changes
+	RefreshInventoryWidget();
 }
 
 void UMC_InventoryComponent::AddItemToFirstAvailableSlot_Implementation(UMC_Item* Item)
