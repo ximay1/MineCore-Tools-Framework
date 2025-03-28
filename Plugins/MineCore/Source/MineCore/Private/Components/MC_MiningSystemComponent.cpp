@@ -74,7 +74,7 @@ void UMC_MiningSystemComponent::CacheMiningToolsFromInventory()
 
 	// Process each inventory item only once
 	TArray<UMC_Item*> Items;
-	InventoryComponent->GetItems(Items);
+	InventoryComponent->GetInventoryItems(Items);
 	for (UMC_Item* const& Item : Items)
 	{
 		// Check if the item is a mining tool

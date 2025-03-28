@@ -151,9 +151,13 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
 	void RemoveItemFromInventory(uint8 Slot, EItemAction ItemAction);
 
-	/** Get Items */
+	/** Get all items in the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void GetItems(TArray<UMC_Item*>& OutItems) const { Items.GenerateValueArray(OutItems); }
+	void GetInventoryItems(TArray<UMC_Item*>& OutItems) const { Items.GenerateValueArray(OutItems); }
+
+	/** Get all items in the inventory as a map */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	void GetInventoryItemsMap(TMap<uint8, UMC_Item*>& OutItems) const { OutItems = Items; }
 	
 	/** Checks if an item exists in the inventory. Returns UMC_Item if found, otherwise nullptr */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")

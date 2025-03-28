@@ -183,7 +183,7 @@ void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& Inven
 	
     // Get all items from inventory
     TArray<UMC_Item*> TempItems;
-    GetItems(TempItems);
+    GetInventoryItems(TempItems);
 
     // Process each item in the inventory
     for (UMC_Item* Item : TempItems)
