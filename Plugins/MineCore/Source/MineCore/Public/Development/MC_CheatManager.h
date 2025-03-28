@@ -13,7 +13,9 @@ class MINECORE_API UMC_CheatManager : public UCheatManager
 
 public:
 
-	
+	// This function adds an item to the player's inventory based on the class name provided in the input string.
+	UFUNCTION(Exec)
+	void AddItemToInventory(FString InputString);
 	
 protected:
 	/**
