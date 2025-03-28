@@ -52,6 +52,18 @@ void UMC_InventoryComponent::RefreshInventoryWidget()
 
 void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* Item)
 {
+#if WITH_EDITOR
+	// Declare a flag to track the validity of the slot and item
+	bool bIsValid = true;
+
+	// Validate both the slot and the item using the macro. If invalid, it will set bIsValid to false and log errors.
+	VALIDATE_ITEM_AND_SLOT_RETURN(Slot, MaxSlots, Item, bIsValid)
+
+	// If both slot and item are valid (bIsValid is still true), exit the function early.
+	if (bIsValid)
+		return;
+#endif
+	
 	//Check if there is something on that slot
 	if (GetItemFromInventory(Slot) != nullptr)
 	{
@@ -84,14 +96,18 @@ void UMC_InventoryComponent::AddItemToFirstAvailableSlot_Implementation(UMC_Item
 
 void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
 {
-#if !UE_BUILD_SHIPPING
-	// Check if the slot number is valid (Slot should be less than or equal to MaxSlots)
-	if (Slot > MaxSlots)
-	{
-		//Log Error
-		UE_LOGFMT(LogInventory, Error, "Invalid slot number. Slot exceeds MaxSlots. File - {0}, Line - {1}.", __FILE__, __LINE__);
-	}
+#if WITH_EDITOR
+	// Declare a flag to track the validity of the slot
+	bool bIsValid = true;
+
+	// Validate the slot number using the macro; if invalid, it will log an error and set bIsValid to false
+	VALIDATE_SLOT_AND_RETURN(Slot, MaxSlots, bIsValid)
+
+	// If the slot is not valid, exit the function early
+	if (!bIsValid)
+		return;
 #endif
+
 
 	// Perform the assigned action based on the ItemAction enum
 	switch (ItemAction)
