@@ -50,22 +50,8 @@ void UMC_InventoryComponent::RefreshInventoryWidget()
 	}*/
 }
 
-void UMC_InventoryComponent::AddItemToInventory_Implementation(uint8 Slot, UMC_Item* Item)
+void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* Item)
 {
-#if !UE_BUILD_SHIPPING
-	// Check if the slot number is valid (Slot should be less than or equal to MaxSlots)
-	if (Slot > MaxSlots)
-	{
-		//Log Error
-		UE_LOGFMT(LogInventory, Error, "Invalid slot number. Slot exceeds MaxSlots. File - {0}, Line - {1}.", __FILE__, __LINE__);
-	}
-	if (Item == nullptr)
-	{
-		//Log Error
-		UE_LOGFMT(LogInventory, Error, "Item is nullptr. File - {0}, Line - {1}.", __FILE__, __LINE__);
-	}
-#endif
-
 	//Check if there is something on that slot
 	if (GetItemFromInventory(Slot) != nullptr)
 	{
@@ -81,7 +67,7 @@ void UMC_InventoryComponent::AddItemToInventory_Implementation(uint8 Slot, UMC_I
 		else
 		{
 			// Drop the item from the inventory using the given item
-			DropItem(Item);
+			DropItemInstance(Item);
 			
 			UE_LOGFMT(LogInventory, Log, "We need to create a bag of items at the player's location when attempting to add an item to the inventory");
 		}
@@ -89,6 +75,11 @@ void UMC_InventoryComponent::AddItemToInventory_Implementation(uint8 Slot, UMC_I
 		// Refresh the inventory widget to reflect the changes
 		RefreshInventoryWidget();
 	}
+}
+
+void UMC_InventoryComponent::AddItemToFirstAvailableSlot_Implementation(UMC_Item* Item)
+{
+	
 }
 
 void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
@@ -130,7 +121,7 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 		case EItemAction::Drop:
 			{
 				// Drop the item from the inventory using the given slot
-				DropItem(Slot);
+				DropItemBySlot(Slot);
 				
 				break;
 			}
@@ -242,12 +233,12 @@ UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_
 	return BestItem;
 }
 
-void UMC_InventoryComponent::DropItem(uint8 Slot)
+void UMC_InventoryComponent::DropItemBySlot(uint8 Slot)
 {
 	//TODO: Create a bag at player's location
 }
 
-void UMC_InventoryComponent::DropItem(UMC_Item* Item)
+void UMC_InventoryComponent::DropItemInstance(UMC_Item* Item)
 {
 	//TODO: Create a bag at player's location
 }

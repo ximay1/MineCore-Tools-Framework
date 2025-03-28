@@ -9,6 +9,53 @@
 
 class UMC_Item;
 
+#pragma region UE_EDITOR_MACROS
+
+#if WITH_EDITOR
+	// Macro to log error if the slot number is invalid, but doesn't return anything
+	#define VALIDATE_SLOT(Slot, MaxSlots) \
+		if (Slot > MaxSlots) \
+		{ \
+			UE_LOGFMT(LogInventory, Error, "Invalid slot number. Slot exceeds MaxSlots. File - {0}, Line - {1}.", __FILE__, __LINE__); \
+		}
+
+	// Macro to log error if the item is invalid (nullptr), but doesn't return anything
+	#define VALIDATE_ITEM(Item) \
+		if (Item == nullptr) \
+		{ \
+			UE_LOGFMT(LogInventory, Error, "Item is nullptr. File - {0}, Line - {1}.", __FILE__, __LINE__); \
+		}
+
+
+	// Macro to check if the slot number is valid, returns false if invalid
+	#define VALIDATE_SLOT_AND_RETURN(Slot, MaxSlots, bIsValid) \
+		if (Slot > MaxSlots) \
+		{ \
+			UE_LOGFMT(LogInventory, Error, "Invalid slot number. Slot exceeds MaxSlots. File - {0}, Line - {1}.", __FILE__, __LINE__); \
+			bIsValid = false; \
+		}
+
+	// Macro to check if the item is valid (not nullptr), returns false if invalid
+	#define VALIDATE_ITEM_AND_RETURN(Item, bIsValid) \
+		if (Item == nullptr) \
+		{ \
+			UE_LOGFMT(LogInventory, Error, "Item is nullptr. File - {0}, Line - {1}.", __FILE__, __LINE__); \
+			bIsValid = false; \
+		}
+
+	// Macro to validate both slot and item without returning
+	#define VALIDATE_ITEM_AND_SLOT(Slot, MaxSlots, Item) \
+		VALIDATE_SLOT(Slot, MaxSlots) \
+		VALIDATE_ITEM(Item)
+
+	// Macro to validate both slot and item, returns false if either is invalid
+	#define VALIDATE_ITEM_AND_SLOT_RETURN(Slot, MaxSlots, Item, bIsValid) \
+		VALIDATE_SLOT_AND_RETURN(Slot, MaxSlots, bIsValid) \
+		VALIDATE_ITEM_AND_RETURN(Item, bIsValid)
+#endif
+
+#pragma endregion
+
 /** 
  * This struct defines the filter criteria for searching items in the inventory.
  */
@@ -93,9 +140,13 @@ public:
 	/** Refresh Widget Inventory */
 	void RefreshInventoryWidget();
 	
-	/** Adds an item to the inventory */
+	/** Adds an item to the specified inventory slot */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
-	void AddItemToInventory(uint8 Slot, UMC_Item* Item);
+	void AddItemToSlot(uint8 Slot, UMC_Item* Item);
+
+	/** Adds an item to the first available slot in the inventory */
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
+	void AddItemToFirstAvailableSlot(UMC_Item* Item);
 
 	/** Removes an item from the inventory */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
@@ -114,11 +165,16 @@ public:
 	void FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const;
 	
 	/** This function attempts to find the best item in the Inventory. */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	UMC_Item* FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const;
 	
-	/** Drops the item as a bag at the player's location */
-	void DropItem(uint8 Slot);
-	void DropItem(UMC_Item* Item);
+	/** Drops the item from the specified inventory slot as a bag at the player's location */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	void DropItemBySlot(uint8 Slot);
+
+	/** Drops the specified item as a bag at the player's location */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	void DropItemInstance(UMC_Item* Item);
 	
 	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
