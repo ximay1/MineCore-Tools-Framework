@@ -15,7 +15,11 @@ public:
 
 	// This function adds an item to the player's inventory based on the class name provided in the input string.
 	UFUNCTION(Exec)
-	void AddItemToInventory(FString InputString);
+	void AddItemToInventory(FString InputString_ClassName, FString InputString_DataAssetType, FString InputString_DataAssetName);
+
+	// This function serializes the inventory to the json file, which is saved in the Saved Folder which is locatd in the project files
+	UFUNCTION(Exec)
+	void SerializeInventoryToJSON();
 	
 protected:
 	/**
