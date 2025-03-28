@@ -19,6 +19,10 @@ public:
 	/** Get Item Config */
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	FORCEINLINE UMC_ItemConfig* GetItemConfig() const { return ItemConfig; }
+
+	/** Set Item Config */
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	FORCEINLINE void SetItemConfig(UMC_ItemConfig* NewItemConfig) { ItemConfig = NewItemConfig; }
 	
 	/** Attempts to cast the ItemConfig to the specified type */
 	template<typename ItemConfigClass = UMC_ItemConfig>
