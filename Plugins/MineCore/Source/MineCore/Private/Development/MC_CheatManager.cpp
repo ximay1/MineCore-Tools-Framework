@@ -139,17 +139,16 @@ void UMC_CheatManager::SerializeInventoryToJSON()
 	}
 }
 
-UClass* UMC_CheatManager::FindAndPrintClass(FString InputString)
+UClass* UMC_CheatManager::FindClass(FString InputString)
 {
 	FString ClassName;
 
 	// Extract the class name from the input string using the "StaticClass=" prefix
 	if (FParse::Value(*InputString, TEXT("StaticClass="), ClassName))
 	{
-		// Try to find the class by its name in the engine's object registry
+		// Try to find the class
 		if (UClass* FoundClass = FindFirstObject<UClass>(*ClassName))
 		{
-			UE_LOGFMT(LogTemp, Log, "Class Name: {0}", FoundClass->GetName());
 			return FoundClass; // Return the found class
 		}
 		else
