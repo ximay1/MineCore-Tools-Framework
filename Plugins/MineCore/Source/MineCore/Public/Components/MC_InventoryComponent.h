@@ -121,7 +121,7 @@ enum class EItemAction : uint8
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAddedToInventory, uint8, Slot, UMC_Item*, Item);
 
 /** Base class for the inventory system used in MineCore. */
-UCLASS( ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent))
 class MINECORE_API UMC_InventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
