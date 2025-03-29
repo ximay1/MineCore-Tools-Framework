@@ -203,6 +203,12 @@ void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& Inven
         // Passed all filters
         OutItems.Add(Item);
     }
+
+	//Log Warning
+	if (OutItems.Num() == 0)
+	{
+		UE_LOGFMT(LogMiningSystem, Warning, "Inventory doesn't contain the requested item. File: {0}, Line: {1}", __FILE__, __LINE__);
+	}
 }
 
 UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const
@@ -219,15 +225,7 @@ UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_
 
 	// Get all Items of given class from the inventory
 	FindItemsByFilter(InventoryItemFilter, OutItems);
-
-	// If no items are found, return nullptr
-	if (OutItems.Num() == 0)
-	{
-		//Log Warning
-		UE_LOGFMT(LogMiningSystem, Warning, "Inventory doesn't contain the requested item. File: {0}, Line: {1}", __FILE__, __LINE__);
-		return nullptr;
-	}
-
+	
 	// Assuming Tier1 is the lowest tier
 	UMC_Item* BestItem = nullptr;
 	EItemTier HighestTier = EItemTier::Tier1;
