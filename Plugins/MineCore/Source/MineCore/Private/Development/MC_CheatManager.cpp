@@ -6,7 +6,7 @@
 void UMC_CheatManager::AddItemToInventory(FString InputString_ClassName, FString InputString_DataAssetType, FString InputString_DataAssetName)
 {
 	// Check if the class was found and is valid
-	if (UClass* ItemClass = FindAndPrintClass(InputString_ClassName))
+	if (UClass* ItemClass = FindClass(InputString_ClassName))
 	{
 		// Ensure the class is a child of UMC_Item (the base item class)
 		checkf(ItemClass->IsChildOf(UMC_Item::StaticClass()), TEXT("We can't create an item from the given class: %s"), *ItemClass->GetName());
