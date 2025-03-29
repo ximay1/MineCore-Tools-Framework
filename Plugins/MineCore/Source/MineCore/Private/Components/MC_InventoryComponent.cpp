@@ -160,7 +160,7 @@ void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& Inven
 {
 #if !UE_BUILD_SHIPPING
 
-	CHECK_NUM_FIELDS(4, FInventoryItemFilter)
+	CHECK_NUM_FIELDS(FInventoryItemFilter, 5)
 	
     // Warn if no filter criteria are enabled
     if (!(InventoryItemFilter.bUseCategoryFilter || 

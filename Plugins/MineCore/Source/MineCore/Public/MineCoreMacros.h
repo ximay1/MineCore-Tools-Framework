@@ -8,7 +8,7 @@
  * - Class: The class/struct type whose fields are being counted.
 */
 #if !UE_BUILD_SHIPPING
-#define CHECK_NUM_FIELDS(ExpectedCount, Class) \
+#define CHECK_NUM_FIELDS(Class, ExpectedCount) \
     { \
         uint16 PropertyCount = 0; \
         for (TFieldIterator<FProperty> PropertyIt(Class::StaticStruct()); PropertyIt; ++PropertyIt) \
