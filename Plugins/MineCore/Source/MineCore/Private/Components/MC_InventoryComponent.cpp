@@ -2,6 +2,7 @@
 #include "MC_LogChannels.h"
 #include "Items/MC_Item.h"
 #include "MineCore/Public/Data/Items/MC_ItemConfig.h"
+#include "MineCoreMacros.h"
 
 FInventoryItemFilter::FInventoryItemFilter()
 	: ItemClass(nullptr)
@@ -158,22 +159,9 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const
 {
 #if !UE_BUILD_SHIPPING
-	// Define expected number of conditions (update this when modifying FInventoryItemFilter)
-	constexpr uint16 ExpectedConditionCount = 5;  
-	uint16 PropertyCount = 0;
 
-	// Get the struct definition of FInventoryItemFilter
-	UStruct* InventoryItemFilterStruct = FInventoryItemFilter::StaticStruct();
-
-	// Count the number of properties in the struct
-	for (TFieldIterator<FProperty> PropertyIt(InventoryItemFilterStruct); PropertyIt; ++PropertyIt)
-	{
-		PropertyCount++;
-	}
-
-	// Ensure that the expected condition count matches the actual number of properties
-	checkf(PropertyCount == ExpectedConditionCount, TEXT("The number of conditions and number of properties in FInventoryItemFilter are not the same."));
-    
+	CHECK_NUM_FIELDS(4, FInventoryItemFilter)
+	
     // Warn if no filter criteria are enabled
     if (!(InventoryItemFilter.bUseCategoryFilter || 
           InventoryItemFilter.bUseItemClass		 || 
