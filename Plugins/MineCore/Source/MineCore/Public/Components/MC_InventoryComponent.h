@@ -10,7 +10,7 @@ class UMC_Item;
 
 #pragma region UE_EDITOR_MACROS
 
-#if WITH_EDITOR
+#if !UE_BUILD_SHIPPING
 	// Macro to log error if the slot number is invalid, but doesn't return anything
 	#define VALIDATE_SLOT(Slot, MaxSlots) \
 		if (Slot > MaxSlots) \

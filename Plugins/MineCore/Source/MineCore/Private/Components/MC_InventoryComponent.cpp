@@ -53,7 +53,7 @@ void UMC_InventoryComponent::RefreshInventoryWidget()
 
 void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* Item)
 {
-#if WITH_EDITOR
+#if !UE_BUILD_SHIPPING
 	// Declare a flag to track the validity of the slot and item
 	bool bIsValid = true;
 
@@ -105,7 +105,7 @@ void UMC_InventoryComponent::AddItemToFirstAvailableSlot_Implementation(UMC_Item
 
 void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
 {
-#if WITH_EDITOR
+#if !UE_BUILD_SHIPPING
 	// Declare a flag to track the validity of the slot
 	bool bIsValid = true;
 
