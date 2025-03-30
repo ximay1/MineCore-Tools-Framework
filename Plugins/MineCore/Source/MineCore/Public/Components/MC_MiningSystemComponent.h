@@ -28,10 +28,10 @@ public:
 
 	/** Get Mining Tool */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
-	FORCEINLINE UMC_MiningTool* GetMiningTool(TSubclassOf<UMC_MiningTool> Class) { return CachedMiningTools.FindChecked(Class); }
+	FORCEINLINE UMC_MiningTool* GetMiningTool(TSubclassOf<UMC_MiningTool> Class) { return *CachedMiningTools.Find(Class); }
 	
 	template<typename MiningToolClass>
-	FORCEINLINE MiningToolClass* GetMiningTool() { return Cast<MiningToolClass>(CachedMiningTools.FindChecked(MiningToolClass::StaticClass())); }
+	FORCEINLINE MiningToolClass* GetMiningTool() { return Cast<MiningToolClass>(CachedMiningTools.Find(MiningToolClass::StaticClass())); }
 	
 	/** Start Mining */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
