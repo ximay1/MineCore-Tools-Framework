@@ -6,6 +6,7 @@ UMC_ServerCheatsComponent::UMC_ServerCheatsComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 	bIsEditorOnly = true;
+	
 	SetIsReplicatedByDefault(true);
 }
 
