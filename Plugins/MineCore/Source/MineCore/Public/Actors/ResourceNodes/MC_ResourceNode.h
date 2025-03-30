@@ -17,25 +17,23 @@ class MINECORE_API AMC_ResourceNode : public AActor
 public:
     /** Constructor */
     AMC_ResourceNode();
-    
+
     /** Displays the mining progress widget on the client. */
     UFUNCTION(Client, Reliable)
     virtual void Client_DisplayMiningProgressWidget(APlayerController* PlayerController);
-    
+
     /** Displays a widget informing the player that mining is denied. */
     UFUNCTION(Client, Reliable)
     virtual void Client_DisplayMiningDeniedWidget(APlayerController* PlayerController);
-    
-    /**
-     * Initiates the mining process on the node. */
+
+    /** Initiates the mining process on the node. */
     UFUNCTION(Server, Reliable, BlueprintCallable)
     virtual void Server_StartMining(APlayerController* PlayerController);
-    
+
     /** Stops the mining process. */
     virtual void StopMining(APlayerController* PlayerController);
 
 protected:
-
     /** Current state of the resource node. */
     UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
     EResourceNodeState ResourceNodeState;
@@ -51,7 +49,7 @@ protected:
     /** Static mesh component representing the resource node. */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
     TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
-    
+
     /** Called when the game starts or when spawned. */
     virtual void BeginPlay() override;
 
@@ -68,9 +66,9 @@ protected:
     /** Validates the PlayerController. */
     virtual bool EnsureValidPlayerController(APlayerController* PlayerController);
 
-    /** Try to claer MineResourceNodeTimerHandle */
+    /** Try to clear MineResourceNodeTimerHandle */
     void TryToClearTimerHandle(FTimerHandle TimerHandle);
-    
+
     /** Updates the static mesh's material based on the current resource node state. */
     virtual void SetStaticMeshForCurrentState();
 
@@ -80,7 +78,7 @@ protected:
 private:
     /** Timer handle for refreshing the resource node state. */
     FTimerHandle ResourceNodeSpawnTimerHandle;
-    
+
     /** Timer handle for managing the mining process. */
     FTimerHandle MineResourceNodeTimerHandle;
 };
