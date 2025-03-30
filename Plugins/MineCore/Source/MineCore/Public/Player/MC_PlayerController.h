@@ -8,5 +8,8 @@ UCLASS()
 class MINECORE_API AMC_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	/** Events */
+	virtual void PostInitializeComponents() override;
 };
