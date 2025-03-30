@@ -10,7 +10,7 @@ class UMC_Pickaxe;
 class UMC_InventoryComponent;
 
 /** Base class for the MiningSystemComponent used in MineCore. Handles mining-related functionality and interactions. */
-UCLASS( ClassGroup=(MiningSystem), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(MineCore), meta=(BlueprintSpawnableComponent) )
 class MINECORE_API UMC_MiningSystemComponent : public UActorComponent
 {
 	GENERATED_BODY()

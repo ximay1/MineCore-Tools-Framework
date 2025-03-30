@@ -4,6 +4,7 @@
 #include "GameFramework/CheatManager.h"
 #include "MC_LogChannels.h"
 #include "Items/MC_Item.h"
+#include "Components/MC_ServerCheatsComponent.h"
 #include "MC_CheatManager.generated.h"
 
 UCLASS()
@@ -35,4 +36,7 @@ protected:
 	 * The expected input format is: "StaticClass=ClassName"
 	*/
 	UClass* FindClass(FString InputString);
+
+	/** Get Server Cheat Component */
+	FORCEINLINE UMC_ServerCheatsComponent* GetServerCheatsComponent() const { return Cast<UMC_ServerCheatsComponent>(GetPlayerController()->FindComponentByClass<UMC_ServerCheatsComponent>()); }
 };
