@@ -117,6 +117,25 @@ enum class EItemAction : uint8
 	Drop    UMETA(DisplayName = "Drop"),     // Player wants to drop the item
 };
 
+/** 
+ * The struct can be used for mapping items to specific inventory slots, 
+ * making it easy to manage and replicate inventory data in multiplayer scenarios.
+ */
+USTRUCT()
+struct FInventoryItemsMap  
+{
+	GENERATED_BODY()
+	
+	/** Slot in the inventory that holds the item */
+	UPROPERTY()
+	uint8 Slot;
+
+	/** Pointer to the item in the given slot */
+	UPROPERTY()
+	UMC_Item* Item;
+};
+
+
 /** Triggered when an item is added (Slot number, Item). */  
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAddedToInventory, uint8, Slot, UMC_Item*, Item);
 
@@ -203,6 +222,17 @@ protected:
 	/** Map of items in the inventory. uint8 represents a number of slot. */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
 	TMap<uint8, UMC_Item*> Items;
+
+	/** Array of items in the inventory. Each entry contains a slot and the corresponding item stored in that slot. */
+	UPROPERTY(ReplicatedUsing = OnRep_Items_Array)
+	TArray<FInventoryItemsMap> Items_Array;
+
+	/** 
+	 * Called when the replicated Items_Array is updated on clients. 
+	 * This function synchronizes the local TMap (Items) with the replicated TArray (Items_Array). 
+	 */
+	UFUNCTION()
+	void OnRep_Items_Array();
 	
 	/** Maximum number of slots in the inventory */
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))

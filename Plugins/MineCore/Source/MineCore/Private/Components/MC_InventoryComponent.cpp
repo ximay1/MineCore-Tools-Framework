@@ -3,6 +3,7 @@
 #include "Items/MC_Item.h"
 #include "MineCore/Public/Data/Items/MC_ItemConfig.h"
 #include "MineCoreMacros.h"
+#include "Net/Core/PushModel/PushModel.h"
 
 FInventoryItemFilter::FInventoryItemFilter()
 	: ItemClass(nullptr)
@@ -89,10 +90,7 @@ void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* 
 		if (FindValidSlot(Slot))
 		{
 			//Add to the inventory
-			Items.Add(Slot, Item);
-
-			//Call delegate
-			OnItemAddedToInventory.Broadcast(Slot, Item);
+			Items_Array.Add(FInventoryItemsMap(Slot, Item));
 		}
 		else
 		{
@@ -100,19 +98,17 @@ void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* 
 			DropItemInstance(Item);
 			
 			UE_LOGFMT(LogInventory, Log, "We need to create a bag of items at the player's location when attempting to add an item to the inventory");
+			return;
 		}
 	}
 	else
 	{
 		//Add to the inventory
-		Items.Add(Slot, Item);
-
-		//Call delegate
-		OnItemAddedToInventory.Broadcast(Slot, Item);
+		Items_Array.Add(FInventoryItemsMap(Slot, Item));
 	}
-	
-	// Refresh the inventory widget to reflect the changes
-	RefreshInventoryWidget();
+
+	//Call delegate
+	OnItemAddedToInventory.Broadcast(Slot, Item);
 }
 
 void UMC_InventoryComponent::AddItemToFirstAvailableSlot_Implementation(UMC_Item* Item)
@@ -134,23 +130,23 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 		return;
 #endif
 
-
+	//TODO: Don't use this function, I need to rethink this code when I won't  falling asleep :)
 	// Perform the assigned action based on the ItemAction enum
 	switch (ItemAction)
 	{
 		case EItemAction::Destroy:
 			{
 				// Find the item in the inventory map using the given slot
-				if (UMC_Item* ItemToDestroy = Items.FindRef(Slot))
+				if (FInventoryItemsMap* ItemToDestroy = Items_Array.FindByPredicate([Slot](const FInventoryItemsMap& Item)
+					{
+						return Item.Slot == Slot;
+					}))
 				{
+					// Remove the item from the inventory
+					Items_Array.RemoveSingle(*ItemToDestroy);
+
 					// Start destroying the item by calling BeginDestroy()
-					ItemToDestroy->BeginDestroy();
-
-					// Remove the item from the inventory map
-					Items.Remove(Slot);
-
-					// Refresh the inventory widget to reflect the changes
-					RefreshInventoryWidget();
+					ItemToDestroy->Item->BeginDestroy();
 				}
 				else
 				{
@@ -163,14 +159,11 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 		case EItemAction::Drop:
 			{
 				// Drop the item from the inventory using the given slot
-				DropItemBySlot(Slot);
+				//DropItemInstance(Slot);
 				
 				break;
 			}
 	};
-
-	// Refresh the inventory widget to reflect the changes
-	RefreshInventoryWidget();
 }
 
 void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const
@@ -268,4 +261,20 @@ void UMC_InventoryComponent::DropItemBySlot(uint8 Slot)
 void UMC_InventoryComponent::DropItemInstance(UMC_Item* Item)
 {
 	//TODO: Create a bag at player's location
+}
+
+void UMC_InventoryComponent::OnRep_Items_Array()
+{
+	//Reset Map
+	Items.Reset();
+	
+	// Iterate through the replicated array and update the map.
+	for (auto& Element : Items_Array)
+	{
+		// Add the item into the TMap using the slot as the key.
+		Items.Add(Element.Slot, Element.Item);
+	}
+	
+	// Refresh the inventory widget to reflect the changes
+	RefreshInventoryWidget();
 }
