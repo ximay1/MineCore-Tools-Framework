@@ -131,14 +131,22 @@ class MINECORE_API UMC_InventoryComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UMC_InventoryComponent();
-	
+
 	/** Creates the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	void CreateInventory();
 
 	/** Refresh Widget Inventory */
 	void RefreshInventoryWidget();
-	
+
+	/** Get Max Slots */
+	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
+	FORCEINLINE uint8 GetMaxSlots() const { return MaxSlots; }
+
+	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	bool FindValidSlot(uint8& OutSlot) const;
+
 	/** Adds an item to the specified inventory slot */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
 	void AddItemToSlot(uint8 Slot, UMC_Item* Item);
@@ -158,7 +166,7 @@ public:
 	/** Get all items in the inventory as a map */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	void GetInventoryItemsMap(TMap<uint8, UMC_Item*>& OutItems) const { OutItems = Items; }
-	
+
 	/** Checks if an item exists in the inventory. Returns UMC_Item if found, otherwise nullptr */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	FORCEINLINE UMC_Item* GetItemFromInventory(uint8 Slot) const { return Items.FindRef(Slot); }
@@ -166,11 +174,11 @@ public:
 	/** Finds items in the inventory based on the given filter criteria. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	void FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const;
-	
+
 	/** This function attempts to find the best item in the Inventory. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	UMC_Item* FindBestItemInInventory(const TSubclassOf<UMC_Item>& ItemClass) const;
-	
+
 	/** Drops the item from the specified inventory slot as a bag at the player's location */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	void DropItemBySlot(uint8 Slot);
@@ -178,14 +186,6 @@ public:
 	/** Drops the specified item as a bag at the player's location */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	void DropItemInstance(UMC_Item* Item);
-	
-	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	bool FindValidSlot(uint8& OutSlot) const;
-	
-	/** Get Max Slots */
-	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
-	FORCEINLINE uint8 GetMaxSlots() const { return MaxSlots; }
 
 public:
 	//Delegates

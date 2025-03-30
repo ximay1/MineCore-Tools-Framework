@@ -51,6 +51,23 @@ void UMC_InventoryComponent::RefreshInventoryWidget()
 	}*/
 }
 
+bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
+{
+	// Iterate through all the slots in the inventory
+	for (uint8 CurrentSlot = 0; CurrentSlot < MaxSlots; CurrentSlot++)
+	{
+		// Check if the current slot is empty (does not contain an item)
+		if (!Items.Contains(CurrentSlot))
+		{
+			OutSlot = CurrentSlot; 	// Assign the found empty slot to OutSlot
+			return true;			// Return true since a valid (empty) slot was found
+		}
+	}
+
+	// Return false if no empty slot was found
+	return false;
+}
+
 void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* Item)
 {
 #if !UE_BUILD_SHIPPING
@@ -100,7 +117,7 @@ void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* 
 
 void UMC_InventoryComponent::AddItemToFirstAvailableSlot_Implementation(UMC_Item* Item)
 {
-	
+	//TODO: Create logic
 }
 
 void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
@@ -251,21 +268,4 @@ void UMC_InventoryComponent::DropItemBySlot(uint8 Slot)
 void UMC_InventoryComponent::DropItemInstance(UMC_Item* Item)
 {
 	//TODO: Create a bag at player's location
-}
-
-bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
-{
-	// Iterate through all the slots in the inventory
-	for (uint8 CurrentSlot = 0; CurrentSlot < MaxSlots; CurrentSlot++)
-	{
-		// Check if the current slot is empty (does not contain an item)
-		if (!Items.Contains(CurrentSlot))
-		{
-			OutSlot = CurrentSlot; 	// Assign the found empty slot to OutSlot
-			return true;			// Return true since a valid (empty) slot was found
-		}
-	}
-
-	// Return false if no empty slot was found
-	return false;
 }
