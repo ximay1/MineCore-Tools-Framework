@@ -29,11 +29,11 @@ public:
 	FORCEINLINE UMC_MiningSystemComponent* GetMiningSystemComponent() const { return MiningSystemComponent; }
 	
 protected:
-	/** Inventory Component */
-	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
+	/** EditAnywhere Component */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory Component")
 	TObjectPtr<UMC_InventoryComponent> InventoryComponent;
 
 	/** Mining System Component */
-	UPROPERTY(BlueprintReadOnly, Category = "Mining System Component")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mining System Component")
 	TObjectPtr<UMC_MiningSystemComponent> MiningSystemComponent;
 };
