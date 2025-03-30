@@ -32,25 +32,6 @@ void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 	DOREPLIFETIME_CONDITION(UMC_MiningSystemComponent, IsPlayerMining, COND_OwnerOnly);
 }
 
-void UMC_MiningSystemComponent::StartMining_Implementation()
-{
-	//TODO: Start animation or something else idk
-
-	//Set Is Player Mining to true
-	IsPlayerMining = true;
-}
-
-void UMC_MiningSystemComponent::StopMining_Implementation()
-{
-	if (IsPlayerMining)
-	{
-		//TODO:Stop animation or something else idk
-	}
-	
-	//Set Is Player Mining to false
-	IsPlayerMining = false;
-}
-
 bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
 {
 	if (MiningTool->GetDurability() > 0.0f && MiningTool->GetDurability() <= MiningTool->GetItemConfig<UMC_UsableItemConfig>()->MaxDurability)
@@ -101,6 +82,25 @@ void UMC_MiningSystemComponent::CacheMiningToolsFromInventory()
 	{
 		CachedMiningTools.Add(ToolPair.Key, ToolPair.Value);
 	}
+}
+
+void UMC_MiningSystemComponent::StartMining_Implementation()
+{
+	//TODO: Start animation or something else idk
+
+	//Set Is Player Mining to true
+	IsPlayerMining = true;
+}
+
+void UMC_MiningSystemComponent::StopMining_Implementation()
+{
+	if (IsPlayerMining)
+	{
+		//TODO:Stop animation or something else idk
+	}
+	
+	//Set Is Player Mining to false
+	IsPlayerMining = false;
 }
 
 UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const

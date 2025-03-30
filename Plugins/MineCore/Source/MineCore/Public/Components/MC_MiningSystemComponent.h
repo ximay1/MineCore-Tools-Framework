@@ -16,7 +16,7 @@ class MINECORE_API UMC_MiningSystemComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
-	//Constructor
+	/** Constructor */
 	UMC_MiningSystemComponent();
 
 	/** Events */
@@ -25,6 +25,10 @@ public:
 	
 	/** This function checks if the player is able to mine the resource node. Always called on the server! */
 	bool CanPlayerMine(UMC_MiningTool* MiningTool);
+
+	/** Caches mining tools from the player's inventory */
+	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
+	void CacheMiningToolsFromInventory();
 
 	/** Get Mining Tool */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
@@ -41,11 +45,12 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
 	virtual void StopMining(); 
 
-	/** Caches mining tools from the player's inventory */
+	/** This function attempts to find the inventory component. */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
-	void CacheMiningToolsFromInventory();
-protected:
+	UMC_InventoryComponent* FindInventory() const;
 
+protected:
+	
 	/** Is Player Mining */
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Mining System Component")
 	bool IsPlayerMining;
@@ -59,8 +64,4 @@ protected:
 	/** Cached pointer to the inventory component. It should never be nullptr. */
 	UPROPERTY(BlueprintReadOnly, Category = "Mining System Component")
 	TObjectPtr<UMC_InventoryComponent> InventoryComponent;
-	
-	/** This function attempts to find the inventory component. */
-	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
-	UMC_InventoryComponent* FindInventory() const;
 };
