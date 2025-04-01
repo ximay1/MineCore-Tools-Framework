@@ -122,37 +122,41 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 		return;
 #endif
 
-	//TODO: Don't use this function, I need to rethink this code when I won't  falling asleep :)
-	// Perform the assigned action based on the ItemAction enum
+	
+	// Find the item in the inventory that matches the given slot
+	FInventoryItemsMap* ItemToDestroy = Items_Array.FindByPredicate([Slot](const FInventoryItemsMap& Item)
+	{
+		return Item.Slot == Slot;
+	});
+
+	// Validate if the item exists and is not null
+	if (!ItemToDestroy || !ItemToDestroy->Item)
+	{
+		UE_LOGFMT(LogInventory, Error, "Failed to perform item action: No valid item found in slot {0}. File: {1}, Line: {2}", Slot, __FILE__, __LINE__);
+		return; // Early return to avoid further execution
+	}
+
 	switch (ItemAction)
 	{
 		case EItemAction::Destroy:
 			{
-				// Find the item in the inventory map using the given slot
-				if (FInventoryItemsMap* ItemToDestroy = Items_Array.FindByPredicate([Slot](const FInventoryItemsMap& Item)
-					{
-						return Item.Slot == Slot;
-					}))
-				{
-					// Remove the item from the inventory
-					Items_Array.RemoveSingle(*ItemToDestroy);
-
-					// Start destroying the item by calling BeginDestroy()
-					ItemToDestroy->Item->BeginDestroy();
-				}
-				else
-				{
-					// Log Error
-					UE_LOGFMT(LogInventory, Error, "We wanted to destroy the item which doesn't exist in the inventory, we passed an invalid slot. File - {0}, Line - {1}", __FILE__, __LINE__);
-				}
-
+				// Remove the item from the inventory array
+				Items_Array.RemoveSingle(*ItemToDestroy);
+				UE_LOGFMT(LogInventory, Log, "Item destroyed from slot {0}.", Slot);
+				
 				break;
 			}
 		case EItemAction::Drop:
 			{
-				// Drop the item from the inventory using the given slot
-				//DropItemInstance(Slot);
+				// Spawn the item in the world and remove it from inventory
+				DropItemInstance(ItemToDestroy->Item);
+				UE_LOGFMT(LogInventory, Log, "Item dropped from slot {0}.", Slot);
 				
+				break;
+			}
+		default:
+			{
+				UE_LOGFMT(LogInventory, Warning, "Unhandled item action type for slot {0}.", Slot);
 				break;
 			}
 	};
