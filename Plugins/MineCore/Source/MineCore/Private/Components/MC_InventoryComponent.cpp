@@ -86,12 +86,7 @@ void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* 
 	if (GetItemFromInventory(Slot) != nullptr)
 	{
 		//Find next valid slot
-		if (FindValidSlot(Slot))
-		{
-			//Add to the inventory
-			Items_Array.Add(FInventoryItemsMap(Slot, Item));
-		}
-		else
+		if (!FindValidSlot(Slot))
 		{
 			// Drop the item from the inventory using the given item
 			DropItemInstance(Item);
@@ -100,11 +95,9 @@ void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* 
 			return;
 		}
 	}
-	else
-	{
-		//Add to the inventory
-		Items_Array.Add(FInventoryItemsMap(Slot, Item));
-	}
+	
+	//Add to the inventory
+	Items_Array.Add(FInventoryItemsMap(Slot, Item));
 
 	//Call delegate
 	OnItemAddedToInventory.Broadcast(Slot, Item);
