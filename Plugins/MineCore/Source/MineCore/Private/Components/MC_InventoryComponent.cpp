@@ -275,28 +275,38 @@ void UMC_InventoryComponent::DropItemInstance(UMC_Item* Item)
 	//TODO: Create a bag at player's location
 }
 
-void UMC_InventoryComponent::InitializeInventory()
+void UMC_InventoryComponent::InitializeInventory_Implementation()
 {
 #if WITH_EDITOR
-	// Validate the default inventory data asset reference
-	if (IsValid(DefaultInventory))
-	{
-		// Initialize inventory with items from the data asset
-		for (const auto& Element : DefaultInventory->DefaultItems)
-		{
-			// Create new item instance and configure it
-			UMC_Item* Item = NewObject<UMC_Item>(this);
-			Item->SetItemConfig(Element.ItemData);
+    // Validate the default inventory data asset reference
+    if (IsValid(DefaultInventory))
+    {
+    	// Initialize inventory with items from the data asset
+    	for (const auto& Element : DefaultInventory->DefaultItems)
+    	{
+    		// Create new item instance and configure it
+    		UMC_Item* Item = NewObject<UMC_Item>(this);
+    		Item->SetItemConfig(Element.ItemData);
 
-			// Add to inventory array with specified slot
-			Items_Array.Add(FInventoryItemsMap(Element.Slot, Item));
-		}
-	}
-	else
-	{
-		// Log warning if data asset is missing
-		UE_LOGFMT(LogInventory, Warning, "Default Inventory not initialized - DataAsset is null. File: {0}, Line: {1}", __FILE__, __LINE__);
-	}
+    		// Log ownership hierarchy for debugging inventory item relationships
+    		UE_LOGFMT(LogInventory, Verbose, 
+				"Inventory Item Ownership - Outer: {OuterName} (Component: {CompName}, Owner: {OwnerName}) | Source: {File}:{Line}",
+				this->GetOuter()->GetName(),  // Outer object name
+				*GetName(),                   // Current component name
+				GetOwner() ? *GetOwner()->GetName() : TEXT("None"),  // Actor owner
+				__FILE__,
+				__LINE__
+			);
+    		
+    		// Add to inventory array with specified slot
+    		Items_Array.Add(FInventoryItemsMap(Element.Slot, Item));
+    	}
+    }
+    else
+    {
+    	// Log warning if data asset is missing
+    	UE_LOGFMT(LogInventory, Warning, "Default Inventory not initialized - DataAsset is null. File: {0}, Line: {1}", __FILE__, __LINE__);
+    }
 #endif
 }
 

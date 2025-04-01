@@ -220,7 +220,7 @@ public:
 	void DropItemInstance(UMC_Item* Item);
 	
 	/** Initializes the inventory system by loading default items and setting up initial state. */	
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void InitializeInventory();
 	
 public:
