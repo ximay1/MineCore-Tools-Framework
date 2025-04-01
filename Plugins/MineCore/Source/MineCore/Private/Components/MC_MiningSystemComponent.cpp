@@ -12,6 +12,7 @@ UMC_MiningSystemComponent::UMC_MiningSystemComponent() : IsPlayerMining(false)
 {
 	//Set Parameters
 	PrimaryComponentTick.bCanEverTick = false;
+	SetIsReplicatedByDefault(true);
 }
 
 void UMC_MiningSystemComponent::BeginPlay()

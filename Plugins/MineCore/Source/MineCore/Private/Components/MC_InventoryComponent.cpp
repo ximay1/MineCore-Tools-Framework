@@ -37,6 +37,7 @@ UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 {
 	//Set Parameters
 	PrimaryComponentTick.bCanEverTick = false;
+	SetIsReplicatedByDefault(true);
 }
 
 void UMC_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
