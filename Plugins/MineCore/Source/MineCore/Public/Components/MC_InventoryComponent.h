@@ -4,7 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "Items/MC_Item.h"
 #include "MineCore/Public/Data/Items/MC_DT_ItemConfig.h"
-#include "Development/Data/MC_DefaultInventoryData.h"
+#include "Development/Data/MC_DT_DefaultInventoryData.h"
 #include "MC_InventoryComponent.generated.h"
 
 class UMC_Item;
