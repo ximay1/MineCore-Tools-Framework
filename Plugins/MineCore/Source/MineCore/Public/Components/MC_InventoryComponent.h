@@ -139,6 +139,9 @@ struct FInventoryItemsMap
 /** Triggered when an item is added (Slot number, Item). */  
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAddedToInventory, uint8, Slot, UMC_Item*, Item);
 
+/** Triggered when an item is removed (Slot number, Item). */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemRemovedFromInventory, uint8, Slot, UMC_Item*, Item);
+
 /** Base class for the inventory system used in MineCore. */
 UCLASS(ClassGroup=(MineCore), meta=(BlueprintSpawnableComponent))
 class MINECORE_API UMC_InventoryComponent : public UActorComponent
@@ -209,6 +212,7 @@ public:
 public:
 	//Delegates
 	FOnItemAddedToInventory OnItemAddedToInventory;
+	FOnItemRemovedFromInventory OnItemRemovedFromInventory;
 	
 protected:
 	/** Widget class representing the Inventory */ 
