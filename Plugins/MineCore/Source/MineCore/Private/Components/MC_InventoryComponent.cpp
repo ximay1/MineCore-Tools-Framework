@@ -286,18 +286,8 @@ void UMC_InventoryComponent::InitializeInventory_Implementation()
     	for (const auto& Element : DefaultInventory->DefaultItems)
     	{
     		// Create new item instance and configure it
-    		UMC_Item* Item = NewObject<UMC_Item>(this);
+    		UMC_Item* Item = NewObject<UMC_Item>(GetOwner());
     		Item->SetItemConfig(Element.ItemData);
-
-    		// Log ownership hierarchy for debugging inventory item relationships
-    		UE_LOGFMT(LogInventory, Log, 
-				"Inventory Item Ownership - Outer: {OuterName} (Component: {CompName}, Owner: {OwnerName}) | Source: {File}:{Line}",
-				this->GetOuter()->GetName(),  // Outer object name
-				*GetName(),                   // Current component name
-				GetOwner() ? *GetOwner()->GetName() : TEXT("None"),  // Actor owner
-				__FILE__,
-				__LINE__
-			);
     		
     		// Add to inventory array with specified slot
     		Items_Array.Add(FInventoryItemsMap(Element.Slot, Item));
