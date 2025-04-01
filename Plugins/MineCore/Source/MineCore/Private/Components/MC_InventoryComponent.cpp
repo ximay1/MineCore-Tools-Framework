@@ -290,7 +290,7 @@ void UMC_InventoryComponent::InitializeInventory_Implementation()
     		Item->SetItemConfig(Element.ItemData);
 
     		// Log ownership hierarchy for debugging inventory item relationships
-    		UE_LOGFMT(LogInventory, Verbose, 
+    		UE_LOGFMT(LogInventory, Log, 
 				"Inventory Item Ownership - Outer: {OuterName} (Component: {CompName}, Owner: {OwnerName}) | Source: {File}:{Line}",
 				this->GetOuter()->GetName(),  // Outer object name
 				*GetName(),                   // Current component name
