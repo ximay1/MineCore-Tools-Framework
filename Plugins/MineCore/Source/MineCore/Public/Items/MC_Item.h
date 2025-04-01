@@ -1,12 +1,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MineCore/Public/Data/Items/MC_ItemConfig.h"
+#include "MineCore/Public/Data/Items/MC_DT_ItemConfig.h"
 #include "UObject/NoExportTypes.h"
 #include "MC_LogChannels.h"
 #include "MC_Item.generated.h"
 
-class UMC_ItemConfig;
+class UMC_DT_ItemConfig;
 
 /** Base class for an item object. */
 UCLASS()
@@ -18,14 +18,14 @@ public:
 
 	/** Get Item Config */
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	FORCEINLINE UMC_ItemConfig* GetItemConfig() const { return ItemConfig; }
+	FORCEINLINE UMC_DT_ItemConfig* GetItemConfig() const { return ItemConfig; }
 
 	/** Set Item Config */
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	FORCEINLINE void SetItemConfig(UMC_ItemConfig* NewItemConfig) { ItemConfig = NewItemConfig; }
+	FORCEINLINE void SetItemConfig(UMC_DT_ItemConfig* NewItemConfig) { ItemConfig = NewItemConfig; }
 	
 	/** Attempts to cast the ItemConfig to the specified type */
-	template<typename ItemConfigClass = UMC_ItemConfig>
+	template<typename ItemConfigClass = UMC_DT_ItemConfig>
 	ItemConfigClass* GetItemConfig() const;
 
 	/** Checks if the current item has a higher or equal tier than the given item. */
@@ -35,7 +35,7 @@ public:
 protected:
 	/** Data Item Config */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
-	TObjectPtr<UMC_ItemConfig> ItemConfig; 
+	TObjectPtr<UMC_DT_ItemConfig> ItemConfig; 
 };
 
 template <typename ItemConfigClass>

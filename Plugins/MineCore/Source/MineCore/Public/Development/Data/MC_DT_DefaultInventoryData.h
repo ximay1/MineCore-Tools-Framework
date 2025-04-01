@@ -2,8 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "Data/Items/MC_ItemConfig.h"
-#include "MC_DefaultInventoryData.generated.h"
+#include "Data/Items/MC_DT_ItemConfig.h"
+#include "MC_DT_DefaultInventoryData.generated.h"
 
 /**
  * Represents a single item in the default inventory configuration
@@ -18,7 +18,7 @@ public:
 
 	/** The item's data asset reference containing all item properties */
 	UPROPERTY(EditAnywhere, Category = "Inventory", meta = (Tooltip = "Reference to the item's data asset"))
-	TObjectPtr<UMC_ItemConfig> ItemData;
+	TObjectPtr<UMC_DT_ItemConfig> ItemData;
 
 	/** The inventory slot where this item should be placed */
 	UPROPERTY(EditAnywhere, Category = "Inventory", meta = (Tooltip = "Default slot index for this item"))
@@ -30,7 +30,7 @@ public:
  * Used to set up starting inventory for characters/players
  */
 UCLASS()
-class MINECORE_API UMC_DefaultInventoryData : public UDataAsset
+class MINECORE_API UMC_DT_DefaultInventoryData : public UDataAsset
 {
 	GENERATED_BODY()
 

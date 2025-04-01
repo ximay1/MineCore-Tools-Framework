@@ -1,7 +1,7 @@
 #include "Components/MC_InventoryComponent.h"
 #include "MC_LogChannels.h"
 #include "Items/MC_Item.h"
-#include "MineCore/Public/Data/Items/MC_ItemConfig.h"
+#include "MineCore/Public/Data/Items/MC_DT_ItemConfig.h"
 #include "MineCoreMacros.h"
 #include "Net/UnrealNetwork.h"
 
@@ -209,7 +209,7 @@ void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& Inven
         // Basic validity checks
         if (!IsValid(Item)) continue;
     	
-        UMC_ItemConfig* ItemConfig = Item->GetItemConfig();
+        UMC_DT_ItemConfig* ItemConfig = Item->GetItemConfig();
         if (!IsValid(ItemConfig)) continue;
 
         // Inclusive filters

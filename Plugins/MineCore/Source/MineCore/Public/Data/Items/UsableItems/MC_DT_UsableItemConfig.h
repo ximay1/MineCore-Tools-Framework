@@ -1,12 +1,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Data/Items/MC_ItemConfig.h"
-#include "MC_UsableItemConfig.generated.h"
+#include "Data/Items/MC_DT_ItemConfig.h"
+#include "MC_DT_UsableItemConfig.generated.h"
 
 /** Base class for usable items. These items can have durability, but it is not required. Examples: weapons, tools, armor, potions. */
 UCLASS()
-class MINECORE_API UMC_UsableItemConfig : public UMC_ItemConfig
+class MINECORE_API UMC_DT_UsableItemConfig : public UMC_DT_ItemConfig
 {
 	GENERATED_BODY()
 

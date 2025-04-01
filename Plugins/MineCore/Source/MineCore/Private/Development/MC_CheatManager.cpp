@@ -37,7 +37,7 @@ void UMC_CheatManager::AddItemToInventory(FString InputString_ClassName, FString
 		UAssetManager::Get().LoadPrimaryAsset(PrimaryAssetID, {}, FStreamableDelegate::CreateLambda([this, ItemClass, PrimaryAssetID]()
 		{
 			//Get Primary Data Asset Object
-			UMC_ItemConfig* ItemConfig = Cast<UMC_ItemConfig>(UAssetManager::Get().GetPrimaryAssetObject(PrimaryAssetID));
+			UMC_DT_ItemConfig* ItemConfig = Cast<UMC_DT_ItemConfig>(UAssetManager::Get().GetPrimaryAssetObject(PrimaryAssetID));
 
 			// Create a new instance of the item using the found class
 			UMC_Item* Item = NewObject<UMC_Item>(GetPlayerController(), ItemClass);

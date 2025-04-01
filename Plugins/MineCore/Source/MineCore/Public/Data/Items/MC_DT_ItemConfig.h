@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "MC_ItemConfig.generated.h"
+#include "MC_DT_ItemConfig.generated.h"
 
 /** Enum representing the tier of an item or resource node. */
 UENUM(BlueprintType)
@@ -42,7 +42,7 @@ enum class EItemCategory : uint8
 
 /** Base class for item configurations. Defines common properties for all items. */
 UCLASS()
-class MINECORE_API UMC_ItemConfig : public UPrimaryDataAsset
+class MINECORE_API UMC_DT_ItemConfig : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 

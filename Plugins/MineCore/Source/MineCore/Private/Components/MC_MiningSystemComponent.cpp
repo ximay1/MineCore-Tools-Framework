@@ -1,5 +1,5 @@
 #include "Components/MC_MiningSystemComponent.h"
-#include "MineCore/Public/Data/Items//UsableItems/MC_UsableItemConfig.h"
+#include "MineCore/Public/Data/Items//UsableItems/MC_DT_UsableItemConfig.h"
 #include "Items/MiningTools/MC_Pickaxe.h"
 #include "Items/MiningTools/MC_Axe.h"
 #include "Items/MiningTools/MC_Knife.h"
@@ -34,7 +34,7 @@ void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 
 bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
 {
-	if (MiningTool->GetDurability() > 0.0f && MiningTool->GetDurability() <= MiningTool->GetItemConfig<UMC_UsableItemConfig>()->MaxDurability)
+	if (MiningTool->GetDurability() > 0.0f && MiningTool->GetDurability() <= MiningTool->GetItemConfig<UMC_DT_UsableItemConfig>()->MaxDurability)
 		return true;
 	
 	return false;

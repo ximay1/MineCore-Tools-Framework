@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Items/MiningTools/MC_MiningTool.h"
 #include "MC_LogChannels.h"
-#include "MC_ResourceNodeConfig.generated.h"
+#include "MC_DT_ResourceNodeConfig.generated.h"
 
 //TODO: Create here a comment which describe what kind of the resource is for the given tier (ResourceNodeTier) : Tier1 - Stone etc.
 
@@ -59,7 +59,7 @@ inline EResourceNodeState operator+(const EResourceNodeState NodeState, uint8 Nu
 
 /** Base class for defining the parameters of a resource node. Contains configuration data related to resource nodes. */
 UCLASS()
-class MINECORE_API UMC_ResourceNodeConfig : public UPrimaryDataAsset
+class MINECORE_API UMC_DT_ResourceNodeConfig : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 

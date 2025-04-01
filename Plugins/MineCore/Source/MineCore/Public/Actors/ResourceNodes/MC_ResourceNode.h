@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MineCore/Public/Data/ResourceNodes/MC_ResourceNodeConfig.h"
+#include "MineCore/Public/Data/ResourceNodes/MC_DT_ResourceNodeConfig.h"
 #include "MC_ResourceNode.generated.h"
 
-class UMC_ResourceNodeConfig;
+class UMC_DT_ResourceNodeConfig;
 struct FStreamableHandle;
 
 /** AMC_ResourceNode represents a resource node in the game world. */
@@ -44,7 +44,7 @@ protected:
 
     /** Pointer to the resource node config asset. */
     UPROPERTY(BlueprintReadWrite, Category = "Resource Node | Config")
-    TObjectPtr<UMC_ResourceNodeConfig> ResourceNodeConfig;
+    TObjectPtr<UMC_DT_ResourceNodeConfig> ResourceNodeConfig;
     
     /** Static mesh component representing the resource node. */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")

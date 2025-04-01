@@ -105,7 +105,7 @@ void AMC_ResourceNode::BeginPlay()
         //Create delegate
         FStreamableDelegate PrimaryDataAssetDelegate = FStreamableDelegate::CreateLambda([this]()
         {
-            ResourceNodeConfig = Cast<UMC_ResourceNodeConfig>(UAssetManager::Get().GetPrimaryAssetObject(ResourceNodeConfigID));
+            ResourceNodeConfig = Cast<UMC_DT_ResourceNodeConfig>(UAssetManager::Get().GetPrimaryAssetObject(ResourceNodeConfigID));
             if (ResourceNodeConfig)
             {
                 //"Start" Node

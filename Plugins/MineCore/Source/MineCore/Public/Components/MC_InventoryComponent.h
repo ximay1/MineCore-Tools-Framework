@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Items/MC_Item.h"
-#include "MineCore/Public/Data/Items/MC_ItemConfig.h"
+#include "MineCore/Public/Data/Items/MC_DT_ItemConfig.h"
 #include "Development/Data/MC_DefaultInventoryData.h"
 #include "MC_InventoryComponent.generated.h"
 
@@ -256,7 +256,7 @@ protected:
 	
 	/** This data asset contains default inventory, it will be applied on the begin play */
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component")
-	TObjectPtr<UMC_DefaultInventoryData> DefaultInventory;
+	TObjectPtr<UMC_DT_DefaultInventoryData> DefaultInventory;
 	
 #endif
 	
