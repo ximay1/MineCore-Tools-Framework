@@ -3,6 +3,7 @@
 #include "Items/MC_Item.h"
 #include "MineCore/Public/Data/Items/MC_ItemConfig.h"
 #include "MineCoreMacros.h"
+#include "Net/UnrealNetwork.h"
 
 FInventoryItemFilter::FInventoryItemFilter()
 	: ItemClass(nullptr)
@@ -36,6 +37,13 @@ UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 {
 	//Set Parameters
 	PrimaryComponentTick.bCanEverTick = false;
+}
+
+void UMC_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION(UMC_InventoryComponent, Items_Array, COND_OwnerOnly);
 }
 
 void UMC_InventoryComponent::CreateInventory()

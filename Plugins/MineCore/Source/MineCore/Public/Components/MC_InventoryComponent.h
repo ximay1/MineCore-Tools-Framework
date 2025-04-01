@@ -133,6 +133,11 @@ struct FInventoryItemsMap
 	/** Pointer to the item in the given slot */
 	UPROPERTY()
 	UMC_Item* Item;
+
+	bool operator==(const FInventoryItemsMap& Other) const
+	{
+		return this->Slot == Other.Slot;
+	}
 };
 
 
@@ -153,6 +158,9 @@ class MINECORE_API UMC_InventoryComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UMC_InventoryComponent();
+
+	/** Events */
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	/** Creates the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
@@ -237,7 +245,8 @@ protected:
 	 */
 	UFUNCTION()
 	void OnRep_Items_Array();
-	
+
+protected:
 	/** Maximum number of slots in the inventory */
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))
 	uint8 MaxSlots;
