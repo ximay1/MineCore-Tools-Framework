@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
 #include "Data/Items/MC_ItemConfig.h"
-#include "MC_DT_DefaultInventory.generated.h"
+#include "MC_DefaultInventoryData.generated.h"
 
 /**
  * Represents a single item in the default inventory configuration
@@ -20,9 +20,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Inventory", meta = (Tooltip = "Reference to the item's data asset"))
 	TObjectPtr<UMC_ItemConfig> ItemData;
 
-	/** The inventory slot index where this item should be placed by default */
+	/** The inventory slot where this item should be placed */
 	UPROPERTY(EditAnywhere, Category = "Inventory", meta = (Tooltip = "Default slot index for this item"))
-	uint8 DefaultSlotIndex;
+	uint8 Slot;
 };
 
 /**

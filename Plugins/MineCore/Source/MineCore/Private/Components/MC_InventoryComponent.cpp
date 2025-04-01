@@ -46,6 +46,14 @@ void UMC_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME_CONDITION(UMC_InventoryComponent, Items_Array, COND_OwnerOnly);
 }
 
+void UMC_InventoryComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//Initialize Inventory
+	InitializeInventory();
+}
+
 void UMC_InventoryComponent::CreateInventory()
 {
 	//TODO: Create Inventory
@@ -265,6 +273,31 @@ void UMC_InventoryComponent::DropItemBySlot(uint8 Slot)
 void UMC_InventoryComponent::DropItemInstance(UMC_Item* Item)
 {
 	//TODO: Create a bag at player's location
+}
+
+void UMC_InventoryComponent::InitializeInventory()
+{
+#if WITH_EDITOR
+	// Validate the default inventory data asset reference
+	if (IsValid(DefaultInventory))
+	{
+		// Initialize inventory with items from the data asset
+		for (const auto& Element : DefaultInventory->DefaultItems)
+		{
+			// Create new item instance and configure it
+			UMC_Item* Item = NewObject<UMC_Item>(this);
+			Item->SetItemConfig(Element.ItemData);
+
+			// Add to inventory array with specified slot
+			Items_Array.Add(FInventoryItemsMap(Element.Slot, Item));
+		}
+	}
+	else
+	{
+		// Log warning if data asset is missing
+		UE_LOGFMT(LogInventory, Warning, "Default Inventory not initialized - DataAsset is null. File: {0}, Line: {1}", __FILE__, __LINE__);
+	}
+#endif
 }
 
 void UMC_InventoryComponent::OnRep_Items_Array()

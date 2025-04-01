@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "Items/MC_Item.h"
 #include "MineCore/Public/Data/Items/MC_ItemConfig.h"
+#include "Development/Data/MC_DefaultInventoryData.h"
 #include "MC_InventoryComponent.generated.h"
 
 class UMC_Item;
@@ -161,6 +162,7 @@ public:
 
 	/** Events */
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void BeginPlay() override;
 
 	/** Creates the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
@@ -216,7 +218,11 @@ public:
 	/** Drops the specified item as a bag at the player's location */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	void DropItemInstance(UMC_Item* Item);
-
+	
+	/** Initializes the inventory system by loading default items and setting up initial state. */	
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	virtual void InitializeInventory();
+	
 public:
 	//Delegates
 	FOnItemAddedToInventory OnItemAddedToInventory;
@@ -246,6 +252,14 @@ protected:
 	UFUNCTION()
 	void OnRep_Items_Array();
 
+#if WITH_EDITORONLY_DATA
+	
+	/** This data asset contains default inventory, it will be applied on the begin play */
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component")
+	TObjectPtr<UMC_DefaultInventoryData> DefaultInventory;
+	
+#endif
+	
 protected:
 	/** Maximum number of slots in the inventory */
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))
