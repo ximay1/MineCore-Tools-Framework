@@ -3,7 +3,6 @@
 #include "Items/MC_Item.h"
 #include "MineCore/Public/Data/Items/MC_ItemConfig.h"
 #include "MineCoreMacros.h"
-#include "Net/Core/PushModel/PushModel.h"
 
 FInventoryItemFilter::FInventoryItemFilter()
 	: ItemClass(nullptr)
@@ -170,7 +169,7 @@ void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& Inven
 {
 #if !UE_BUILD_SHIPPING
 
-	CHECK_NUM_FIELDS(FInventoryItemFilter, 5)
+	CHECK_NUM_FIELDS(FInventoryItemFilter::StaticStruct(), 5)
 	
     // Warn if no filter criteria are enabled
     if (!(InventoryItemFilter.bUseCategoryFilter || 

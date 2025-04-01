@@ -11,7 +11,7 @@
 #define CHECK_NUM_FIELDS(Class, ExpectedCount) \
     { \
         uint16 PropertyCount = 0; \
-        for (TFieldIterator<FProperty> PropertyIt(Class::StaticStruct()); PropertyIt; ++PropertyIt) \
+        for (TFieldIterator<FProperty> PropertyIt(Class); PropertyIt; ++PropertyIt) \
         { \
             PropertyCount++; \
         } \
