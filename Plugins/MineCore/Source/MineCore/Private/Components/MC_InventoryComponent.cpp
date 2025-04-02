@@ -297,10 +297,13 @@ void UMC_InventoryComponent::DestroyItem(FInventoryItemsMap* ItemToDestroy)
 		return;
 	}
 	
-	//1. Call delegate
+	// 1. Call delegate
 	OnItemRemovedFromInventory.Broadcast(ItemToDestroy->Slot);
+
+	// 2. Remove from replication
+	RemoveReplicatedSubObject(ItemToDestroy->Item);
 	
-	// 2. Remove from inventory array
+	// 3. Remove from inventory array
 	Items_Array.RemoveSingle(*ItemToDestroy);
 }
 
