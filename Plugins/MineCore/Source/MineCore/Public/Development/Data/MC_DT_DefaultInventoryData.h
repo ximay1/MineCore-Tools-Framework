@@ -18,7 +18,7 @@ public:
 
 	/** The item's data asset reference containing all item properties */
 	UPROPERTY(EditAnywhere, Category = "Inventory", meta = (Tooltip = "Reference to the item's data asset"))
-	TObjectPtr<UMC_DT_ItemConfig> ItemData;
+	TObjectPtr<UMC_DT_ItemConfig> ItemConfig;
 
 	/** The inventory slot where this item should be placed */
 	UPROPERTY(EditAnywhere, Category = "Inventory", meta = (Tooltip = "Default slot index for this item"))

@@ -33,6 +33,11 @@ FInventoryItemFilter::FInventoryItemFilter(TSubclassOf<UMC_Item> InItemClass, EI
 {
 }
 
+FItemDefinition::FItemDefinition(UMC_DT_ItemConfig* NewItemConfig) : ItemConfig(NewItemConfig)
+{
+	
+}
+
 UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 {
 	//Set Parameters
@@ -152,6 +157,7 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 			{
 				// Remove the item from the inventory array
 				Items_Array.RemoveSingle(*ItemToDestroy);
+				RemoveReplicatedSubObject
 				UE_LOGFMT(LogInventory, Log, "Item destroyed from slot {0}.", Slot);
 				
 				break;
@@ -283,6 +289,21 @@ UMC_Item* UMC_InventoryComponent::ConstructItem(const FItemDefinition& ItemDefin
 	return Item;
 }
 
+void UMC_InventoryComponent::DestroyItem(FInventoryItemsMap* ItemToDestroy)
+{
+	if (!ItemToDestroy || !ItemToDestroy->Item)
+	{
+		UE_LOG(LogInventory, Warning, TEXT("Attempted to destroy invalid item"));
+		return;
+	}
+	
+	//1. Call delegate
+	OnItemRemovedFromInventory.Broadcast(ItemToDestroy->Slot);
+	
+	// 2. Remove from inventory array
+	Items_Array.RemoveSingle(*ItemToDestroy);
+}
+
 void UMC_InventoryComponent::InitializeInventory_Implementation()
 {
 #if WITH_EDITOR
@@ -293,13 +314,11 @@ void UMC_InventoryComponent::InitializeInventory_Implementation()
 		// Initialize inventory with items from the data asset
 		for (const auto& Element : DefaultInventory->DefaultItems)
 		{
-			// Create new item instance and configure it
-			UMC_Item* Item = NewObject<UMC_Item>(GetOwner());
-			Item->SetItemConfig(Element.ItemData);
-			AddReplicatedSubObject(Item);
-    	
+			//Create Item Definition
+			FItemDefinition ItemDefinition(Element.ItemConfig);
+			
 			// Add to inventory array with specified slot
-			Items_Array.Add(FInventoryItemsMap(Element.Slot, Item));
+			Items_Array.Add(FInventoryItemsMap(Element.Slot, ConstructItem(ItemDefinition)));
 		}
 	}
 	else

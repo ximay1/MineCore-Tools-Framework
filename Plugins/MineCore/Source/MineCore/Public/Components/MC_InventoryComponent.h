@@ -148,6 +148,10 @@ struct FItemDefinition
 	GENERATED_BODY()
 
 public:
+
+	/** Constructors */
+	FItemDefinition(UMC_DT_ItemConfig* NewItemConfig);
+	
 	//Item Data Config
 	UPROPERTY(BlueprintReadWrite, Category = "Inventory Component | Item Definition")
 	UMC_DT_ItemConfig* ItemConfig;
@@ -156,8 +160,8 @@ public:
 /** Triggered when an item is added (Slot number, Item). */  
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAddedToInventory, uint8, Slot, UMC_Item*, Item);
 
-/** Triggered when an item is removed (Slot number, Item). */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemRemovedFromInventory, uint8, Slot, UMC_Item*, Item);
+/** Triggered when an item is removed (Slot number). */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemRemovedFromInventory, uint8, Slot);
 
 /** Base class for the inventory system used in MineCore. */
 UCLASS(ClassGroup=(MineCore), meta=(BlueprintSpawnableComponent))
@@ -236,7 +240,11 @@ public:
 	/** Creates item instance from definition data */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	virtual UMC_Item* ConstructItem(const FItemDefinition& ItemDefinition);
-	
+
+	/** Destroys item instance */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	virtual void DestroyItem(FInventoryItemsMap* ItemToDestroy);
+
 public:
 	//Delegates
 	FOnItemAddedToInventory OnItemAddedToInventory;
