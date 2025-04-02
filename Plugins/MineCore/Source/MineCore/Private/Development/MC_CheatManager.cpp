@@ -49,7 +49,7 @@ void UMC_CheatManager::AddItemToInventory(FString InputString_ClassName, FString
 			AMC_PlayerCharacter* PlayerCharacter = Cast<AMC_PlayerCharacter>(GetPlayerController()->GetPawn());
 
 			// Add the created item to the player's inventory in the first available slot
-			GetServerCheatsComponent()->AddItemToFirstAvailableSlot_Cheat(Item);
+			GetCheatsComponent()->AddItemToFirstAvailableSlot_Cheat(Item);
 		}));
 	}
 }
