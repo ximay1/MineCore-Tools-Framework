@@ -24,6 +24,6 @@ void AMC_PlayerCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	//Initialize Inventory
-	InventoryComponent->InitializeInventory();
+	InventoryComponent->Server_InitializeInventory();
 }
 

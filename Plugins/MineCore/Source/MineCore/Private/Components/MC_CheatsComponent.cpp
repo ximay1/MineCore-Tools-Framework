@@ -12,6 +12,6 @@ UMC_CheatsComponent::UMC_CheatsComponent()
 
 void UMC_CheatsComponent::AddItemToFirstAvailableSlot_Cheat_Implementation(UMC_Item* Item)
 {
-	Cast<APlayerController>(GetOwner())->GetPawn()->FindComponentByClass<UMC_InventoryComponent>()->AddItemToFirstAvailableSlot(Item);
+	Cast<APlayerController>(GetOwner())->GetPawn()->FindComponentByClass<UMC_InventoryComponent>()->Server_AddItemToFirstAvailableSlot(Item);
 }
 

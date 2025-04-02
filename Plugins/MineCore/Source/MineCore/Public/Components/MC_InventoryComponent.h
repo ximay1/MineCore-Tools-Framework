@@ -180,10 +180,11 @@ public:
 
 	/** Creates the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void CreateInventory();
+	void Client_CreateInventory();
 
 	/** Refresh Widget Inventory */
-	void RefreshInventoryWidget();
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	void Client_RefreshInventoryWidget();
 
 	/** Get Max Slots */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
@@ -195,15 +196,15 @@ public:
 
 	/** Adds an item to the specified inventory slot */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
-	void AddItemToSlot(uint8 Slot, const FItemDefinition& ItemDefinition);
+	void Server_AddItemToSlot(uint8 Slot, const FItemDefinition& ItemDefinition);
 
 	/** Adds an item to the first available slot in the inventory */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
-	void AddItemToFirstAvailableSlot(UMC_Item* Item);
+	void Server_AddItemToFirstAvailableSlot(UMC_Item* Item);
 
 	/** Removes an item from the inventory */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
-	void RemoveItemFromInventory(uint8 Slot, EItemAction ItemAction);
+	void Server_RemoveItemFromInventory(uint8 Slot, EItemAction ItemAction);
 
 	/** Get all items in the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
@@ -227,23 +228,23 @@ public:
 
 	/** Drops the item from the specified inventory slot as a bag at the player's location */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void DropItemBySlot(uint8 Slot);
+	void Server_DropItemBySlot(uint8 Slot);
 
 	/** Drops the specified item as a bag at the player's location */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void DropItemInstance(UMC_Item* Item);
+	void Server_DropItemInstance(UMC_Item* Item);
 	
 	/** Initializes the inventory system by loading default items and setting up initial state. */	
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
-	virtual void InitializeInventory();
+	virtual void Server_InitializeInventory();
 
 	/** Creates item instance from definition data */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	virtual UMC_Item* ConstructItem(const FItemDefinition& ItemDefinition);
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
+	virtual UMC_Item* Server_ConstructItem(const FItemDefinition& ItemDefinition);
 
 	/** Destroys item instance */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	virtual void DestroyItem(FInventoryItemsMap* ItemToDestroy);
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
+	virtual void Server_DestroyItem(FInventoryItemsMap* ItemToDestroy);
 
 public:
 	//Delegates

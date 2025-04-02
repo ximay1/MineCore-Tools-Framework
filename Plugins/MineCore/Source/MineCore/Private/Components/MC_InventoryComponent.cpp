@@ -52,12 +52,12 @@ void UMC_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME_CONDITION(UMC_InventoryComponent, Items_Array, COND_OwnerOnly);
 }
 
-void UMC_InventoryComponent::CreateInventory()
+void UMC_InventoryComponent::Client_CreateInventory()
 {
 	//TODO: Create Inventory
 }
 
-void UMC_InventoryComponent::RefreshInventoryWidget()
+void UMC_InventoryComponent::Client_RefreshInventoryWidget()
 {
 	/*if (InventoryWidget)
 	{
@@ -82,10 +82,10 @@ bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
 	return false;
 }
 
-void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
+void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
 {
 	//Construct Items
-	UMC_Item* Item = ConstructItem(ItemDefinition);
+	UMC_Item* Item = Server_ConstructItem(ItemDefinition);
 	
 #if !UE_BUILD_SHIPPING
 	// Declare a flag to track the validity of the slot and item
@@ -106,7 +106,7 @@ void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, const FIte
 		if (!FindValidSlot(Slot))
 		{
 			// Drop the item from the inventory using the given item
-			DropItemInstance(Item);
+			Server_DropItemInstance(Item);
 			
 			UE_LOGFMT(LogInventory, Log, "We need to create a bag of items at the player's location when attempting to add an item to the inventory");
 			return;
@@ -120,12 +120,12 @@ void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, const FIte
 	OnItemAddedToInventory.Broadcast(Slot, Item);
 }
 
-void UMC_InventoryComponent::AddItemToFirstAvailableSlot_Implementation(UMC_Item* Item)
+void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(UMC_Item* Item)
 {
 	//TODO: Create logic
 }
 
-void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
+void UMC_InventoryComponent::Server_RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
 {
 #if !UE_BUILD_SHIPPING
 	// Declare a flag to track the validity of the slot
@@ -158,7 +158,7 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 		case EItemAction::Destroy:
 			{
 				// Destroy item 
-				DestroyItem(ItemToDestroy);
+				Server_DestroyItem(ItemToDestroy);
 
 				//Log
 				UE_LOGFMT(LogInventory, Log, "Item destroyed from slot {0}.", Slot);
@@ -168,7 +168,7 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 		case EItemAction::Drop:
 			{
 				// Spawn the item in the world and remove it from inventory
-				DropItemInstance(ItemToDestroy->Item);
+				Server_DropItemInstance(ItemToDestroy->Item);
 
 				//Log
 				UE_LOGFMT(LogInventory, Log, "Item dropped from slot {0}.", Slot);
@@ -271,17 +271,17 @@ UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_
 	return BestItem;
 }
 
-void UMC_InventoryComponent::DropItemBySlot(uint8 Slot)
+void UMC_InventoryComponent::Server_DropItemBySlot(uint8 Slot)
 {
 	//TODO: Create a bag at player's location
 }
 
-void UMC_InventoryComponent::DropItemInstance(UMC_Item* Item)
+void UMC_InventoryComponent::Server_DropItemInstance(UMC_Item* Item)
 {
 	//TODO: Create a bag at player's location
 }
 
-UMC_Item* UMC_InventoryComponent::ConstructItem(const FItemDefinition& ItemDefinition)
+UMC_Item* UMC_InventoryComponent::Server_ConstructItem_Implementation(const FItemDefinition& ItemDefinition)
 {
 	//Create Item
 	UMC_Item* Item = NewObject<UMC_Item>(GetOwner());
@@ -295,7 +295,7 @@ UMC_Item* UMC_InventoryComponent::ConstructItem(const FItemDefinition& ItemDefin
 	return Item;
 }
 
-void UMC_InventoryComponent::DestroyItem(FInventoryItemsMap* ItemToDestroy)
+void UMC_InventoryComponent::Server_DestroyItem_Implementation(FInventoryItemsMap* ItemToDestroy)
 {
 	if (!ItemToDestroy || !ItemToDestroy->Item)
 	{
@@ -313,7 +313,7 @@ void UMC_InventoryComponent::DestroyItem(FInventoryItemsMap* ItemToDestroy)
 	Items_Array.RemoveSingle(*ItemToDestroy);
 }
 
-void UMC_InventoryComponent::InitializeInventory_Implementation()
+void UMC_InventoryComponent::Server_InitializeInventory_Implementation()
 {
 #if WITH_EDITOR
 
@@ -327,7 +327,7 @@ void UMC_InventoryComponent::InitializeInventory_Implementation()
 			FItemDefinition ItemDefinition(Element.ItemConfig);
 			
 			// Add to inventory array with specified slot
-			Items_Array.Add(FInventoryItemsMap(Element.Slot, ConstructItem(ItemDefinition)));
+			Items_Array.Add(FInventoryItemsMap(Element.Slot, Server_ConstructItem(ItemDefinition)));
 		}
 	}
 	else
@@ -351,5 +351,5 @@ void UMC_InventoryComponent::OnRep_Items_Array()
 	}
 	
 	// Refresh the inventory widget to reflect the changes
-	RefreshInventoryWidget();
+	Client_RefreshInventoryWidget();
 }
