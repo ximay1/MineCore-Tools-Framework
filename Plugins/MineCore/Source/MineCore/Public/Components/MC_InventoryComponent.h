@@ -195,7 +195,7 @@ public:
 
 	/** Adds an item to the specified inventory slot */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
-	void AddItemToSlot(uint8 Slot, UMC_Item* Item);
+	void AddItemToSlot(uint8 Slot, const FItemDefinition& ItemDefinition);
 
 	/** Adds an item to the first available slot in the inventory */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")

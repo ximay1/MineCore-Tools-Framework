@@ -35,7 +35,6 @@ FInventoryItemFilter::FInventoryItemFilter(TSubclassOf<UMC_Item> InItemClass, EI
 
 FItemDefinition::FItemDefinition(UMC_DT_ItemConfig* NewItemConfig) : ItemConfig(NewItemConfig)
 {
-	
 }
 
 UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
@@ -83,8 +82,11 @@ bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
 	return false;
 }
 
-void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, UMC_Item* Item)
+void UMC_InventoryComponent::AddItemToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
 {
+	//Construct Items
+	UMC_Item* Item = ConstructItem(ItemDefinition);
+	
 #if !UE_BUILD_SHIPPING
 	// Declare a flag to track the validity of the slot and item
 	bool bIsValid = true;
@@ -155,9 +157,10 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 	{
 		case EItemAction::Destroy:
 			{
-				// Remove the item from the inventory array
-				Items_Array.RemoveSingle(*ItemToDestroy);
-				RemoveReplicatedSubObject
+				// Destroy item 
+				DestroyItem(ItemToDestroy);
+
+				//Log
 				UE_LOGFMT(LogInventory, Log, "Item destroyed from slot {0}.", Slot);
 				
 				break;
@@ -166,12 +169,15 @@ void UMC_InventoryComponent::RemoveItemFromInventory_Implementation(uint8 Slot, 
 			{
 				// Spawn the item in the world and remove it from inventory
 				DropItemInstance(ItemToDestroy->Item);
+
+				//Log
 				UE_LOGFMT(LogInventory, Log, "Item dropped from slot {0}.", Slot);
 				
 				break;
 			}
 		default:
 			{
+				//Log
 				UE_LOGFMT(LogInventory, Warning, "Unhandled item action type for slot {0}.", Slot);
 				break;
 			}
