@@ -16,6 +16,10 @@ class MINECORE_API UMC_Item : public UObject
 
 public:
 
+	/** Events */
+	virtual bool IsSupportedForNetworking() const override { return true; }
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
 	/** Get Item Config */
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	FORCEINLINE UMC_DT_ItemConfig* GetItemConfig() const { return ItemConfig; }
@@ -30,11 +34,11 @@ public:
 
 	/** Checks if the current item has a higher or equal tier than the given item. */
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	bool IsBetterThan(const UMC_Item* const Item) const { return (this->ItemConfig->ItemTier >= Item->ItemConfig->ItemTier); };
+	bool IsBetterThan(const UMC_Item* const Item) const { return (this->ItemConfig->ItemTier >= Item->ItemConfig->ItemTier); }
 
 protected:
 	/** Data Item Config */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
 	TObjectPtr<UMC_DT_ItemConfig> ItemConfig; 
 };
 
@@ -53,9 +57,7 @@ ItemConfigClass* UMC_Item::GetItemConfig() const
 		else
 		{
 			// Log an error message if the cast fails
-			UE_LOGFMT(LogItem, Error, "Invalid cast for ItemConfig. Expected: {0}, Actual: {1}. File - {2}, Line - {3}", 
-					  *ItemConfigClass::StaticClass()->GetName(), *ItemConfig->GetClass()->GetName(), 
-					  __FILE__, __LINE__);
+			UE_LOGFMT(LogItem, Error, "Invalid cast for ItemConfig. Expected: {0}, Actual: {1}. File - {2}, Line - {3}", *ItemConfigClass::StaticClass()->GetName(), *ItemConfig->GetClass()->GetName(), __FILE__, __LINE__);
 			
 			return nullptr;
 		}

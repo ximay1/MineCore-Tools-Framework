@@ -37,6 +37,7 @@ UMC_InventoryComponent::UMC_InventoryComponent() : MaxSlots(40)
 {
 	//Set Parameters
 	PrimaryComponentTick.bCanEverTick = false;
+	bReplicateUsingRegisteredSubObjectList = true;
 	SetIsReplicatedByDefault(true);
 }
 
@@ -51,7 +52,6 @@ void UMC_InventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Initialize Inventory
 	InitializeInventory();
 }
 
@@ -279,25 +279,27 @@ void UMC_InventoryComponent::DropItemInstance(UMC_Item* Item)
 void UMC_InventoryComponent::InitializeInventory_Implementation()
 {
 #if WITH_EDITOR
-    // Validate the default inventory data asset reference
-    if (IsValid(DefaultInventory))
-    {
-    	// Initialize inventory with items from the data asset
-    	for (const auto& Element : DefaultInventory->DefaultItems)
-    	{
-    		// Create new item instance and configure it
-    		UMC_Item* Item = NewObject<UMC_Item>(GetOwner());
-    		Item->SetItemConfig(Element.ItemData);
-    		
-    		// Add to inventory array with specified slot
-    		Items_Array.Add(FInventoryItemsMap(Element.Slot, Item));
-    	}
-    }
-    else
-    {
-    	// Log warning if data asset is missing
-    	UE_LOGFMT(LogInventory, Warning, "Default Inventory not initialized - DataAsset is null. File: {0}, Line: {1}", __FILE__, __LINE__);
-    }
+
+	// Validate the default inventory data asset reference
+	if (IsValid(DefaultInventory))
+	{
+		// Initialize inventory with items from the data asset
+		for (const auto& Element : DefaultInventory->DefaultItems)
+		{
+			// Create new item instance and configure it
+			UMC_Item* Item = NewObject<UMC_Item>(GetOwner());
+			Item->SetItemConfig(Element.ItemData);
+			AddReplicatedSubObject(Item);
+    	
+			// Add to inventory array with specified slot
+			Items_Array.Add(FInventoryItemsMap(Element.Slot, Item));
+		}
+	}
+	else
+	{
+		// Log warning if data asset is missing
+		UE_LOGFMT(LogInventory, Warning, "Default Inventory not initialized - DataAsset is null. File: {0}, Line: {1}", __FILE__, __LINE__);
+	}
 #endif
 }
 
