@@ -19,7 +19,8 @@ public:
 	
 	/** Events */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	virtual void PossessedBy(AController* NewController) override;
+	
 	/** Get Inventory Component */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	FORCEINLINE UMC_InventoryComponent* GetInventoryComponent() const { return InventoryComponent; } 
@@ -27,7 +28,7 @@ public:
 	/** Get Mining System Component */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
 	FORCEINLINE UMC_MiningSystemComponent* GetMiningSystemComponent() const { return MiningSystemComponent; }
-	
+
 protected:
 	/** EditAnywhere Component */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory Component")

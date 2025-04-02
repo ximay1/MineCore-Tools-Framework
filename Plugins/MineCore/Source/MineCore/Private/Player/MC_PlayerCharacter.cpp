@@ -19,3 +19,11 @@ void AMC_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void AMC_PlayerCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	//Initialize Inventory
+	InventoryComponent->InitializeInventory();
+}
+

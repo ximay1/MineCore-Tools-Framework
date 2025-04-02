@@ -48,13 +48,6 @@ void UMC_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME_CONDITION(UMC_InventoryComponent, Items_Array, COND_OwnerOnly);
 }
 
-void UMC_InventoryComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	InitializeInventory();
-}
-
 void UMC_InventoryComponent::CreateInventory()
 {
 	//TODO: Create Inventory
