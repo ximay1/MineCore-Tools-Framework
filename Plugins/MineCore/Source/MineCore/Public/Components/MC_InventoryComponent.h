@@ -122,7 +122,7 @@ enum class EItemAction : uint8
  * The struct can be used for mapping items to specific inventory slots, 
  * making it easy to manage and replicate inventory data in multiplayer scenarios.
  */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FInventoryItemsMap  
 {
 	GENERATED_BODY()
@@ -239,12 +239,12 @@ public:
 	virtual void Server_InitializeInventory();
 
 	/** Creates item instance from definition data */
-	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	virtual UMC_Item* Server_ConstructItem(const FItemDefinition& ItemDefinition);
 
 	/** Destroys item instance */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
-	virtual void Server_DestroyItem(FInventoryItemsMap* ItemToDestroy);
+	virtual void Server_DestroyItem(const FInventoryItemsMap& ItemToDestroy);
 
 public:
 	//Delegates

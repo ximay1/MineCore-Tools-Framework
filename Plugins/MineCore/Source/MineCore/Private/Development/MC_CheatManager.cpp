@@ -1,58 +1,8 @@
 #include "Development/MC_CheatManager.h"
 #include "Components/MC_InventoryComponent.h"
-#include "Engine/AssetManager.h"
+#include "MC_LogChannels.h"
+#include "Items/MC_Item.h"
 #include "Player/MC_PlayerCharacter.h"
-
-void UMC_CheatManager::AddItemToInventory(FString InputString_ClassName, FString InputString_DataAssetType, FString InputString_DataAssetName)
-{
-	// Check if the class was found and is valid
-	if (UClass* ItemClass = FindClass(InputString_ClassName))
-	{
-		// Ensure the class is a child of UMC_Item (the base item class)
-		checkf(ItemClass->IsChildOf(UMC_Item::StaticClass()), TEXT("We can't create an item from the given class: %s"), *ItemClass->GetName());
-
-		FName DataAssetType;
-		FName DataAsetName;
-		
-		// Extract the ID of the primary data asset using the "DT_Type=" prefix 
-		if (!FParse::Value(*InputString_DataAssetType, TEXT("DT_Type="), DataAssetType))
-		{
-			// Log a warning if the input string does not contain "DT_Type="
-			UE_LOGFMT(LogTemp, Warning, "Invalid input format. Expected format: DT_Type=DataAssetType");
-			return;
-		}
-
-		// Extract the Name of the primary data asset using the "DT_Name=" prefix
-		if (!FParse::Value(*InputString_DataAssetName, TEXT("DT_Name="), DataAsetName))
-		{
-			// Log a warning if the input string does not contain "DT_Name="
-			UE_LOGFMT(LogTemp, Warning, "Invalid input format. Expected format: DT_Name=DataAssetName");
-			return;
-		}
-
-		//Combine Data Asset Type and Name
-		FPrimaryAssetId PrimaryAssetID(DataAssetType, DataAsetName);
-
-		//Try to load this primary data asset
-		UAssetManager::Get().LoadPrimaryAsset(PrimaryAssetID, {}, FStreamableDelegate::CreateLambda([this, ItemClass, PrimaryAssetID]()
-		{
-			//Get Primary Data Asset Object
-			UMC_DT_ItemConfig* ItemConfig = Cast<UMC_DT_ItemConfig>(UAssetManager::Get().GetPrimaryAssetObject(PrimaryAssetID));
-
-			// Create a new instance of the item using the found class
-			UMC_Item* Item = NewObject<UMC_Item>(GetPlayerController(), ItemClass);
-
-			//Set Item Config
-			Item->SetItemConfig(ItemConfig);
-			
-			// Get the player character to interact with its inventory
-			AMC_PlayerCharacter* PlayerCharacter = Cast<AMC_PlayerCharacter>(GetPlayerController()->GetPawn());
-
-			// Add the created item to the player's inventory in the first available slot
-			GetCheatsComponent()->AddItemToFirstAvailableSlot_Cheat(Item);
-		}));
-	}
-}
 
 void UMC_CheatManager::SerializeInventoryToJSON()
 {
@@ -136,32 +86,4 @@ void UMC_CheatManager::SerializeInventoryToJSON()
 	{
 		UE_LOGFMT(LogJson, Error, "Failed to serialize inventory to JSON.");
 	}
-}
-
-UClass* UMC_CheatManager::FindClass(FString InputString)
-{
-	FString ClassName;
-
-	// Extract the class name from the input string using the "StaticClass=" prefix
-	if (FParse::Value(*InputString, TEXT("StaticClass="), ClassName))
-	{
-		// Try to find the class
-		if (UClass* FoundClass = FindFirstObject<UClass>(*ClassName))
-		{
-			return FoundClass; // Return the found class
-		}
-		else
-		{
-			// Log a warning if the class was not found
-			UE_LOGFMT(LogTemp, Warning, "Class not found: {0}", ClassName);
-		}
-	}
-	else
-	{
-		// Log a warning if the input string does not contain "StaticClass="
-		UE_LOGFMT(LogTemp, Warning, "Invalid input format. Expected format: StaticClass=ClassName");
-	}
-
-	// Return nullptr if class was not found or input was invalid
-	return nullptr; 
 }

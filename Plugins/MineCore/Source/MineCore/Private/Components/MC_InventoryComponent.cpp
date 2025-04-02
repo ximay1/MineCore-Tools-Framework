@@ -158,7 +158,7 @@ void UMC_InventoryComponent::Server_RemoveItemFromInventory_Implementation(uint8
 		case EItemAction::Destroy:
 			{
 				// Destroy item 
-				Server_DestroyItem(ItemToDestroy);
+				Server_DestroyItem(*ItemToDestroy);
 
 				//Log
 				UE_LOGFMT(LogInventory, Log, "Item destroyed from slot {0}.", Slot);
@@ -281,7 +281,7 @@ void UMC_InventoryComponent::Server_DropItemInstance(UMC_Item* Item)
 	//TODO: Create a bag at player's location
 }
 
-UMC_Item* UMC_InventoryComponent::Server_ConstructItem_Implementation(const FItemDefinition& ItemDefinition)
+UMC_Item* UMC_InventoryComponent::Server_ConstructItem(const FItemDefinition& ItemDefinition)
 {
 	//Create Item
 	UMC_Item* Item = NewObject<UMC_Item>(GetOwner());
@@ -295,22 +295,22 @@ UMC_Item* UMC_InventoryComponent::Server_ConstructItem_Implementation(const FIte
 	return Item;
 }
 
-void UMC_InventoryComponent::Server_DestroyItem_Implementation(FInventoryItemsMap* ItemToDestroy)
+void UMC_InventoryComponent::Server_DestroyItem_Implementation(const FInventoryItemsMap& ItemToDestroy)
 {
-	if (!ItemToDestroy || !ItemToDestroy->Item)
+	if (!ItemToDestroy.Item)
 	{
 		UE_LOG(LogInventory, Warning, TEXT("Attempted to destroy invalid item"));
 		return;
 	}
 	
 	// 1. Call delegate
-	OnItemRemovedFromInventory.Broadcast(ItemToDestroy->Slot);
+	OnItemRemovedFromInventory.Broadcast(ItemToDestroy.Slot);
 
 	// 2. Remove from replication
-	RemoveReplicatedSubObject(ItemToDestroy->Item);
+	RemoveReplicatedSubObject(ItemToDestroy.Item);
 	
 	// 3. Remove from inventory array
-	Items_Array.RemoveSingle(*ItemToDestroy);
+	Items_Array.RemoveSingle(ItemToDestroy);
 }
 
 void UMC_InventoryComponent::Server_InitializeInventory_Implementation()
