@@ -150,6 +150,7 @@ struct FItemDefinition
 public:
 
 	/** Constructors */
+	FItemDefinition() = default;
 	FItemDefinition(UMC_DT_ItemConfig* NewItemConfig);
 	
 	//Item Data Config
