@@ -141,6 +141,17 @@ struct FInventoryItemsMap
 	}
 };
 
+/** Defines a complete in-game item instance */ 
+USTRUCT(BlueprintType)
+struct FItemDefinition
+{
+	GENERATED_BODY()
+
+public:
+	//Item Data Config
+	UPROPERTY(BlueprintReadWrite, Category = "Inventory Component | Item Definition")
+	UMC_DT_ItemConfig* ItemConfig;
+};
 
 /** Triggered when an item is added (Slot number, Item). */  
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAddedToInventory, uint8, Slot, UMC_Item*, Item);
@@ -221,6 +232,10 @@ public:
 	/** Initializes the inventory system by loading default items and setting up initial state. */	
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void InitializeInventory();
+
+	/** Creates item instance from definition data */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	virtual UMC_Item* ConstructItem(const FItemDefinition& ItemDefinition);
 	
 public:
 	//Delegates

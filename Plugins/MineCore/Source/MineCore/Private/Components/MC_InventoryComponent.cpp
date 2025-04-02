@@ -269,6 +269,20 @@ void UMC_InventoryComponent::DropItemInstance(UMC_Item* Item)
 	//TODO: Create a bag at player's location
 }
 
+UMC_Item* UMC_InventoryComponent::ConstructItem(const FItemDefinition& ItemDefinition)
+{
+	//Create Item
+	UMC_Item* Item = NewObject<UMC_Item>(GetOwner());
+
+	//Set replication
+	AddReplicatedSubObject(Item);
+
+	//Set values from Item Definition
+	Item->SetItemConfig(ItemDefinition.ItemConfig);
+	
+	return Item;
+}
+
 void UMC_InventoryComponent::InitializeInventory_Implementation()
 {
 #if WITH_EDITOR
