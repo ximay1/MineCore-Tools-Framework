@@ -7,6 +7,7 @@
 /** Forward Declarations */
 class UMC_Pickaxe;
 class UMC_InventoryComponent;
+class UMC_MiningTool;
 
 /** Base class for the MiningSystemComponent used in MineCore. Handles mining-related functionality and interactions. */
 UCLASS( ClassGroup=(MineCore), meta=(BlueprintSpawnableComponent) )
