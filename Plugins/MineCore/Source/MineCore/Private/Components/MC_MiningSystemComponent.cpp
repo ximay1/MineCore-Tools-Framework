@@ -23,9 +23,6 @@ void UMC_MiningSystemComponent::BeginPlay()
 
 	//Find Inventory
 	InventoryComponent = FindInventory();
-
-	//Update cache
-	CacheMiningToolsFromInventory();
 }
 
 void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -37,9 +34,6 @@ void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 
 void UMC_MiningSystemComponent::InitializeMiningSystemComponent()
 {
-	//Cache mining tools
-	CacheMiningToolsFromInventory();
-	
 	//Call Server Initialize Mining System Component
 	Server_InitializeMiningSystemComponent();
 }
