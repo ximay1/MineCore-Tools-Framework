@@ -51,6 +51,7 @@ void UMC_CheatManager::SerializeInventoryToJSON()
 
 		// Set item properties
 		ItemJsonObject->SetNumberField(TEXT("Slot"), Slot);
+		ItemJsonObject->SetStringField(TEXT("Class Name"), ItemPtr->GetItemConfig()->ItemClass->GetName());
 		ItemJsonObject->SetStringField(TEXT("Name"), ItemPtr->GetItemConfig()->ItemName.ToString());
 		ItemJsonObject->SetStringField(TEXT("Tier"), EnumTier->GetNameStringByIndex(static_cast<uint8>(ItemPtr->GetItemConfig()->ItemTier)));
 		ItemJsonObject->SetStringField(TEXT("Rarity"), EnumRarity->GetNameStringByIndex(static_cast<uint8>(ItemPtr->GetItemConfig()->ItemRarity)));
