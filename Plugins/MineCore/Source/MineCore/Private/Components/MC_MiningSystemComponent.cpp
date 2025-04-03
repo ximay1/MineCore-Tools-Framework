@@ -52,45 +52,48 @@ bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
 
 void UMC_MiningSystemComponent::CacheMiningToolsFromInventory()
 {
-	// List of tool classes we're interested in
-	const TSet<TSubclassOf<UMC_MiningTool>> ToolClasses = {
-		UMC_Pickaxe::StaticClass(),
-		UMC_Hammer::StaticClass(),
-		UMC_Axe::StaticClass(),
-		UMC_Knife::StaticClass(),
-		UMC_Sickle::StaticClass()
-	};
-
-	TMap<TSubclassOf<UMC_MiningTool>, UMC_MiningTool*> BestToolsMap;
-
-	// Process each inventory item only once
-	TArray<UMC_Item*> Items;
-	InventoryComponent->GetInventoryItems(Items);
-	for (UMC_Item* const& Item : Items)
+	if (InventoryComponent)
 	{
-		// Check if the item is a mining tool
-		if (UMC_MiningTool* Tool = Cast<UMC_MiningTool>(Item))
+		// List of tool classes we're interested in
+		const TSet<TSubclassOf<UMC_MiningTool>> ToolClasses = {
+			UMC_Pickaxe::StaticClass(),
+			UMC_Hammer::StaticClass(),
+			UMC_Axe::StaticClass(),
+			UMC_Knife::StaticClass(),
+			UMC_Sickle::StaticClass()
+		};
+
+		TMap<TSubclassOf<UMC_MiningTool>, UMC_MiningTool*> BestToolsMap;
+
+		// Process each inventory item only once
+		TArray<UMC_Item*> Items;
+		InventoryComponent->GetInventoryItems(Items);
+		for (UMC_Item* const& Item : Items)
 		{
-			TSubclassOf<UMC_MiningTool> ToolClass = Tool->GetClass();
-            
-			// Check if this is one of the tool types we're looking for
-			if (ToolClasses.Contains(ToolClass))
+			// Check if the item is a mining tool
+			if (UMC_MiningTool* Tool = Cast<UMC_MiningTool>(Item))
 			{
-				// Compare tiers with current best tool of this type
-				UMC_MiningTool*& CurrentBestTool = BestToolsMap.FindOrAdd(ToolClass);
-				if (!CurrentBestTool || Tool->IsBetterThan(CurrentBestTool))
+				TSubclassOf<UMC_MiningTool> ToolClass = Tool->GetClass();
+            
+				// Check if this is one of the tool types we're looking for
+				if (ToolClasses.Contains(ToolClass))
 				{
-					CurrentBestTool = Tool;
+					// Compare tiers with current best tool of this type
+					UMC_MiningTool*& CurrentBestTool = BestToolsMap.FindOrAdd(ToolClass);
+					if (!CurrentBestTool || Tool->IsBetterThan(CurrentBestTool))
+					{
+						CurrentBestTool = Tool;
+					}
 				}
 			}
 		}
-	}
 
-	// Update cache: clear old entries and add new ones
-	CachedMiningTools.Empty();
-	for (const auto& ToolPair : BestToolsMap)
-	{
-		CachedMiningTools.Add(ToolPair.Key, ToolPair.Value);
+		// Update cache: clear old entries and add new ones
+		CachedMiningTools.Empty();
+		for (const auto& ToolPair : BestToolsMap)
+		{
+			CachedMiningTools.Add(ToolPair.Key, ToolPair.Value);
+		}
 	}
 }
 

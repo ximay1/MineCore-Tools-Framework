@@ -39,7 +39,7 @@ public:
 	FORCEINLINE UMC_MiningTool* GetMiningTool(TSubclassOf<UMC_MiningTool> Class) { return *CachedMiningTools.Find(Class); }
 	
 	template<typename MiningToolClass>
-	FORCEINLINE MiningToolClass* GetMiningTool() { return Cast<MiningToolClass>(*CachedMiningTools.Find(MiningToolClass::StaticClass())); }
+	FORCEINLINE MiningToolClass* GetMiningTool() { return CachedMiningTools.Contains(MiningToolClass::StaticClass()) ? Cast<MiningToolClass>(*CachedMiningTools.Find(MiningToolClass::StaticClass())) : nullptr; }
 	
 	/** Start Mining */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
