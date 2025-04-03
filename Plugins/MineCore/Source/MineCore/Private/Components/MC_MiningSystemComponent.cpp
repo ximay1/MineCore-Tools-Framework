@@ -35,7 +35,7 @@ void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 	DOREPLIFETIME_CONDITION(UMC_MiningSystemComponent, IsPlayerMining, COND_OwnerOnly);
 }
 
-void UMC_MiningSystemComponent::Client_InitializeMiningSystemComponent_Implementation()
+void UMC_MiningSystemComponent::InitializeMiningSystemComponent()
 {
 	//Cache mining tools
 	CacheMiningToolsFromInventory();
