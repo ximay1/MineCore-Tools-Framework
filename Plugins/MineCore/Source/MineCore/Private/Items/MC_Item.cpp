@@ -1,5 +1,4 @@
 #include "Items/MC_Item.h"
-
 #include "Net/UnrealNetwork.h"
 
 void UMC_Item::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

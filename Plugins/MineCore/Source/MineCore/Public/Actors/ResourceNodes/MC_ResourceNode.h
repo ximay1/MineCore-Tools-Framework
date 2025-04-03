@@ -2,11 +2,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MineCore/Public/Data/ResourceNodes/MC_DT_ResourceNodeConfig.h"
 #include "MC_ResourceNode.generated.h"
 
+/** Forward Declarations */
 class UMC_DT_ResourceNodeConfig;
 struct FStreamableHandle;
+enum class EResourceNodeState : uint8;
 
 /** AMC_ResourceNode represents a resource node in the game world. */
 UCLASS()

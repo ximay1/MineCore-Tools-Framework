@@ -1,9 +1,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Items/MiningTools/MC_MiningTool.h"
 #include "MC_LogChannels.h"
 #include "MC_DT_ResourceNodeConfig.generated.h"
+
+/** Forward Declarations */
+class UMC_MiningTool;
+enum class EItemTier : uint8;
 
 //TODO: Create here a comment which describe what kind of the resource is for the given tier (ResourceNodeTier) : Tier1 - Stone etc.
 

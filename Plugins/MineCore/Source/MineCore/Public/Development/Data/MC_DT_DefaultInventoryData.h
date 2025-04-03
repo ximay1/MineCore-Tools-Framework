@@ -2,8 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "Data/Items/MC_DT_ItemConfig.h"
 #include "MC_DT_DefaultInventoryData.generated.h"
+
+/** Forward Declarations */
+class UMC_DT_ItemConfig;
 
 /**
  * Represents a single item in the default inventory configuration

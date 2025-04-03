@@ -1,12 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MineCore/Public/Data/Items/MC_DT_ItemConfig.h"
-#include "UObject/NoExportTypes.h"
 #include "MC_LogChannels.h"
+#include "Data/Items/MC_DT_ItemConfig.h"
 #include "MC_Item.generated.h"
-
-class UMC_DT_ItemConfig;
 
 /** Base class for an item object. */
 UCLASS()

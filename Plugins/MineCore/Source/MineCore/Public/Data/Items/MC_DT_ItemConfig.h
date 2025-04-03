@@ -2,8 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
-#include "Items/MC_Item.h"
 #include "MC_DT_ItemConfig.generated.h"
+
+/** Forward Declarations */
+class UMC_Item;
 
 /** Enum representing the tier of an item or resource node. */
 UENUM(BlueprintType)

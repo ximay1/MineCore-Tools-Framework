@@ -2,10 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Components/MC_InventoryComponent.h"
-#include "Items/MiningTools/MC_MiningTool.h"
 #include "MC_MiningSystemComponent.generated.h"
 
+/** Forward Declarations */
 class UMC_Pickaxe;
 class UMC_InventoryComponent;
 

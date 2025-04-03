@@ -2,12 +2,15 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Items/MC_Item.h"
-#include "MineCore/Public/Data/Items/MC_DT_ItemConfig.h"
-#include "Development/Data/MC_DT_DefaultInventoryData.h"
 #include "MC_InventoryComponent.generated.h"
 
+/** Forward Declarations */
 class UMC_Item;
+class UMC_DT_ItemConfig;
+class UMC_DT_DefaultInventoryData;
+enum class EItemTier : uint8;
+enum class EItemCategory : uint8;
+enum class EItemRarity : uint8;
 
 #pragma region UE_EDITOR_MACROS
 

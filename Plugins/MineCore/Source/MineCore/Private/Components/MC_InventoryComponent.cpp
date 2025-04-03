@@ -1,8 +1,11 @@
 #include "Components/MC_InventoryComponent.h"
 #include "MC_LogChannels.h"
+#include "MineCoreMacros.h"
+#include "Development/Data/MC_DT_DefaultInventoryData.h"
+#include "Items/MC_Item.h"
 #include "Items/MC_Item.h"
 #include "MineCore/Public/Data/Items/MC_DT_ItemConfig.h"
-#include "MineCoreMacros.h"
+#include "MineCore/Public/Data/Items/MC_DT_ItemConfig.h"
 #include "Net/UnrealNetwork.h"
 
 FInventoryItemFilter::FInventoryItemFilter()

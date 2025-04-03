@@ -1,8 +1,9 @@
 #include "Actors/ResourceNodes/MC_ResourceNode.h"
 #include "Components/MC_MiningSystemComponent.h"
 #include "Engine/AssetManager.h"
-#include "Player/MC_PlayerCharacter.h"
 #include "Items/MiningTools/MC_Pickaxe.h"
+#include "MineCore/Public/Data/ResourceNodes/MC_DT_ResourceNodeConfig.h"
+#include "Player/MC_PlayerCharacter.h"
 
 AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(0,3)))
 {
