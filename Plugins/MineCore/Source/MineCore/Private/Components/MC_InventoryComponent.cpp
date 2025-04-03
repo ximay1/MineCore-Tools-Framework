@@ -284,7 +284,7 @@ void UMC_InventoryComponent::Server_DropItemInstance(UMC_Item* Item)
 UMC_Item* UMC_InventoryComponent::Server_ConstructItem(const FItemDefinition& ItemDefinition)
 {
 	//Create Item
-	UMC_Item* Item = NewObject<UMC_Item>(GetOwner());
+	UMC_Item* Item = NewObject<UMC_Item>(GetOwner(), ItemDefinition.ItemConfig->ItemClass);
 
 	//Set replication
 	AddReplicatedSubObject(Item);
