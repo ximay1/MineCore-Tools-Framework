@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "Items/MC_Item.h"
 #include "MC_DT_ItemConfig.generated.h"
 
 /** Enum representing the tier of an item or resource node. */
@@ -48,6 +49,10 @@ class MINECORE_API UMC_DT_ItemConfig : public UPrimaryDataAsset
 
 public:
 	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override { return FPrimaryAssetId("ItemConfig", GetFName()); }
+
+	/** Class of item */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
+	TSubclassOf<UMC_Item> ItemClass;
 
 	/** Item tier */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
