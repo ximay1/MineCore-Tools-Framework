@@ -21,6 +21,9 @@ public:
 	/** Events */
 	virtual void BeginPlay() override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION(BlueprintCallable, Client, Unreliable, Category = "Mining System Component")
+	virtual void Client_InitializeMiningSystemComponent();
 	
 	/** This function checks if the player is able to mine the resource node. Always called on the server! */
 	bool CanPlayerMine(UMC_MiningTool* MiningTool);
@@ -49,6 +52,10 @@ public:
 	UMC_InventoryComponent* FindInventory() const;
 
 protected:
+
+	/** Initializes the Mining System Component on the server. */
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Mining System Component")
+	virtual void Server_InitializeMiningSystemComponent();
 	
 	/** Is Player Mining */
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Mining System Component")

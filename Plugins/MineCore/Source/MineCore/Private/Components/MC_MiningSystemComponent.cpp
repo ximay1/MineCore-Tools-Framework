@@ -35,6 +35,19 @@ void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 	DOREPLIFETIME_CONDITION(UMC_MiningSystemComponent, IsPlayerMining, COND_OwnerOnly);
 }
 
+void UMC_MiningSystemComponent::Client_InitializeMiningSystemComponent_Implementation()
+{
+	//Cache mining tools
+	CacheMiningToolsFromInventory();
+	
+	//Call Server Initialize Mining System Component
+	Server_InitializeMiningSystemComponent();
+}
+
+void UMC_MiningSystemComponent::Server_InitializeMiningSystemComponent_Implementation()
+{
+}
+
 bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
 {
 	if (MiningTool->GetDurability() > 0.0f && MiningTool->GetDurability() <= MiningTool->GetItemConfig<UMC_DT_UsableItemConfig>()->MaxDurability)
