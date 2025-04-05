@@ -76,6 +76,10 @@ protected:
     /** Applies resource node config. Sets up timers for state refresh and initializes the material. */
     virtual void ApplyResourceNodeConfig();
 
+    /** Cleans up the MiningTimers map by removing all entries with invalid (nullptr) PlayerController keys. */
+    UFUNCTION(BlueprintCallable, Category = "Resource Node")
+    void Server_RemoveInvalidMiningTimers();
+    
 private:
     /** Timer handle for refreshing the resource node state. */
     FTimerHandle ResourceNodeSpawnTimerHandle;

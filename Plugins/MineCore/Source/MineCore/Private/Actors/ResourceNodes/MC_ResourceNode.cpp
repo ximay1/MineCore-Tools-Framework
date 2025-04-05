@@ -193,11 +193,8 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
         //Log Warning
         UE_LOGFMT(LogResourceNode, Error, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
 
-        //Clear timer
-        TryToClearTimerHandle(MineResourceNodeTimerHandle);
-
-        //Set Player Controller to nullptr
-        PlayerController = nullptr;
+        
+        
         
         // PlayerController is null, return false.
         return false;
@@ -241,4 +238,30 @@ void AMC_ResourceNode::ApplyResourceNodeConfig()
     
     // Set the initial StaticMesh
     SetStaticMeshForCurrentState();
+}
+
+void AMC_ResourceNode::Server_RemoveInvalidMiningTimers()
+{
+    // Get the World's TimerManager to handle timer cleanup
+    FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+
+    // Temporary array to store keys for removal (can't modify map during iteration)
+    TArray<APlayerController*> KeysToRemove;
+    
+    // Iterate through all MiningTimers entries
+    for (auto& Pair : MiningTimers)
+    {
+        if (!IsValid(Pair.Key))
+        {
+            // Clear and invalidate the timer before removal
+            TimerManager.ClearTimer(Pair.Value);
+            KeysToRemove.Add(Pair.Key);
+        }
+    }
+
+    // Remove all invalid entries from the MiningTimers map
+    for (auto& Element : KeysToRemove)
+    {
+        MiningTimers.Remove(Element);
+    }
 }
