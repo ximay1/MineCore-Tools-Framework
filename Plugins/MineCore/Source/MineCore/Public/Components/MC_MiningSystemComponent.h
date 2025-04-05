@@ -62,8 +62,8 @@ public:
 	bool CanPlayerMine(UMC_MiningTool* MiningTool);
 
 	/** Caches mining tools from the player's inventory */
-	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
-	void CacheMiningToolsFromInventory();
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Mining System Component")
+	void Server_CacheMiningToolsFromInventory();
 
 	/** Get Pickaxe */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")

@@ -30,6 +30,7 @@ void UMC_MiningSystemComponent::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION(UMC_MiningSystemComponent, IsPlayerMining, COND_OwnerOnly);
+	DOREPLIFETIME_CONDITION(UMC_MiningSystemComponent, CachedMiningTools, COND_OwnerOnly);
 }
 
 void UMC_MiningSystemComponent::InitializeMiningSystemComponent()
@@ -50,7 +51,7 @@ bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
 	return false;
 }
 
-void UMC_MiningSystemComponent::CacheMiningToolsFromInventory()
+void UMC_MiningSystemComponent::Server_CacheMiningToolsFromInventory_Implementation()
 {
 	//Try to find Inventory Component
 	if (!IsValid(InventoryComponent))

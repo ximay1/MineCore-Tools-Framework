@@ -119,9 +119,6 @@ void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(uint8 Slot, con
 	
 	//Add to the inventory
 	Items_Array.Add(FInventoryItemsMap(Slot, Item));
-
-	//Call delegate
-	OnItemAddedToInventory.Broadcast(Slot, Item);
 }
 
 void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(UMC_Item* Item)
@@ -307,13 +304,10 @@ void UMC_InventoryComponent::Server_DestroyItem_Implementation(const FInventoryI
 		return;
 	}
 	
-	// 1. Call delegate
-	OnItemRemovedFromInventory.Broadcast(ItemToDestroy.Slot);
-
-	// 2. Remove from replication
+	// Remove from replication
 	RemoveReplicatedSubObject(ItemToDestroy.Item);
 	
-	// 3. Remove from inventory array
+	// Remove from inventory array
 	Items_Array.RemoveSingle(ItemToDestroy);
 }
 
@@ -361,5 +355,5 @@ void UMC_InventoryComponent::OnRep_Items_Array()
 	UMC_MiningSystemComponent* MiningSystemComponent = GetOwner()->FindComponentByClass<UMC_MiningSystemComponent>();
 	
 	//Try to cache the inventory items
-	MiningSystemComponent->CacheMiningToolsFromInventory();
+	MiningSystemComponent->Server_CacheMiningToolsFromInventory();
 }
