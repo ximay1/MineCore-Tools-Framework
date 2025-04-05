@@ -52,6 +52,10 @@ bool UMC_MiningSystemComponent::CanPlayerMine(UMC_MiningTool* MiningTool)
 
 void UMC_MiningSystemComponent::CacheMiningToolsFromInventory()
 {
+	//Try to find Inventory Component
+	if (!IsValid(InventoryComponent))
+		InventoryComponent = FindInventory();
+	
 	if (InventoryComponent)
 	{
 		// List of tool classes we're interested in
