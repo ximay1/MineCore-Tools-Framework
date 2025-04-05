@@ -88,6 +88,13 @@ public:
 	/** Returns cached mining tool of specified type */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
 	UMC_MiningTool* GetMiningTool(TSubclassOf<UMC_MiningTool> ToolClass) const;
+
+	/** Returns cached mining tool of specified type */
+	template<typename T>
+	T* GetMiningTool() const
+	{
+		return Cast<T>(GetMiningTool(T::StaticClass()));
+	}
 	
 	/** Start Mining */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
