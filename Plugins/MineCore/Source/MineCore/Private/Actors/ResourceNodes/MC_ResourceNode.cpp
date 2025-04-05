@@ -17,6 +17,41 @@ AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNo
     RootComponent = StaticMeshComponent;
 }
 
+void AMC_ResourceNode::BeginPlay()
+{
+    Super::BeginPlay();
+
+    if (HasAuthority())
+    {
+#if !UE_BUILD_SHIPPING
+        // Valid if the ResourceNodeConfigId is set
+        if (!ResourceNodeConfigID.IsValid())
+        {
+            //Log Error
+            UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigID is not valid. File - {0}, Line - {1}", __FILE__, __LINE__);
+        
+            // If the config is invalid, destroy this actor to prevent issues
+            Destroy(true);
+            return;
+        }
+#endif
+    
+        //Create delegate
+        FStreamableDelegate PrimaryDataAssetDelegate = FStreamableDelegate::CreateLambda([this]()
+        {
+            ResourceNodeConfig = Cast<UMC_DT_ResourceNodeConfig>(UAssetManager::Get().GetPrimaryAssetObject(ResourceNodeConfigID));
+            if (ResourceNodeConfig)
+            {
+                //"Start" Node
+                Server_ApplyResourceNodeConfig();
+            }
+        });
+    
+        //Load Primary Data Asset
+        UAssetManager::Get().LoadPrimaryAsset(ResourceNodeConfigID, {}, PrimaryDataAssetDelegate);
+    }
+}
+
 void AMC_ResourceNode::Client_DisplayMiningProgressWidget_Implementation()
 {
     //TODO:Create Progress bar Widget and show widget
@@ -90,53 +125,6 @@ void AMC_ResourceNode::Server_StopMining(APlayerController* PlayerController)
     }
 }
 
-void AMC_ResourceNode::BeginPlay()
-{
-    Super::BeginPlay();
-
-    if (HasAuthority())
-    {
-#if !UE_BUILD_SHIPPING
-        // Valid if the ResourceNodeConfigId is set
-        if (!ResourceNodeConfigID.IsValid())
-        {
-            //Log Error
-            UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigID is not valid. File - {0}, Line - {1}", __FILE__, __LINE__);
-        
-            // If the config is invalid, destroy this actor to prevent issues
-            Destroy(true);
-            return;
-        }
-#endif
-    
-        //Create delegate
-        FStreamableDelegate PrimaryDataAssetDelegate = FStreamableDelegate::CreateLambda([this]()
-        {
-            ResourceNodeConfig = Cast<UMC_DT_ResourceNodeConfig>(UAssetManager::Get().GetPrimaryAssetObject(ResourceNodeConfigID));
-            if (ResourceNodeConfig)
-            {
-                //"Start" Node
-                Server_ApplyResourceNodeConfig();
-            }
-        });
-    
-        //Load Primary Data Asset
-        UAssetManager::Get().LoadPrimaryAsset(ResourceNodeConfigID, {}, PrimaryDataAssetDelegate);
-    }
-}
-
-void AMC_ResourceNode::Server_ResourceNode_Refresh()
-{
-    // If the node is already in the final state, exit the function
-    if (ResourceNodeState == EResourceNodeState::STATE_4) { return; }
-
-    // Increment the resource node state by 1
-    ResourceNodeState = ResourceNodeState + 1;
-
-    //Set StaticMesh 
-    Server_SetStaticMeshForCurrentState();
-}
-
 bool AMC_ResourceNode::Server_CanBeMined(APlayerController* PlayerController)
 {
     // Validate the player controller
@@ -183,34 +171,16 @@ void AMC_ResourceNode::Server_PlayerMineResource(APlayerController* PlayerContro
     }
 }
 
-bool AMC_ResourceNode::Server_EnsureValidPlayerController(APlayerController* PlayerController)
+void AMC_ResourceNode::Server_ResourceNode_Refresh()
 {
-    //Check if the player controller is valid
-    if (IsValid(PlayerController))
-    {
-        // PlayerController is valid, return true.
-        return true;
-    }
-    else
-    {
-        //Log Warning
-        UE_LOGFMT(LogResourceNode, Error, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
+    // If the node is already in the final state, exit the function
+    if (ResourceNodeState == EResourceNodeState::STATE_4) { return; }
 
-        //Find and remove the invalid timers
-        Server_RemoveInvalidMiningTimers();
-        
-        // PlayerController is null, return false.
-        return false;
-    }
-}
+    // Increment the resource node state by 1
+    ResourceNodeState = ResourceNodeState + 1;
 
-void AMC_ResourceNode::Server_TryToClearTimerHandle(APlayerController* PlayerController)
-{
-    //Clear Timer
-    GetWorld()->GetTimerManager().ClearTimer(*MiningTimers.Find(PlayerController));
-
-    // Remove the player's entry from the MiningTimers
-    MiningTimers.Remove(PlayerController);
+    //Set StaticMesh 
+    Server_SetStaticMeshForCurrentState();
 }
 
 void AMC_ResourceNode::Server_SetStaticMeshForCurrentState()
@@ -241,6 +211,36 @@ void AMC_ResourceNode::Server_ApplyResourceNodeConfig()
     
     // Set the initial StaticMesh
     Server_SetStaticMeshForCurrentState();
+}
+
+bool AMC_ResourceNode::Server_EnsureValidPlayerController(APlayerController* PlayerController)
+{
+    //Check if the player controller is valid
+    if (IsValid(PlayerController))
+    {
+        // PlayerController is valid, return true.
+        return true;
+    }
+    else
+    {
+        //Log Warning
+        UE_LOGFMT(LogResourceNode, Error, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
+
+        //Find and remove the invalid timers
+        Server_RemoveInvalidMiningTimers();
+        
+        // PlayerController is null, return false.
+        return false;
+    }
+}
+
+void AMC_ResourceNode::Server_TryToClearTimerHandle(APlayerController* PlayerController)
+{
+    //Clear Timer
+    GetWorld()->GetTimerManager().ClearTimer(*MiningTimers.Find(PlayerController));
+
+    // Remove the player's entry from the MiningTimers
+    MiningTimers.Remove(PlayerController);
 }
 
 void AMC_ResourceNode::Server_RemoveInvalidMiningTimers()

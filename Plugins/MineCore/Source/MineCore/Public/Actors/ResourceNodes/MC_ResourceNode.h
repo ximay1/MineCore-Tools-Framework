@@ -19,6 +19,9 @@ public:
     /** Constructor */
     AMC_ResourceNode();
 
+    /** Called when the game starts or when spawned. */
+    virtual void BeginPlay() override;
+
     /** Displays the mining progress widget on the client-side. */
     UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Resource Node")
     virtual void Client_DisplayMiningProgressWidget();
@@ -31,14 +34,36 @@ public:
     UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Resource Node")
     virtual void Server_StartMining(APlayerController* PlayerController);
 
+protected:
     /** Stops the mining process. */
     virtual void Server_StopMining(APlayerController* PlayerController);
 
-protected:
-    /** Current state of the resource node. */
-    UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
-    EResourceNodeState ResourceNodeState;
+    /** Checks if the resource node is in a state that allows mining. */
+    virtual bool Server_CanBeMined(APlayerController* PlayerController);
 
+    /** Called when the player mines a resource. */
+    virtual void Server_PlayerMineResource(APlayerController* PlayerController);
+
+    /** Refreshes the resource node's state (e.g. for resource regeneration). */
+    UFUNCTION(BlueprintCallable)
+    virtual void Server_ResourceNode_Refresh();
+
+    /** Updates the static mesh's material based on the current resource node state. */
+    virtual void Server_SetStaticMeshForCurrentState();
+
+    /** Applies resource node config. Sets up timers for state refresh and initializes the material. */
+    virtual void Server_ApplyResourceNodeConfig();
+    
+    /** Validates the PlayerController. */
+    virtual bool Server_EnsureValidPlayerController(APlayerController* PlayerController);
+
+    /** Clears and removes the mining timer associated with a player. */
+    void Server_TryToClearTimerHandle(APlayerController* PlayerController);
+
+    /** Cleans up the MiningTimers map by removing invalid PlayerController keys. */
+    UFUNCTION(BlueprintCallable, Category = "Resource Node")
+    void Server_RemoveInvalidMiningTimers();
+    
     /** Resource Node config primary asset id */
     UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Resource Node | Config")
     FPrimaryAssetId ResourceNodeConfigID;    
@@ -50,38 +75,13 @@ protected:
     /** Static mesh component representing the resource node. */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Resource Node")
     TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
-
-    /** Called when the game starts or when spawned. */
-    virtual void BeginPlay() override;
-
-    /** Refreshes the resource node's state (e.g. for resource regeneration). This function is invoked periodically via a timer. */
-    UFUNCTION(BlueprintCallable)
-    virtual void Server_ResourceNode_Refresh();
-
-    /** Checks if the resource node is in a state that allows mining. */
-    virtual bool Server_CanBeMined(APlayerController* PlayerController);
-
-    /** Called when the player mines a resource. */
-    virtual void Server_PlayerMineResource(APlayerController* PlayerController);
     
-    /** Validates the PlayerController. */
-    virtual bool Server_EnsureValidPlayerController(APlayerController* PlayerController);
+    /** Current state of the resource node. */
+    UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
+    EResourceNodeState ResourceNodeState;
 
-    /** Clears and removes the mining timer associated with a player. */
-    void Server_TryToClearTimerHandle(APlayerController* PlayerController);
-
-    /** Updates the static mesh's material based on the current resource node state. */
-    virtual void Server_SetStaticMeshForCurrentState();
-
-    /** Applies resource node config. Sets up timers for state refresh and initializes the material. */
-    virtual void Server_ApplyResourceNodeConfig();
-
-    /** Cleans up the MiningTimers map by removing all entries with invalid (nullptr) PlayerController keys. */
-    UFUNCTION(BlueprintCallable, Category = "Resource Node")
-    void Server_RemoveInvalidMiningTimers();
-    
 private:
-    /** Timer handle for refreshing the resource node state. */
+    /** Timer handle for refreshing the resource node state. Server-only*/
     FTimerHandle ResourceNodeSpawnTimerHandle;
 
     /** Stores active mining timer handles for each player controller. Server-only */
