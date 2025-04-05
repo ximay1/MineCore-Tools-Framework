@@ -250,7 +250,6 @@ public:
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void Server_DestroyItem(const FInventoryItemsMap& ItemToDestroy);
 
-public:
 	//Delegates
 	FOnItemAddedToInventory OnItemAddedToInventory;
 	FOnItemRemovedFromInventory OnItemRemovedFromInventory;
