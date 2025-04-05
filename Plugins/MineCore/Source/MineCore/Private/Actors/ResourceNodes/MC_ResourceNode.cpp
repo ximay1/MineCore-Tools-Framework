@@ -48,6 +48,9 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
         
             //Set timer
             GetWorldTimerManager().SetTimer(const_cast<FTimerHandle&>(TimerHandle), MineResourceNodeDelegate, ResourceNodeConfig->MiningTime, true);
+
+            //Add Timer Handle to the MiningTimers
+            MiningTimers.Add(PlayerController, TimerHandle);
             
             //Start Mining
             MiningSystemComponent->StartMining();
