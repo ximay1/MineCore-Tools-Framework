@@ -17,24 +17,16 @@ AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNo
     RootComponent = StaticMeshComponent;
 }
 
-void AMC_ResourceNode::Client_DisplayMiningProgressWidget_Implementation(APlayerController* PlayerController)
+void AMC_ResourceNode::Client_DisplayMiningProgressWidget_Implementation()
 {
-    //Get Player Controller
-    if (PlayerController)
-    {
-        //TODO:Create Progress bar Widget and show widget
-        UE_LOGFMT(LogResourceNode, Error, "Displaying progress bar widget on the client - Player Controller - {0}", PlayerController->GetName());
-    }
+    //TODO:Create Progress bar Widget and show widget
+    UE_LOGFMT(LogResourceNode, Error, "Displaying progress bar widget on the client");
 }
 
-void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation(APlayerController* PlayerController)
+void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation()
 {
-    //Get Player Controller
-    if (PlayerController)
-    {
-        //TODO:Create Denied Widget and show widget
-        UE_LOGFMT(LogResourceNode, Error, "Displaying mining denied widget on the client - Player Controller - {0}", PlayerController->GetName());
-    }
+    //TODO:Create Denied Widget and show widget
+    UE_LOGFMT(LogResourceNode, Error, "Displaying mining denied widget on the client");
 }
 
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)

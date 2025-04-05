@@ -20,15 +20,15 @@ public:
     AMC_ResourceNode();
 
     /** Displays the mining progress widget on the client. */
-    UFUNCTION(Client, Reliable)
-    virtual void Client_DisplayMiningProgressWidget(APlayerController* PlayerController);
+    UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Resource Node")
+    virtual void Client_DisplayMiningProgressWidget();
 
     /** Displays a widget informing the player that mining is denied. */
-    UFUNCTION(Client, Reliable)
-    virtual void Client_DisplayMiningDeniedWidget(APlayerController* PlayerController);
+    UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Resource Node")
+    virtual void Client_DisplayMiningDeniedWidget();
 
     /** Initiates the mining process on the node. */
-    UFUNCTION(Server, Reliable, BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Resource Node")
     virtual void Server_StartMining(APlayerController* PlayerController);
 
     /** Stops the mining process. */
