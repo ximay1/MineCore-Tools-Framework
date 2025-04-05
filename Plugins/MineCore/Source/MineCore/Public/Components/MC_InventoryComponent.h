@@ -244,6 +244,13 @@ public:
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void Server_DestroyItem(const FInventoryItemsMap& ItemToDestroy);
 
+	/** Get Items_Array C++ */
+	FORCEINLINE const TArray<FInventoryItemsMap>& GetItemsArray() const { return Items_Array; }
+
+	/** Get Items_Array BP */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	FORCEINLINE TArray<FInventoryItemsMap> BP_GetItemsArray() const { return GetItemsArray(); }
+	
 protected:
 	/** Widget class representing the Inventory */ 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Component")
