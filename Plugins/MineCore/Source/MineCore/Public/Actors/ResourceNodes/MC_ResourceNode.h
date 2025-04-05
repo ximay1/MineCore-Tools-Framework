@@ -19,11 +19,11 @@ public:
     /** Constructor */
     AMC_ResourceNode();
 
-    /** Displays the mining progress widget on the client. */
+    /** Displays the mining progress widget on the client-side. */
     UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Resource Node")
     virtual void Client_DisplayMiningProgressWidget();
 
-    /** Displays a widget informing the player that mining is denied. */
+    /** Displays a widget informing the player that mining is denied on the client-side. */
     UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Resource Node")
     virtual void Client_DisplayMiningDeniedWidget();
 
