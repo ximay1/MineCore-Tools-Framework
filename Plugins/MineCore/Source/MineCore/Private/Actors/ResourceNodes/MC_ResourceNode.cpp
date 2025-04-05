@@ -193,8 +193,8 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
         //Log Warning
         UE_LOGFMT(LogResourceNode, Error, "Player Controller isn't valid. File: {0}, Line: {1}", __FILE__, __LINE__);
 
-        
-        
+        //Find and remove the invalid timers
+        Server_RemoveInvalidMiningTimers();
         
         // PlayerController is null, return false.
         return false;
