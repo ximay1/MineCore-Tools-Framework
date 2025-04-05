@@ -56,25 +56,25 @@ protected:
 
     /** Refreshes the resource node's state (e.g. for resource regeneration). This function is invoked periodically via a timer. */
     UFUNCTION(BlueprintCallable)
-    virtual void ResourceNode_Refresh();
+    virtual void Server_ResourceNode_Refresh();
 
     /** Checks if the resource node is in a state that allows mining. */
-    virtual bool CanBeMined(APlayerController* PlayerController);
+    virtual bool Server_CanBeMined(APlayerController* PlayerController);
 
     /** Called when the player mines a resource. */
-    virtual void PlayerMineResource(APlayerController* PlayerController);
+    virtual void Server_PlayerMineResource(APlayerController* PlayerController);
     
     /** Validates the PlayerController. */
-    virtual bool EnsureValidPlayerController(APlayerController* PlayerController);
+    virtual bool Server_EnsureValidPlayerController(APlayerController* PlayerController);
 
     /** Clears and removes the mining timer associated with a player. */
     void Server_TryToClearTimerHandle(APlayerController* PlayerController);
 
     /** Updates the static mesh's material based on the current resource node state. */
-    virtual void SetStaticMeshForCurrentState();
+    virtual void Server_SetStaticMeshForCurrentState();
 
     /** Applies resource node config. Sets up timers for state refresh and initializes the material. */
-    virtual void ApplyResourceNodeConfig();
+    virtual void Server_ApplyResourceNodeConfig();
 
     /** Cleans up the MiningTimers map by removing all entries with invalid (nullptr) PlayerController keys. */
     UFUNCTION(BlueprintCallable, Category = "Resource Node")

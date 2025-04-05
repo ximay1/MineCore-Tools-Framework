@@ -35,7 +35,7 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
     UMC_MiningSystemComponent* MiningSystemComponent = Cast<AMC_PlayerCharacter>(PlayerController->GetPawn())->GetMiningSystemComponent();
     
     //Check if the player is able to mine
-    if (CanBeMined(PlayerController))
+    if (Server_CanBeMined(PlayerController))
     {
         //Find timer
         const FTimerHandle& TimerHandle = MiningTimers.FindRef(PlayerController);
@@ -44,7 +44,7 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
         if (!TimerHandle.IsValid())
         {
             //Create Delegate
-            FTimerDelegate MineResourceNodeDelegate = FTimerDelegate::CreateUObject(this, &AMC_ResourceNode::PlayerMineResource, PlayerController);
+            FTimerDelegate MineResourceNodeDelegate = FTimerDelegate::CreateUObject(this, &AMC_ResourceNode::Server_PlayerMineResource, PlayerController);
         
             //Set timer
             GetWorldTimerManager().SetTimer(const_cast<FTimerHandle&>(TimerHandle), MineResourceNodeDelegate, ResourceNodeConfig->MiningTime, true);
@@ -75,7 +75,7 @@ void AMC_ResourceNode::Server_StopMining(APlayerController* PlayerController)
         Cast<AMC_PlayerCharacter>(PlayerController->GetPawn())->GetMiningSystemComponent()->StopMining();
 
         //Try to clear timer
-        Server_TryToClearTimerHandle(MineResourceNodeTimerHandle);
+        Server_TryToClearTimerHandle(PlayerController);
 
         //Log
         UE_LOGFMT(LogResourceNode, Log, "Player stopped mining");
@@ -113,7 +113,7 @@ void AMC_ResourceNode::BeginPlay()
             if (ResourceNodeConfig)
             {
                 //"Start" Node
-                ApplyResourceNodeConfig();
+                Server_ApplyResourceNodeConfig();
             }
         });
     
@@ -122,7 +122,7 @@ void AMC_ResourceNode::BeginPlay()
     }
 }
 
-void AMC_ResourceNode::ResourceNode_Refresh()
+void AMC_ResourceNode::Server_ResourceNode_Refresh()
 {
     // If the node is already in the final state, exit the function
     if (ResourceNodeState == EResourceNodeState::STATE_4) { return; }
@@ -131,13 +131,13 @@ void AMC_ResourceNode::ResourceNode_Refresh()
     ResourceNodeState = ResourceNodeState + 1;
 
     //Set StaticMesh 
-    SetStaticMeshForCurrentState();
+    Server_SetStaticMeshForCurrentState();
 }
 
-bool AMC_ResourceNode::CanBeMined(APlayerController* PlayerController)
+bool AMC_ResourceNode::Server_CanBeMined(APlayerController* PlayerController)
 {
     // Validate the player controller
-    if (EnsureValidPlayerController(PlayerController))
+    if (Server_EnsureValidPlayerController(PlayerController))
     {
         // Check if the MineResourceNodeTimerHandle isn't cleared for the given player controller
         // Check if the resource node is in a minable state
@@ -160,16 +160,16 @@ bool AMC_ResourceNode::CanBeMined(APlayerController* PlayerController)
     return false; 
 }
 
-void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
+void AMC_ResourceNode::Server_PlayerMineResource(APlayerController* PlayerController)
 {
     //Check if ResourceNodeState can be mined
-    if (CanBeMined(PlayerController))
+    if (Server_CanBeMined(PlayerController))
     {
         //Decrease State of this Node
         ResourceNodeState = ResourceNodeState - 1;
 
         //Set StaticMesh
-        SetStaticMeshForCurrentState();
+        Server_SetStaticMeshForCurrentState();
 
         //Check if ResourceNodeState is STATE_1 now
         if (ResourceNodeState == EResourceNodeState::STATE_1)
@@ -180,7 +180,7 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
     }
 }
 
-bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerController)
+bool AMC_ResourceNode::Server_EnsureValidPlayerController(APlayerController* PlayerController)
 {
     //Check if the player controller is valid
     if (IsValid(PlayerController))
@@ -210,7 +210,7 @@ void AMC_ResourceNode::Server_TryToClearTimerHandle(APlayerController* PlayerCon
     MiningTimers.Remove(PlayerController);
 }
 
-void AMC_ResourceNode::SetStaticMeshForCurrentState()
+void AMC_ResourceNode::Server_SetStaticMeshForCurrentState()
 {
     //Find and check
     if (UStaticMesh* StaticMesh = ResourceNodeConfig->ResourceNodeMaterials.FindChecked(ResourceNodeState))
@@ -225,19 +225,19 @@ void AMC_ResourceNode::SetStaticMeshForCurrentState()
     }
 }
 
-void AMC_ResourceNode::ApplyResourceNodeConfig()
+void AMC_ResourceNode::Server_ApplyResourceNodeConfig()
 {
     // Set the timer to refresh the resource node
     GetWorldTimerManager().SetTimer(
         ResourceNodeSpawnTimerHandle,
         this,
-        &AMC_ResourceNode::ResourceNode_Refresh,
+        &AMC_ResourceNode::Server_ResourceNode_Refresh,
         ResourceNodeConfig->TimeToIncreaseState,
         true
     );
     
     // Set the initial StaticMesh
-    SetStaticMeshForCurrentState();
+    Server_SetStaticMeshForCurrentState();
 }
 
 void AMC_ResourceNode::Server_RemoveInvalidMiningTimers()
