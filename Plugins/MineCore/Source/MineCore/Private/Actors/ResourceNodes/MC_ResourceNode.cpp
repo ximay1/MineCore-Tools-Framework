@@ -37,14 +37,17 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
     //Check if the player is able to mine
     if (CanBeMined(PlayerController))
     {
+        //Find timer
+        const FTimerHandle& TimerHandle = MiningTimers.FindRef(PlayerController);
+        
         //Check if the timer handle is invalid
-        if (!MineResourceNodeTimerHandle.IsValid())
+        if (!TimerHandle.IsValid())
         {
             //Create Delegate
             FTimerDelegate MineResourceNodeDelegate = FTimerDelegate::CreateUObject(this, &AMC_ResourceNode::PlayerMineResource, PlayerController);
         
             //Set timer
-            GetWorldTimerManager().SetTimer(MineResourceNodeTimerHandle, MineResourceNodeDelegate, ResourceNodeConfig->MiningTime, true);
+            GetWorldTimerManager().SetTimer(const_cast<FTimerHandle&>(TimerHandle), MineResourceNodeDelegate, ResourceNodeConfig->MiningTime, true);
             
             //Start Mining
             MiningSystemComponent->StartMining();
