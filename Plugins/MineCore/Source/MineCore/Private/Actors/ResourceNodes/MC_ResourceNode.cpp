@@ -73,13 +73,18 @@ void AMC_ResourceNode::StopMining(APlayerController* PlayerController)
     {
         //Stop Mining
         Cast<AMC_PlayerCharacter>(PlayerController->GetPawn())->GetMiningSystemComponent()->StopMining();
-    }
-    
-    //Try to clear timer
-    TryToClearTimerHandle(MineResourceNodeTimerHandle);
 
-    //Log
-    UE_LOGFMT(LogResourceNode, Log, "Player stopped mining");
+        //Try to clear timer
+        TryToClearTimerHandle(MineResourceNodeTimerHandle);
+
+        //Log
+        UE_LOGFMT(LogResourceNode, Log, "Player stopped mining");
+    }
+    else
+    {
+        // Log Error
+        UE_LOGFMT(LogResourceNode, Error, "Player Controlelr is nullptr. File - {0}, Line - {1}", __FILE__, __LINE__);
+    }
 }
 
 void AMC_ResourceNode::BeginPlay()
