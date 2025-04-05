@@ -92,12 +92,12 @@ void UMC_MiningSystemComponent::CacheMiningToolsFromInventory()
 			}
 		}
 
-		// Update cache: clear old entries and add new ones
-		CachedMiningTools.Empty();
-		for (const auto& ToolPair : BestToolsMap)
-		{
-			CachedMiningTools.Add(ToolPair.Key, ToolPair.Value);
-		}
+		// Update cached mining tools
+		CachedMiningTools.CachedPickaxe = Cast<UMC_Pickaxe>(BestToolsMap.FindRef(UMC_Pickaxe::StaticClass()));
+		CachedMiningTools.CachedAxe = Cast<UMC_Axe>(BestToolsMap.FindRef(UMC_Axe::StaticClass()));
+		CachedMiningTools.CachedHammer = Cast<UMC_Hammer>(BestToolsMap.FindRef(UMC_Hammer::StaticClass()));
+		CachedMiningTools.CachedKnife = Cast<UMC_Knife>(BestToolsMap.FindRef(UMC_Knife::StaticClass()));
+		CachedMiningTools.CachedSickle = Cast<UMC_Sickle>(BestToolsMap.FindRef(UMC_Sickle::StaticClass()));
 	}
 }
 
