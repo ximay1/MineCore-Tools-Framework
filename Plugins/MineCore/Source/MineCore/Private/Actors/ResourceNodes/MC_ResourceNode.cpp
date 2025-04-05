@@ -165,8 +165,14 @@ void AMC_ResourceNode::Server_PlayerMineResource(APlayerController* PlayerContro
         //Check if ResourceNodeState is STATE_1 now
         if (ResourceNodeState == EResourceNodeState::STATE_1)
         {
-            //Stop Mining
-            Server_StopMining(PlayerController);
+            // Stop all active mining operations
+            TArray<APlayerController*> PlayerControllers;
+            MiningTimers.GenerateKeyArray(PlayerControllers);
+
+            for (APlayerController* PC : PlayerControllers)
+            {
+                Server_StopMining(PC);
+            }
         }
     }
 }
