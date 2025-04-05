@@ -120,6 +120,28 @@ void UMC_MiningSystemComponent::StopMining_Implementation()
 	IsPlayerMining = false;
 }
 
+UMC_MiningTool* UMC_MiningSystemComponent::GetMiningTool(TSubclassOf<UMC_MiningTool> ToolClass) const
+{
+	 if (!ToolClass) return nullptr;
+    
+    if (ToolClass == UMC_Pickaxe::StaticClass())
+        return CachedMiningTools.CachedPickaxe;
+	
+    if (ToolClass == UMC_Axe::StaticClass())
+        return CachedMiningTools.CachedAxe;
+	
+    if (ToolClass == UMC_Hammer::StaticClass())
+        return CachedMiningTools.CachedHammer;
+	
+    if (ToolClass == UMC_Knife::StaticClass())
+        return CachedMiningTools.CachedKnife;
+	
+    if (ToolClass == UMC_Sickle::StaticClass())
+        return CachedMiningTools.CachedSickle;
+
+    return nullptr;
+}
+
 UMC_InventoryComponent* UMC_MiningSystemComponent::FindInventory() const
 {
 	//Get Owner

@@ -84,6 +84,10 @@ public:
 	/** Get Sickle */
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
 	FORCEINLINE UMC_Sickle* GetSickle() const { return CachedMiningTools.CachedSickle; }
+
+	/** Returns cached mining tool of specified type */
+	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
+	UMC_MiningTool* GetMiningTool(TSubclassOf<UMC_MiningTool> ToolClass) const;
 	
 	/** Start Mining */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
