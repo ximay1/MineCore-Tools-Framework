@@ -5,7 +5,7 @@
 #include "MineCore/Public/Data/ResourceNodes/MC_DT_ResourceNodeConfig.h"
 #include "Player/MC_PlayerCharacter.h"
 
-AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(FMath::RandRange(0,3)))
+AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(0))
 {
     //Set Parameters
     PrimaryActorTick.bCanEverTick = false;
@@ -50,13 +50,13 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
             MiningSystemComponent->StartMining();
         
             //Show progress bar
-            Client_DisplayMiningProgressWidget(PlayerController);
+            Client_DisplayMiningProgressWidget();
         }
     }
     else
     {
         //If the player can't mine, we have to show a error widget
-        Client_DisplayMiningDeniedWidget(PlayerController);
+        Client_DisplayMiningDeniedWidget();
 
         //Stop Mining. Timer won't be set here.
         MiningSystemComponent->StopMining();

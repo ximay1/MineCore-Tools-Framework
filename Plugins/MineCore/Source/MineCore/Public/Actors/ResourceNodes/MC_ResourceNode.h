@@ -80,6 +80,7 @@ private:
     /** Timer handle for refreshing the resource node state. */
     FTimerHandle ResourceNodeSpawnTimerHandle;
 
-    /** Timer handle for managing the mining process. */
-    FTimerHandle MineResourceNodeTimerHandle;
+    /** Stores active mining timer handles for each player controller. Server-only */
+    UPROPERTY()
+    TMap<APlayerController*, FTimerHandle> MiningTimers;
 };
