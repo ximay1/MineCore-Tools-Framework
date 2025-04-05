@@ -82,6 +82,9 @@ void AMC_ResourceNode::StopMining(APlayerController* PlayerController)
     
     //Try to clear timer
     TryToClearTimerHandle(MineResourceNodeTimerHandle);
+
+    //Log
+    UE_LOGFMT(LogResourceNode, Log, "Player stopped mining");
 }
 
 void AMC_ResourceNode::BeginPlay()
