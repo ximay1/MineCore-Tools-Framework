@@ -272,10 +272,7 @@ protected:
 	UPROPERTY(ReplicatedUsing = OnRep_Items_Array)
 	TArray<FInventoryItemsMap> Items_Array;
 
-	/** 
-	 * Called when the replicated Items_Array is updated on clients. 
-	 * This function synchronizes the local TMap (Items) with the replicated TArray (Items_Array). 
-	 */
+	/** Called when the replicated Items_Array is updated on clients. */
 	UFUNCTION()
 	void OnRep_Items_Array();
 
@@ -287,7 +284,6 @@ protected:
 	
 #endif
 	
-protected:
 	/** Maximum number of slots in the inventory */
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))
 	uint8 MaxSlots;
