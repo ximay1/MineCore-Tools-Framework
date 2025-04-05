@@ -71,10 +71,10 @@ void UMC_MiningSystemComponent::Server_CacheMiningToolsFromInventory_Implementat
 		TMap<TSubclassOf<UMC_MiningTool>, UMC_MiningTool*> BestToolsMap;
 
 		// Process each inventory item only once
-		for (UMC_Item* const& Item : InventoryComponent->Items)
+		for (const auto& Pair : InventoryComponent->GetItemsArray())
 		{
 			// Check if the item is a mining tool
-			if (UMC_MiningTool* Tool = Cast<UMC_MiningTool>(Item))
+			if (UMC_MiningTool* Tool = Cast<UMC_MiningTool>(Pair.Item))
 			{
 				TSubclassOf<UMC_MiningTool> ToolClass = Tool->GetClass();
             
