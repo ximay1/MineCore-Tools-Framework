@@ -75,7 +75,7 @@ void AMC_ResourceNode::Server_StopMining(APlayerController* PlayerController)
         Cast<AMC_PlayerCharacter>(PlayerController->GetPawn())->GetMiningSystemComponent()->StopMining();
 
         //Try to clear timer
-        TryToClearTimerHandle(MineResourceNodeTimerHandle);
+        Server_TryToClearTimerHandle(MineResourceNodeTimerHandle);
 
         //Log
         UE_LOGFMT(LogResourceNode, Log, "Player stopped mining");
@@ -201,13 +201,13 @@ bool AMC_ResourceNode::EnsureValidPlayerController(APlayerController* PlayerCont
     }
 }
 
-void AMC_ResourceNode::TryToClearTimerHandle(FTimerHandle TimerHandle)
+void AMC_ResourceNode::Server_TryToClearTimerHandle(APlayerController* PlayerController)
 {
-    //Try to clear timer
-    if (TimerHandle.IsValid())
-    {
-        GetWorldTimerManager().ClearTimer(TimerHandle);
-    }
+    //Clear Timer
+    GetWorld()->GetTimerManager().ClearTimer(*MiningTimers.Find(PlayerController));
+
+    // Remove the player's entry from the MiningTimers
+    MiningTimers.Remove(PlayerController);
 }
 
 void AMC_ResourceNode::SetStaticMeshForCurrentState()

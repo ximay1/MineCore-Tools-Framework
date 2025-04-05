@@ -67,8 +67,8 @@ protected:
     /** Validates the PlayerController. */
     virtual bool EnsureValidPlayerController(APlayerController* PlayerController);
 
-    /** Try to clear MineResourceNodeTimerHandle */
-    void TryToClearTimerHandle(FTimerHandle TimerHandle);
+    /** Clears and removes the mining timer associated with a player. */
+    void Server_TryToClearTimerHandle(APlayerController* PlayerController);
 
     /** Updates the static mesh's material based on the current resource node state. */
     virtual void SetStaticMeshForCurrentState();
