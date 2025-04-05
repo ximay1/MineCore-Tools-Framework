@@ -32,7 +32,7 @@ public:
     virtual void Server_StartMining(APlayerController* PlayerController);
 
     /** Stops the mining process. */
-    virtual void StopMining(APlayerController* PlayerController);
+    virtual void Server_StopMining(APlayerController* PlayerController);
 
 protected:
     /** Current state of the resource node. */

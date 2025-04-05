@@ -66,7 +66,7 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
     }
 }
 
-void AMC_ResourceNode::StopMining(APlayerController* PlayerController)
+void AMC_ResourceNode::Server_StopMining(APlayerController* PlayerController)
 {
     //Check if the player controller is valid
     if (IsValid(PlayerController))
@@ -175,7 +175,7 @@ void AMC_ResourceNode::PlayerMineResource(APlayerController* PlayerController)
         if (ResourceNodeState == EResourceNodeState::STATE_1)
         {
             //Stop Mining
-            StopMining(PlayerController);
+            Server_StopMining(PlayerController);
         }
     }
 }
