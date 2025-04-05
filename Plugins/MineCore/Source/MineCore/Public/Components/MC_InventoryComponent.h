@@ -261,7 +261,7 @@ protected:
 	UPROPERTY(ReplicatedUsing = OnRep_Items_Array)
 	TArray<FInventoryItemsMap> Items_Array;
 
-	/** Called when the replicated Items_Array is updated on clients. */
+	/** Called when the Items_Array is replicated to the owner. */
 	UFUNCTION()
 	void OnRep_Items_Array();
 
