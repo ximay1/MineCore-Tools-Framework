@@ -161,12 +161,6 @@ public:
 	UMC_DT_ItemConfig* ItemConfig;
 };
 
-/** Triggered when an item is added (Slot number, Item). */  
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnItemAddedToInventory, uint8, Slot, UMC_Item*, Item);
-
-/** Triggered when an item is removed (Slot number). */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemRemovedFromInventory, uint8, Slot);
-
 /** Base class for the inventory system used in MineCore. */
 UCLASS(ClassGroup=(MineCore), meta=(BlueprintSpawnableComponent))
 class MINECORE_API UMC_InventoryComponent : public UActorComponent
@@ -250,10 +244,6 @@ public:
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void Server_DestroyItem(const FInventoryItemsMap& ItemToDestroy);
 
-	//Delegates
-	FOnItemAddedToInventory OnItemAddedToInventory;
-	FOnItemRemovedFromInventory OnItemRemovedFromInventory;
-	
 protected:
 	/** Widget class representing the Inventory */ 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Component")
