@@ -18,10 +18,7 @@ class MINECORE_API AMC_ResourceNode : public AActor
 public:
     /** Constructor */
     AMC_ResourceNode();
-
-    /** Called when the game starts or when spawned. */
-    virtual void BeginPlay() override;
-
+    
     /** Displays the mining progress widget on the client-side. */
     UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Resource Node")
     virtual void Client_DisplayMiningProgressWidget();
@@ -30,6 +27,14 @@ public:
     UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Resource Node")
     virtual void Client_DisplayMiningDeniedWidget();
 
+    /** Initialize properties in the resource node */
+    UFUNCTION(BlueprintCallable, Category = "Resource Node")
+    virtual void Server_InitializeProperites(const FPrimaryAssetId& NewResourceNodeConfigID);
+
+    /** Initialize resource node */
+    UFUNCTION(BlueprintCallable, Category = "Resource Node")
+    virtual void Server_Initialize();
+    
     /** Initiates the mining process on the node. */
     UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Resource Node")
     virtual void Server_StartMining(APlayerController* PlayerController);
@@ -65,11 +70,11 @@ protected:
     void Server_RemoveInvalidMiningTimers();
     
     /** Resource Node config primary asset id */
-    UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Resource Node")
+    UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
     FPrimaryAssetId ResourceNodeConfigID;    
 
     /** Pointer to the resource node config asset. */
-    UPROPERTY(BlueprintReadWrite, Category = "Resource Node")
+    UPROPERTY(BlueprintReadOnly, Category = "Resource Node")
     TObjectPtr<UMC_DT_ResourceNodeConfig> ResourceNodeConfig;
     
     /** Static mesh component representing the resource node. */

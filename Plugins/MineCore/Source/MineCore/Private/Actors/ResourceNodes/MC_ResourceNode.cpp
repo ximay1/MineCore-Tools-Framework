@@ -22,41 +22,6 @@ AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNo
     RootComponent = StaticMeshComponent;
 }
 
-void AMC_ResourceNode::BeginPlay()
-{
-    Super::BeginPlay();
-
-    if (HasAuthority())
-    {
-#if !UE_BUILD_SHIPPING
-        // Valid if the ResourceNodeConfigId is set
-        if (!ResourceNodeConfigID.IsValid())
-        {
-            //Log Error
-            UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigID is not valid. File - {0}, Line - {1}", __FILE__, __LINE__);
-        
-            // If the config is invalid, destroy this actor to prevent issues
-            Destroy(true);
-            return;
-        }
-#endif
-    
-        //Create delegate
-        FStreamableDelegate PrimaryDataAssetDelegate = FStreamableDelegate::CreateLambda([this]()
-        {
-            ResourceNodeConfig = Cast<UMC_DT_ResourceNodeConfig>(UAssetManager::Get().GetPrimaryAssetObject(ResourceNodeConfigID));
-            if (ResourceNodeConfig)
-            {
-                //"Start" Node
-                Server_ApplyResourceNodeConfig();
-            }
-        });
-    
-        //Load Primary Data Asset
-        UAssetManager::Get().LoadPrimaryAsset(ResourceNodeConfigID, {}, PrimaryDataAssetDelegate);
-    }
-}
-
 void AMC_ResourceNode::Client_DisplayMiningProgressWidget_Implementation()
 {
     //TODO:Create Progress bar Widget and show widget
@@ -67,6 +32,45 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation()
 {
     //TODO:Create Denied Widget and show widget
     UE_LOGFMT(LogResourceNode, Error, "Displaying mining denied widget on the client");
+}
+
+void AMC_ResourceNode::Server_InitializeProperites(const FPrimaryAssetId& NewResourceNodeConfigID)
+{
+    //Check if the NewPrimaryAssetID is valid
+    if (NewResourceNodeConfigID.IsValid())
+    {
+        ResourceNodeConfigID = NewResourceNodeConfigID;
+    }
+}
+
+void AMC_ResourceNode::Server_Initialize()
+{
+#if !UE_BUILD_SHIPPING
+    // Valid if the ResourceNodeConfigId is set
+    if (!ResourceNodeConfigID.IsValid())
+    {
+        //Log Error
+        UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigID is not valid. File - {0}, Line - {1}", __FILE__, __LINE__);
+    
+        // If the config is invalid, destroy this actor to prevent issues
+        Destroy(true);
+        return;
+    }
+#endif
+
+    //Create delegate
+    FStreamableDelegate PrimaryDataAssetDelegate = FStreamableDelegate::CreateLambda([this]()
+    {
+        ResourceNodeConfig = Cast<UMC_DT_ResourceNodeConfig>(UAssetManager::Get().GetPrimaryAssetObject(ResourceNodeConfigID));
+        if (ResourceNodeConfig)
+        {
+            //"Start" Node
+            Server_ApplyResourceNodeConfig();
+        }
+    });
+
+    //Load Primary Data Asset
+    UAssetManager::Get().LoadPrimaryAsset(ResourceNodeConfigID, {}, PrimaryDataAssetDelegate);
 }
 
 void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* PlayerController)
