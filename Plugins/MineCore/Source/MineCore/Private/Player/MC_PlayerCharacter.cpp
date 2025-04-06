@@ -29,4 +29,3 @@ void AMC_PlayerCharacter::PossessedBy(AController* NewController)
 	//Initialize Mining System Component
 	MiningSystemComponent->InitializeMiningSystemComponent();
 }
-
