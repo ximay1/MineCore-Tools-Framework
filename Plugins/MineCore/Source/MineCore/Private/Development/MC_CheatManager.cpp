@@ -7,7 +7,7 @@
 void UMC_CheatManager::SerializeInventoryToJSON()
 {
 	// Set the path to the "Saved" folder where the JSON file will be stored
-	FString SavedFolderDir = FPaths::ProjectSavedDir() / TEXT("Mine Core") / TEXT("Inventory.json");
+	FString SavedFolderDir = FPaths::ProjectSavedDir() / TEXT("Mine Core") / FString::Printf(TEXT("Inventory_%s.json"), *FGuid::NewGuid().ToString(EGuidFormats::Digits).Left(8));
 
 	// Create a JSON root object
 	TSharedPtr<FJsonObject> RootJsonObject = MakeShareable(new FJsonObject());
@@ -19,7 +19,7 @@ void UMC_CheatManager::SerializeInventoryToJSON()
 	AMC_PlayerCharacter* PlayerCharacter = Cast<AMC_PlayerCharacter>(GetPlayerController()->GetPawn());
 	if (!PlayerCharacter)
 	{
-		UE_LOGFMT(LogJson, Error, "Failed to get player character.");
+		UE_LOGFMT(LogJson, Error, "Failed to get MC Player Character.");
 		return;
 	}
 
