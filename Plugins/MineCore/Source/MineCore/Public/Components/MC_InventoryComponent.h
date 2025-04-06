@@ -158,7 +158,7 @@ public:
 	
 	//Item Data Config
 	UPROPERTY(BlueprintReadWrite, Category = "Inventory Component | Item Definition")
-	UMC_DT_ItemConfig* ItemConfig = {};
+	TObjectPtr<UMC_DT_ItemConfig> ItemConfig;
 };
 
 /** Base class for the inventory system used in MineCore. */
