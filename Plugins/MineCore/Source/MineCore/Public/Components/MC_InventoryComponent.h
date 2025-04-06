@@ -197,7 +197,7 @@ public:
 	virtual void Server_AddItemToSlot(uint8 Slot, const FItemDefinition& ItemDefinition);
 
 	/** Adds an item to the first available slot in the inventory */
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void Server_AddItemToFirstAvailableSlot(const FItemDefinition& ItemDefinition);
 
 	/** Removes an item from the inventory */
