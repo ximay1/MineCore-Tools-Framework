@@ -170,7 +170,7 @@ class MINECORE_API UMC_InventoryComponent : public UActorComponent
 	// TODO: Change UUserWidget class to the base InventoryWidget class
 	
 public:	
-	// Sets default values for this component's properties
+	/** Constructor */
 	UMC_InventoryComponent();
 
 	/** Events */
@@ -193,7 +193,7 @@ public:
 	bool FindValidSlot(uint8& OutSlot) const;
 
 	/** Adds an item to the specified inventory slot */
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	void Server_AddItemToSlot(uint8 Slot, const FItemDefinition& ItemDefinition);
 
 	/** Adds an item to the first available slot in the inventory */
@@ -249,7 +249,7 @@ public:
 
 	/** Get Items_Array BP */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	FORCEINLINE TArray<FInventoryItemsMap> BP_GetItemsArray() const { return GetItemsArray(); }
+	FORCEINLINE void BP_GetItemsArray(TArray<FInventoryItemsMap>& OutResult) const { OutResult = GetItemsArray(); }
 	
 protected:
 	/** Widget class representing the Inventory */ 
