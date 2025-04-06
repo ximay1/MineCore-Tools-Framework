@@ -178,11 +178,11 @@ public:
 
 	/** Creates the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void Client_CreateInventory();
+	virtual void Client_CreateInventory();
 
 	/** Refresh Widget Inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void Client_RefreshInventoryWidget();
+	virtual void Client_RefreshInventoryWidget();
 
 	/** Get Max Slots */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
@@ -194,15 +194,15 @@ public:
 
 	/** Adds an item to the specified inventory slot */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
-	void Server_AddItemToSlot(uint8 Slot, const FItemDefinition& ItemDefinition);
+	virtual void Server_AddItemToSlot(uint8 Slot, const FItemDefinition& ItemDefinition);
 
 	/** Adds an item to the first available slot in the inventory */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
-	void Server_AddItemToFirstAvailableSlot(UMC_Item* Item);
+	virtual void Server_AddItemToFirstAvailableSlot(UMC_Item* Item);
 
 	/** Removes an item from the inventory */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
-	void Server_RemoveItemFromInventory(uint8 Slot, EItemAction ItemAction);
+	virtual void Server_RemoveItemFromInventory(uint8 Slot, EItemAction ItemAction);
 
 	/** Get all items in the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
@@ -218,7 +218,7 @@ public:
 
 	/** Finds items in the inventory based on the given filter criteria. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const;
+	virtual void FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const;
 
 	/** This function attempts to find the best item in the Inventory. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
@@ -226,11 +226,11 @@ public:
 
 	/** Drops the item from the specified inventory slot as a bag at the player's location */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void Server_DropItemBySlot(uint8 Slot);
+	virtual void Server_DropItemBySlot(uint8 Slot);
 
 	/** Drops the specified item as a bag at the player's location */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	void Server_DropItemInstance(UMC_Item* Item);
+	virtual void Server_DropItemInstance(UMC_Item* Item);
 	
 	/** Initializes the inventory system by loading default items and setting up initial state. */	
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
