@@ -138,10 +138,10 @@ bool AMC_ResourceNode::Server_CanBeMined(APlayerController* PlayerController)
             if (AMC_PlayerCharacter* PlayerCharacter = PlayerController->GetPawn<AMC_PlayerCharacter>())
             {
                 // Get the player's pickaxe from the mining system component
-                if (UMC_Pickaxe* Pickaxe = PlayerCharacter->GetMiningSystemComponent()->GetMiningTool<UMC_Pickaxe>())
+                if (UMC_MiningTool* MiningTool = PlayerCharacter->GetMiningSystemComponent()->GetMiningTool(ResourceNodeConfig->AllowedTool))
                 {
                     // Check if the player can mine using the retrieved pickaxe
-                    return PlayerCharacter->GetMiningSystemComponent()->CanPlayerMine(Pickaxe);
+                    return PlayerCharacter->GetMiningSystemComponent()->CanPlayerMine(MiningTool);
                 }
             }
         }
