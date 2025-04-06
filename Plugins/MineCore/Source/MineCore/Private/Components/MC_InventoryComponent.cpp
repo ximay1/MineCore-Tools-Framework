@@ -87,7 +87,7 @@ bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
 
 void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
 {
-	//Construct Items
+	//Construct Item
 	UMC_Item* Item = Server_ConstructItem(ItemDefinition);
 	
 #if !UE_BUILD_SHIPPING
@@ -110,7 +110,8 @@ void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(uint8 Slot, con
 		{
 			// Drop the item from the inventory using the given item
 			Server_DropItemInstance(Item);
-			
+
+			//Log
 			UE_LOGFMT(LogInventory, Log, "We need to create a bag of items at the player's location when attempting to add an item to the inventory");
 			return;
 		}
@@ -120,9 +121,38 @@ void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(uint8 Slot, con
 	Items_Array.Add(FInventoryItemsMap(Slot, Item));
 }
 
-void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(UMC_Item* Item)
+void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(const FItemDefinition& ItemDefinition)
 {
-	//TODO: Create logic
+	//Construct Item
+	UMC_Item* Item = Server_ConstructItem(ItemDefinition);
+	
+#if !UE_BUILD_SHIPPING
+	// Declare a flag to track the validity of the item
+	bool bIsValid = true;
+
+	// Validate the item using the macro. If invalid, it will set bIsValid to false and log errors.
+	VALIDATE_ITEM_AND_RETURN(Item, bIsValid)
+
+	// If item isn't valid, exit the function early.
+	if (!bIsValid)
+		return;
+#endif
+
+	uint8 Slot = 0;
+	
+	//Find next valid slot
+	if (!FindValidSlot(Slot))
+	{
+		// Drop the item from the inventory using the given item
+		Server_DropItemInstance(Item);
+
+		//Log 
+		UE_LOGFMT(LogInventory, Log, "We need to create a bag of items at the player's location when attempting to add an item to the inventory");
+		return;
+	}
+
+	//Add to the inventory
+    Items_Array.Add(FInventoryItemsMap(Slot, Item));
 }
 
 void UMC_InventoryComponent::Server_RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
