@@ -9,7 +9,12 @@ AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNo
 {
     //Set Parameters
     PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bAllowTickOnDedicatedServer = false;
     bReplicates = true;
+    SetNetUpdateFrequency(25.0f);
+    SetCallPreReplication(false);
+    SetCallPreReplicationForReplay(false);
+    SetCanBeDamaged(false);
     
     // Create the static mesh component and set it as the root
     StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
