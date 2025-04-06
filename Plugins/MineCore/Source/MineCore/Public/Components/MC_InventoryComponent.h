@@ -159,6 +159,11 @@ public:
 	//Item Data Config
 	UPROPERTY(BlueprintReadWrite, Category = "Inventory Component | Item Definition")
 	TObjectPtr<UMC_DT_ItemConfig> ItemConfig;
+
+	bool operator==(const FItemDefinition& Other) const
+	{
+		return ItemConfig == Other.ItemConfig;
+	}
 };
 
 /** Base class for the inventory system used in MineCore. */
