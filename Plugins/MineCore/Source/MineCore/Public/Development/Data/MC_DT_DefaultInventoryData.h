@@ -24,7 +24,7 @@ public:
 
 	/** The inventory slot where this item should be placed */
 	UPROPERTY(EditAnywhere, Category = "Inventory", meta = (Tooltip = "Default slot index for this item"))
-	uint8 Slot;
+	uint8 Slot = {};
 };
 
 /**

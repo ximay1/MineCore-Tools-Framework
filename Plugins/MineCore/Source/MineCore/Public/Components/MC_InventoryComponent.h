@@ -132,11 +132,11 @@ struct FInventoryItemsMap
 	
 	/** Slot in the inventory that holds the item */
 	UPROPERTY()
-	uint8 Slot;
+	uint8 Slot = {};
 
 	/** Pointer to the item in the given slot */
 	UPROPERTY()
-	UMC_Item* Item;
+	TObjectPtr<UMC_Item> Item;
 
 	bool operator==(const FInventoryItemsMap& Other) const
 	{
@@ -158,7 +158,7 @@ public:
 	
 	//Item Data Config
 	UPROPERTY(BlueprintReadWrite, Category = "Inventory Component | Item Definition")
-	UMC_DT_ItemConfig* ItemConfig;
+	UMC_DT_ItemConfig* ItemConfig = {};
 };
 
 /** Base class for the inventory system used in MineCore. */
