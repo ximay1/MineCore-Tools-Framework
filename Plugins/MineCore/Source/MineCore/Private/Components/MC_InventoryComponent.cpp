@@ -4,7 +4,6 @@
 #include "Components/MC_MiningSystemComponent.h"
 #include "Development/Data/MC_DT_DefaultInventoryData.h"
 #include "Items/MC_Item.h"
-#include "Items/MiningTools/MC_MiningTool.h"
 #include "MineCore/Public/Data/Items/MC_DT_ItemConfig.h"
 #include "Net/UnrealNetwork.h"
 

@@ -59,7 +59,7 @@ public:
 	virtual void InitializeMiningSystemComponent();
 	
 	/** This function checks if the player is able to mine the resource node. Always called on the server! */
-	bool CanPlayerMine(UMC_MiningTool* MiningTool);
+	virtual bool CanPlayerMine(UMC_MiningTool* MiningTool);
 
 	/** Caches mining tools from the player's inventory */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Mining System Component")
@@ -97,11 +97,11 @@ public:
 	}
 	
 	/** Start Mining */
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Mining System Component")
 	virtual void StartMining(); 
 	
 	/** Stop Mining */
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Mining System Component")
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Mining System Component")
 	virtual void StopMining(); 
 
 	/** This function attempts to find the inventory component. */
