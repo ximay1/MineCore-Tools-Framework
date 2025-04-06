@@ -65,11 +65,11 @@ protected:
     void Server_RemoveInvalidMiningTimers();
     
     /** Resource Node config primary asset id */
-    UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Resource Node | Config")
+    UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Resource Node")
     FPrimaryAssetId ResourceNodeConfigID;    
 
     /** Pointer to the resource node config asset. */
-    UPROPERTY(BlueprintReadWrite, Category = "Resource Node | Config")
+    UPROPERTY(BlueprintReadWrite, Category = "Resource Node")
     TObjectPtr<UMC_DT_ResourceNodeConfig> ResourceNodeConfig;
     
     /** Static mesh component representing the resource node. */
