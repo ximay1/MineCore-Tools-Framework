@@ -201,7 +201,7 @@ public:
 	virtual void Server_AddItemToFirstAvailableSlot(UMC_Item* Item);
 
 	/** Removes an item from the inventory */
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Inventory Component")
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void Server_RemoveItemFromInventory(uint8 Slot, EItemAction ItemAction);
 
 	/** Get all items in the inventory */
