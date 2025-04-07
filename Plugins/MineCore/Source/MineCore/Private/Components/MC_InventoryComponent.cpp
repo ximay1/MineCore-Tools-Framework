@@ -85,7 +85,7 @@ bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
 	return false;
 }
 
-void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
+void UMC_InventoryComponent::Server_AddItemDefinitionToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
 {
 	//Construct Item
 	UMC_Item* Item = Server_ConstructItem(ItemDefinition);
@@ -121,7 +121,7 @@ void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(uint8 Slot, con
 	Items_Array.Add(FInventorySlot(Slot, Item));
 }
 
-void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(const FItemDefinition& ItemDefinition)
+void UMC_InventoryComponent::Server_AddItemDefinitionToFirstAvailableSlot_Implementation(const FItemDefinition& ItemDefinition)
 {
 	//Construct Item
 	UMC_Item* Item = Server_ConstructItem(ItemDefinition);
@@ -155,7 +155,7 @@ void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(c
     Items_Array.Add(FInventorySlot(Slot, Item));
 }
 
-void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(uint8 SlotIndex, const FItemDefinition& ItemDefinition, int32 StacksToAdd)
+void UMC_InventoryComponent::Server_AddItemDefinitionStacksToSlot_Implementation(uint8 SlotIndex, const FItemDefinition& ItemDefinition, int32 StacksToAdd)
 {
 	// Validate input parameters
 	if (!IsValidSlot(SlotIndex)|| StacksToAdd <= 0)
@@ -258,7 +258,7 @@ void UMC_InventoryComponent::Server_SplitItemStack_Implementation(uint8 SourceSl
 	//TODO Check if the adresses are the same of Data Asset
 	Server_ConstructItem(FItemDefinition(SourceInventorySlot.Item->GetItemConfig()));
 	
-	//Server_AddItemToFirstAvailableSlot();
+	//Server_AddItemDefinitionToFirstAvailableSlot();
 }
 
 void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const
