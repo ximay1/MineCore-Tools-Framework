@@ -87,7 +87,6 @@ bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
 
 void UMC_InventoryComponent::Server_AddItemDefinitionToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
 {
-	//Add Item to slot
 	Server_AddItemToSlot(FInventorySlot(Slot, Server_ConstructItem(ItemDefinition)));
 }
 
@@ -132,7 +131,6 @@ void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(const FInventor
 
 void UMC_InventoryComponent::Server_AddItemDefinitionToFirstAvailableSlot_Implementation(const FItemDefinition& ItemDefinition)
 {
-	//Construct Item 
 	Server_AddItemToFirstAvailableSlot_Implementation(Server_ConstructItem(ItemDefinition));
 }
 
@@ -169,10 +167,7 @@ void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(U
 
 void UMC_InventoryComponent::Server_AddItemDefinitionStacksToSlot_Implementation(uint8 SlotIndex, const FItemDefinition& ItemDefinition, int32 StacksToAdd)
 {
-	// Create temporary slot representation for search
-	FInventorySlot TargetSlot(SlotIndex, Server_ConstructItem(ItemDefinition));
-    
-	Server_AddItemStacksToSlot(TargetSlot, StacksToAdd);
+	Server_AddItemStacksToSlot(FInventorySlot(SlotIndex, Server_ConstructItem(ItemDefinition)), StacksToAdd);
 }
 
 void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(const FInventorySlot& TargetSlot, int32 StacksToAdd)
