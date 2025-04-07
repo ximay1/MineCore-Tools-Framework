@@ -268,8 +268,10 @@ void UMC_InventoryComponent::Server_SplitItemStack_Implementation(uint8 SourceSl
 	}
 	
 	//Get Source InventorySlot
-	FInventorySlot& SourceInventorySlot = *Items_Array.FindByPredicate([&SourceSlot](const FInventorySlot& InventorySlot)
-		{ return InventorySlot.Slot == SourceSlot; });
+	FInventorySlot* SourceInventorySlot = Items_Array.FindByPredicate([&SourceSlot](const FInventorySlot& InventorySlot)
+	{
+		return InventorySlot.Slot == SourceSlot;
+	});
 
 	
 	//Construct Item
