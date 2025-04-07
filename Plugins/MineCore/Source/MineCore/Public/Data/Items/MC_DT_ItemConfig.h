@@ -73,7 +73,7 @@ public:
 	float Weight = 0.0f;
 
 	/** MaxStackSize in the inventory. Max = 999 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (InlineEditConditionToggle))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (InlineEditConditionToggle, ClampMin = 1, ClampMax = 999))
 	int32 MaxStackSize = 1;
 
 	/** Name of the item */
