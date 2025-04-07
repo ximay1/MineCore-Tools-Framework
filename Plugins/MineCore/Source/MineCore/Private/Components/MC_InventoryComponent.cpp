@@ -118,16 +118,11 @@ void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(uint8 Slot, con
 	}
 	
 	//Add to the inventory
-	Items_Array.Add(FInventoryItemsMap(Slot, Item));
+	Items_Array.Add(FInventorySlot(Slot, Item));
 }
 
 void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(const FItemDefinition& ItemDefinition)
 {
-	if (ItemDefinition.ItemConfig->IsStackable())
-	{
-		
-	}
-	
 	//Construct Item
 	UMC_Item* Item = Server_ConstructItem(ItemDefinition);
 	
@@ -157,7 +152,7 @@ void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(c
 	}
 
 	//Add to the inventory
-    Items_Array.Add(FInventoryItemsMap(Slot, Item));
+    Items_Array.Add(FInventorySlot(Slot, Item));
 }
 
 void UMC_InventoryComponent::Server_RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
@@ -176,7 +171,7 @@ void UMC_InventoryComponent::Server_RemoveItemFromInventory_Implementation(uint8
 
 	
 	// Find the item in the inventory that matches the given slot
-	FInventoryItemsMap* ItemToDestroy = Items_Array.FindByPredicate([Slot](const FInventoryItemsMap& Item)
+	FInventorySlot* ItemToDestroy = Items_Array.FindByPredicate([Slot](const FInventorySlot& Item)
 	{
 		return Item.Slot == Slot;
 	});
@@ -330,7 +325,7 @@ UMC_Item* UMC_InventoryComponent::Server_ConstructItem(const FItemDefinition& It
 	return Item;
 }
 
-void UMC_InventoryComponent::Server_DestroyItem_Implementation(const FInventoryItemsMap& ItemToDestroy)
+void UMC_InventoryComponent::Server_DestroyItem_Implementation(const FInventorySlot& ItemToDestroy)
 {
 	if (!ItemToDestroy.Item)
 	{
@@ -359,7 +354,7 @@ void UMC_InventoryComponent::Server_InitializeInventory_Implementation()
 			FItemDefinition ItemDefinition(Element.ItemConfig);
 			
 			// Add to inventory array with specified slot
-			Items_Array.Add(FInventoryItemsMap(Element.Slot, Server_ConstructItem(ItemDefinition)));
+			Items_Array.Add(FInventorySlot(Element.Slot, Server_ConstructItem(ItemDefinition)));
 		}
 	}
 	else

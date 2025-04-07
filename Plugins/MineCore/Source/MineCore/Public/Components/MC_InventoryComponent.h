@@ -126,7 +126,7 @@ enum class EItemAction : uint8
  * making it easy to manage and replicate inventory data in multiplayer scenarios.
  */
 USTRUCT(BlueprintType)
-struct FInventoryItemsMap  
+struct FInventorySlot  
 {
 	GENERATED_BODY()
 	
@@ -138,7 +138,7 @@ struct FInventoryItemsMap
 	UPROPERTY()
 	TObjectPtr<UMC_Item> Item;
 
-	bool operator==(const FInventoryItemsMap& Other) const
+	bool operator==(const FInventorySlot& Other) const
 	{
 		return this->Slot == Other.Slot;
 	}
@@ -247,14 +247,14 @@ public:
 
 	/** Destroys item instance */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
-	virtual void Server_DestroyItem(const FInventoryItemsMap& ItemToDestroy);
+	virtual void Server_DestroyItem(const FInventorySlot& ItemToDestroy);
 
 	/** Get Items_Array C++ */
-	FORCEINLINE const TArray<FInventoryItemsMap>& GetItemsArray() const { return Items_Array; }
+	FORCEINLINE const TArray<FInventorySlot>& GetItemsArray() const { return Items_Array; }
 
 	/** Get Items_Array BP */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	FORCEINLINE void BP_GetItemsArray(TArray<FInventoryItemsMap>& OutResult) const { OutResult = GetItemsArray(); }
+	FORCEINLINE void BP_GetItemsArray(TArray<FInventorySlot>& OutResult) const { OutResult = GetItemsArray(); }
 	
 protected:
 	/** Widget class representing the Inventory */ 
@@ -271,7 +271,7 @@ protected:
 
 	/** Array of items in the inventory. Each entry contains a slot and the corresponding item stored in that slot. */
 	UPROPERTY(ReplicatedUsing = OnRep_Items_Array)
-	TArray<FInventoryItemsMap> Items_Array;
+	TArray<FInventorySlot> Items_Array;
 
 	/** Called when the Items_Array is replicated to the owner. */
 	UFUNCTION()
