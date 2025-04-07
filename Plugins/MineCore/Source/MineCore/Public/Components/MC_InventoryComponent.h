@@ -196,6 +196,10 @@ public:
 	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	bool FindValidSlot(uint8& OutSlot) const;
+	
+	/** Checks if the slot is valid */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	FORCEINLINE bool IsValidSlot(uint8 Slot) { return Slot <= MaxSlots; }
 
 	/** Adds an item to the specified inventory slot */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
@@ -263,10 +267,6 @@ public:
 	/** Get Items_Array BP */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	FORCEINLINE void BP_GetItemsArray(TArray<FInventorySlot>& OutResult) const { OutResult = GetItemsArray(); }
-
-	/** Checks if the slot is valid */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	FORCEINLINE bool IsValidSlot(uint8 Slot) { return Slot <= MaxSlots; }
 	
 protected:
 	/** Widget class representing the Inventory */ 
