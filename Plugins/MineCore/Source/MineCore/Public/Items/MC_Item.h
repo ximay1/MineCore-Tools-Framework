@@ -35,7 +35,7 @@ public:
 
 	/** Checks if the current item is stackable */
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	FORCEINLINE bool IsStackable() { return ItemConfig->MaxStackSize > 1; }
+	virtual bool IsStackable() { return ItemConfig->IsStackable(); }
 	
 protected:
 	/** Data Item Config */

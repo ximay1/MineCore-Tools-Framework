@@ -123,6 +123,8 @@ void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(uint8 Slot, con
 
 void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(const FItemDefinition& ItemDefinition)
 {
+	if (ItemDefinition.ItemConfig->Is)
+	
 	//Construct Item
 	UMC_Item* Item = Server_ConstructItem(ItemDefinition);
 	
