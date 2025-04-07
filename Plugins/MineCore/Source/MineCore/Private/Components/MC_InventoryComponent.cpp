@@ -155,6 +155,33 @@ void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(c
     Items_Array.Add(FInventorySlot(Slot, Item));
 }
 
+void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(uint8 SlotIndex, const FItemDefinition& ItemDefinition, int32 StacksToAdd)
+{
+	// Validate input parameters
+	if (!IsValidSlot(SlotIndex)|| StacksToAdd <= 0)
+	{
+		UE_LOGFMT(LogInventory, Error, "Invalid slot index ({0})", SlotIndex);
+		return;
+	}
+    
+	// Create temporary slot representation for search
+	FInventorySlot TargetSlot(SlotIndex, Server_ConstructItem(ItemDefinition));
+    
+	// Check if slot already contains matching item
+	if (int32 FoundIndex = Items_Array.Find(TargetSlot))
+	{
+		// Add stacks to existing item
+		FInventorySlot& ExistingSlot = Items_Array[FoundIndex];
+		ExistingSlot.Item->Server_AddToStack(StacksToAdd);
+	}
+	else
+	{
+		// Initialize new item with proper stack count
+		TargetSlot.Item->Server_AddToStack(StacksToAdd);
+		Items_Array.Add(TargetSlot);
+	}
+}
+
 void UMC_InventoryComponent::Server_RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
 {
 #if !UE_BUILD_SHIPPING

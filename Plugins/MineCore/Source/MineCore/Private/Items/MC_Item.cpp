@@ -13,8 +13,7 @@ int32 UMC_Item::Server_AddToStack(int32 Amount)
 	// Validate input parameters
 	if (Amount <= 0 || !IsStackable())
 	{
-		UE_LOGFMT(LogItem, Warning, "Invalid AddToStack request for {0}: Amount={1} (expected positive), Stackable={2}", 
-			GetName(), Amount, IsStackable());
+		UE_LOGFMT(LogItem, Warning, "Invalid AddToStack request for {0}: Amount={1} (expected positive), Stackable={2}", GetName(), Amount, IsStackable());
 		return 0;
 	}
 

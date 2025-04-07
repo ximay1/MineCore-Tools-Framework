@@ -205,6 +205,10 @@ public:
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void Server_AddItemToFirstAvailableSlot(const FItemDefinition& ItemDefinition);
 
+	/** Adds multiple stacks of an item to specified slot, merging with existing items if possible */
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
+	virtual void Server_AddItemStacksToSlot(uint8 SlotIndex, const FItemDefinition& ItemDefinition, int32 StacksToAdd);
+	
 	/** Removes an item from the inventory */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void Server_RemoveItemFromInventory(uint8 Slot, EItemAction ItemAction);
