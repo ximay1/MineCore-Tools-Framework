@@ -87,8 +87,17 @@ bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
 
 void UMC_InventoryComponent::Server_AddItemDefinitionToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
 {
-	//Construct Item
-	UMC_Item* Item = Server_ConstructItem(ItemDefinition);
+	//Add Item to slot
+	Server_AddItemToSlot(FInventorySlot(Slot, Server_ConstructItem(ItemDefinition)));
+}
+
+void UMC_InventoryComponent::Server_AddItemToSlot_Implementation(const FInventorySlot& InventorySlot)
+{
+	//Get Slot
+	uint8 Slot = InventorySlot.Slot;
+
+	//Get Item
+	UMC_Item* Item = InventorySlot.Item;
 	
 #if !UE_BUILD_SHIPPING
 	// Declare a flag to track the validity of the slot and item
@@ -123,9 +132,12 @@ void UMC_InventoryComponent::Server_AddItemDefinitionToSlot_Implementation(uint8
 
 void UMC_InventoryComponent::Server_AddItemDefinitionToFirstAvailableSlot_Implementation(const FItemDefinition& ItemDefinition)
 {
-	//Construct Item
-	UMC_Item* Item = Server_ConstructItem(ItemDefinition);
-	
+	//Construct Item 
+	Server_AddItemToFirstAvailableSlot_Implementation(Server_ConstructItem(ItemDefinition));
+}
+
+void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(UMC_Item* Item)
+{
 #if !UE_BUILD_SHIPPING
 	// Declare a flag to track the validity of the item
 	bool bIsValid = true;
@@ -152,21 +164,26 @@ void UMC_InventoryComponent::Server_AddItemDefinitionToFirstAvailableSlot_Implem
 	}
 
 	//Add to the inventory
-    Items_Array.Add(FInventorySlot(Slot, Item));
+	Items_Array.Add(FInventorySlot(Slot, Item));
 }
 
 void UMC_InventoryComponent::Server_AddItemDefinitionStacksToSlot_Implementation(uint8 SlotIndex, const FItemDefinition& ItemDefinition, int32 StacksToAdd)
 {
-	// Validate input parameters
-	if (!IsValidSlot(SlotIndex)|| StacksToAdd <= 0)
-	{
-		UE_LOGFMT(LogInventory, Error, "Invalid slot index ({0})", SlotIndex);
-		return;
-	}
-    
 	// Create temporary slot representation for search
 	FInventorySlot TargetSlot(SlotIndex, Server_ConstructItem(ItemDefinition));
     
+	Server_AddItemStacksToSlot(TargetSlot, StacksToAdd);
+}
+
+void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(const FInventorySlot& TargetSlot, int32 StacksToAdd)
+{
+	// Validate input parameters
+	if (!IsValidSlot(TargetSlot.Slot)|| StacksToAdd <= 0)
+	{
+		UE_LOGFMT(LogInventory, Error, "Invalid slot index ({0})", TargetSlot.Slot);
+		return;
+	}
+	
 	// Check if slot already contains matching item
 	if (int32 FoundIndex = Items_Array.Find(TargetSlot))
 	{
