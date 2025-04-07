@@ -21,9 +21,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	FORCEINLINE UMC_DT_ItemConfig* GetItemConfig() const { return ItemConfig; }
 
-	/** Set Item Config */
+	/** Set Item Config. Server-only*/
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	FORCEINLINE void SetItemConfig(UMC_DT_ItemConfig* NewItemConfig) { ItemConfig = NewItemConfig; }
+	FORCEINLINE void Server_SetItemConfig(UMC_DT_ItemConfig* NewItemConfig) { ItemConfig = NewItemConfig; }
 	
 	/** Attempts to cast the ItemConfig to the specified type */
 	template<typename ItemConfigClass = UMC_DT_ItemConfig>
@@ -36,11 +36,26 @@ public:
 	/** Checks if the current item is stackable */
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	virtual bool IsStackable() { return ItemConfig->IsStackable(); }
+
+	/** Increases item stack count by specified amount. Server-only */
+	UFUNCTION(BlueprintCallable, Category = "Item")
+    int32 Server_AddToStack(int32 Amount);
+
+	/** Decreases item stack count by specified amount */
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	int32 Server_RemoveFromStack(int32 Amount);
 	
 protected:
 	/** Data Item Config */
 	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
-	TObjectPtr<UMC_DT_ItemConfig> ItemConfig; 
+	TObjectPtr<UMC_DT_ItemConfig> ItemConfig;
+
+	/** Current quantity of items in this slot. For non-stackable items, value will always be 1 */
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CurrentStackCount, Category = "Item")
+	int32 CurrentStackCount = 1;
+
+	UFUNCTION()
+	virtual void OnRep_CurrentStackCount() {};
 };
 
 template <typename ItemConfigClass>
