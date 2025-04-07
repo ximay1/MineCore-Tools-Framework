@@ -33,6 +33,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	FORCEINLINE bool IsBetterThan(const UMC_Item* const Item) const { return (this->ItemConfig->ItemTier >= Item->ItemConfig->ItemTier); }
 
+	/** Checks if the current item is stackable */
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	FORCEINLINE bool IsStackable() { return ItemConfig->MaxStackSize > 1; }
+	
 protected:
 	/** Data Item Config */
 	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
