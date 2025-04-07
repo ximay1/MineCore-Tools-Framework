@@ -255,6 +255,10 @@ public:
 	/** Get Items_Array BP */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	FORCEINLINE void BP_GetItemsArray(TArray<FInventorySlot>& OutResult) const { OutResult = GetItemsArray(); }
+
+	/** Checks if the slot is valid */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	FORCEINLINE bool IsValidSlot(uint8 Slot) { return Slot <= MaxSlots; }
 	
 protected:
 	/** Widget class representing the Inventory */ 
