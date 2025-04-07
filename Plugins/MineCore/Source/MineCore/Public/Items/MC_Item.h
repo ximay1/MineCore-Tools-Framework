@@ -39,11 +39,11 @@ public:
 
 	/** Increases item stack count by specified amount. Server-only */
 	UFUNCTION(BlueprintCallable, Category = "Item")
-    int32 Server_AddToStack(int32 Amount);
+    int32 Server_AddToStack(int32 Amount = 1);
 
 	/** Decreases item stack count by specified amount */
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	int32 Server_RemoveFromStack(int32 Amount);
+	int32 Server_RemoveFromStack(int32 Amount = 1);
 	
 protected:
 	/** Data Item Config */
