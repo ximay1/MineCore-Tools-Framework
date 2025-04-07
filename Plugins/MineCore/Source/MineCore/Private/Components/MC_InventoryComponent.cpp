@@ -241,6 +241,26 @@ void UMC_InventoryComponent::Server_RemoveItemFromInventory_Implementation(uint8
 	};
 }
 
+void UMC_InventoryComponent::Server_SplitItemStack_Implementation(uint8 SourceSlot, int32 StacksToSplit)
+{
+	// Validate input parameter
+	if (!IsValidSlot(SourceSlot))
+	{
+		UE_LOGFMT(LogInventory, Error, "Invalid slot indexes ({0})", SourceSlot);
+		return;
+	}
+	
+	//Get Source InventorySlot
+	FInventorySlot& SourceInventorySlot = Items_Array[SourceSlot];
+
+	
+	//Construct Item
+	//TODO Check if the adresses are the same of Data Asset
+	Server_ConstructItem(FItemDefinition(SourceInventorySlot.Item->GetItemConfig()));
+	
+	//Server_AddItemToFirstAvailableSlot();
+}
+
 void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const
 {
 #if !UE_BUILD_SHIPPING

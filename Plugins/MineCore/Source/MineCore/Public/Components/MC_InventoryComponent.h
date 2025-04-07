@@ -212,7 +212,11 @@ public:
 	/** Removes an item from the inventory */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
 	virtual void Server_RemoveItemFromInventory(uint8 Slot, EItemAction ItemAction);
-
+	
+	/** Splits item stack from specified slot and creates new item with requested stack count */
+	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
+	virtual void Server_SplitItemStack(uint8 SourceSlot, int32 StacksToSplit);
+	
 	/** Get all items in the inventory */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	FORCEINLINE void GetInventoryItems(TArray<UMC_Item*>& OutItems) const { Items.GenerateValueArray(OutItems); }
