@@ -170,17 +170,17 @@ void UMC_InventoryComponent::Server_AddItemDefinitionStacksToSlot_Implementation
 	Server_AddItemStacksToSlot(FInventorySlot(SlotIndex, Server_ConstructItem(ItemDefinition)), StacksToAdd);
 }
 
-void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(const FInventorySlot& TargetSlot, int32 StacksToAdd)
+void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(const FInventorySlot& TargetInventorySlot, int32 StacksToAdd)
 {
 	// Validate input parameters
-	if (!IsValidSlot(TargetSlot.Slot)|| StacksToAdd <= 0)
+	if (!IsValidSlot(TargetInventorySlot.Slot)|| StacksToAdd <= 0)
 	{
-		UE_LOGFMT(LogInventory, Error, "Invalid slot index ({0})", TargetSlot.Slot);
+		UE_LOGFMT(LogInventory, Error, "Invalid slot index ({0})", TargetInventorySlot.Slot);
 		return;
 	}
 	
 	// Check if slot already contains matching item
-	if (int32 FoundIndex = Items_Array.Find(TargetSlot))
+	if (int32 FoundIndex = Items_Array.Find(TargetInventorySlot))
 	{
 		// Add stacks to existing item
 		FInventorySlot& ExistingSlot = Items_Array[FoundIndex];
@@ -189,8 +189,8 @@ void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(const FIn
 	else
 	{
 		// Initialize new item with proper stack count
-		TargetSlot.Item->Server_AddToStack(StacksToAdd);
-		Items_Array.Add(TargetSlot);
+		TargetInventorySlot.Item->Server_AddToStack(StacksToAdd);
+		Items_Array.Add(TargetInventorySlot);
 	}
 }
 
@@ -259,11 +259,12 @@ void UMC_InventoryComponent::Server_SplitItemStack_Implementation(uint8 SourceSl
 	if (!IsValidSlot(SourceSlot))
 	{
 		UE_LOGFMT(LogInventory, Error, "Invalid slot indexes ({0})", SourceSlot);
-		return;
+		//return;
 	}
 	
 	//Get Source InventorySlot
-	FInventorySlot& SourceInventorySlot = Items_Array[SourceSlot];
+	FInventorySlot& SourceInventorySlot = *Items_Array.FindByPredicate([&SourceSlot](const FInventorySlot& InventorySlot)
+		{ return InventorySlot.Slot == SourceSlot; });
 
 	
 	//Construct Item

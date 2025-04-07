@@ -223,7 +223,7 @@ public:
 
 	/** Adds multiple stacks of an item to specified slot, merging with existing items if possible */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
-	virtual void Server_AddItemStacksToSlot(const FInventorySlot& TargetSlot, int32 StacksToAdd);
+	virtual void Server_AddItemStacksToSlot(const FInventorySlot& TargetInventorySlot, int32 StacksToAdd);
 	
 	/** Removes an item from the inventory */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
