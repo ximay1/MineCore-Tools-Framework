@@ -85,6 +85,11 @@ bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
 	return false;
 }
 
+bool UMC_InventoryComponent::IsValidInventorySlot(const FInventorySlot& InventorySlot)
+{
+	return IsValid(InventorySlot.Item) && IsValidSlot(InventorySlot.Slot);
+}
+
 void UMC_InventoryComponent::Server_AddItemDefinitionToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
 {
 	Server_AddItemToSlot(FInventorySlot(Slot, Server_ConstructItem(ItemDefinition)));

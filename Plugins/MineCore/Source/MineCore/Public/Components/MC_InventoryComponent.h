@@ -129,6 +129,8 @@ USTRUCT(BlueprintType)
 struct FInventorySlot  
 {
 	GENERATED_BODY()
+
+public:
 	
 	/** Slot in the inventory that holds the item */
 	UPROPERTY()
@@ -200,6 +202,10 @@ public:
 	/** Checks if the slot is valid */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	FORCEINLINE bool IsValidSlot(uint8 Slot) { return Slot <= MaxSlots; }
+
+	/** Checks if the inventory slot is valid */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	bool IsValidInventorySlot(const FInventorySlot& InventorySlot);
 
 	/** Adds an item to the specified inventory slot */
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
