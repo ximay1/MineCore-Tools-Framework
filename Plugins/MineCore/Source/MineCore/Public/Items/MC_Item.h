@@ -31,7 +31,7 @@ public:
 
 	/** Checks if the current item has a higher or equal tier than the given item. */
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	bool IsBetterThan(const UMC_Item* const Item) const { return (this->ItemConfig->ItemTier >= Item->ItemConfig->ItemTier); }
+	FORCEINLINE bool IsBetterThan(const UMC_Item* const Item) const { return (this->ItemConfig->ItemTier >= Item->ItemConfig->ItemTier); }
 
 protected:
 	/** Data Item Config */
