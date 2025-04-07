@@ -273,12 +273,12 @@ void UMC_InventoryComponent::Server_SplitItemStack_Implementation(uint8 SourceSl
 		return InventorySlot.Slot == SourceSlot;
 	});
 
-	
-	//Construct Item
-	//TODO Check if the adresses are the same of Data Asset
-	Server_ConstructItem(FItemDefinition(SourceInventorySlot.Item->GetItemConfig()));
-	
-	//Server_AddItemDefinitionToFirstAvailableSlot();
+	//Check if the SourceInventorySlot isn't nullptr
+	if (IsValidInventorySlot(*SourceInventorySlot))
+	{
+		//Construct Item and add item to first available slot
+		Server_AddItemToFirstAvailableSlot(Server_ConstructItem(FItemDefinition(SourceInventorySlot->Item->GetItemConfig())));
+	}
 }
 
 void UMC_InventoryComponent::FindItemsByFilter(const FInventoryItemFilter& InventoryItemFilter, TArray<UMC_Item*>& OutItems) const
