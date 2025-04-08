@@ -19,6 +19,8 @@ void AMC_ItemBag::Server_InitializeItemBag(const FItemBagDefinition& Params)
 {
 	//Set Static Mesh
 	BagMeshComponent->SetStaticMesh(Params.BagMesh);
+
+	//TODO: Generate items here
 }
 
 void AMC_ItemBag::BeginPlay()
