@@ -23,8 +23,11 @@ public:
 	/** Get BagMeshComponent */
 	UFUNCTION(BlueprintGetter, Category = "Item Bag")
 	FORCEINLINE UStaticMeshComponent* GetBagMeshComponent() { return BagMeshComponent; }
-	
+
 protected:
+	/** Events */
+	virtual void BeginPlay() override;
+
 	/** Primary inventory system attached to this bag item. Handles all item storage and transfer operations */
 	UPROPERTY(BlueprintReadOnly, Category = "Item Bag")
 	TObjectPtr<UMC_InventoryComponent> InventoryComponent;
