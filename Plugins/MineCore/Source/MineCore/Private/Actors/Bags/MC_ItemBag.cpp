@@ -2,6 +2,5 @@
 
 AMC_ItemBag::AMC_ItemBag()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
+	PrimaryActorTick.bCanEverTick = false;
 }
