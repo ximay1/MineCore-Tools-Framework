@@ -15,6 +15,12 @@ AMC_ItemBag::AMC_ItemBag()
 	InventoryComponent = CreateDefaultSubobject<UMC_InventoryComponent>(FName("Inventory"));
 }
 
+void AMC_ItemBag::Server_InitializeItemBag(const FItemBagDefinition& Params)
+{
+	//Set Static Mesh
+	BagMeshComponent->SetStaticMesh(Params.BagMesh);
+}
+
 void AMC_ItemBag::BeginPlay()
 {
 	Super::BeginPlay();

@@ -27,6 +27,10 @@ public:
 	/** Constructor */
 	AMC_ItemBag();
 
+	/** Initialize Item Bag */
+	UFUNCTION(BlueprintCallable, Category = "Item Bag")
+	virtual void Server_InitializeItemBag(const FItemBagDefinition& Params);
+	
 	/** Get InventoryComponent */
 	UFUNCTION(BlueprintGetter, Category = "Item Bag")
 	FORCEINLINE UMC_InventoryComponent* GetInventoryComponent() { return InventoryComponent; }
