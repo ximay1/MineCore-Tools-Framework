@@ -7,6 +7,17 @@
 /** Forward Declarations */
 class UMC_InventoryComponent;
 
+/** Contains all initialization data for an ItemBag actor */
+USTRUCT(BlueprintType)
+struct FItemBagDefinition
+{
+	GENERATED_BODY()
+	
+	/** Physical mesh representing the bag */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UStaticMesh> BagMesh;
+};
+
 UCLASS()
 class MINECORE_API AMC_ItemBag : public AActor
 {
