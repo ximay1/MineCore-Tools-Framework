@@ -4,16 +4,18 @@
 #include "Engine/AssetManager.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "MC_LogChannels.h"
+#include "DeveloperSettings/MC_DeveloperSettings.h"
 #include "Engine/AssetManagerSettings.h"
 
 void UMC_ItemManager::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
-    //LoadAllItemsFromFolder()
+    //Load Items from folders
+    LoadAllItemsFromFolders(GetDefault<UMC_DeveloperSettings>()->PrimaryAssetType);
 }
 
-void UMC_ItemManager::LoadAllItemsFromFolder(const FPrimaryAssetType& PrimaryAssetType)
+void UMC_ItemManager::LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType)
 {
     // Execute only on the server
     if (UKismetSystemLibrary::IsServer(GetWorld()))
