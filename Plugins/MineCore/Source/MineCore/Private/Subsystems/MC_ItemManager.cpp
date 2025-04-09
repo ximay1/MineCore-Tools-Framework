@@ -11,8 +11,18 @@ void UMC_ItemManager::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
+    //Get Default UMC_DeveloperSettings
+    const UMC_DeveloperSettings* MineCore_DeveloperSettings = GetDefault<UMC_DeveloperSettings>();
+    
+    //Get PrimaryAssetType
+    FPrimaryAssetType PrimaryAssetType = MineCore_DeveloperSettings->PrimaryAssetType;
+
+    //If PrimaryAssetType isnt' valid, assign default value "ItemConfig"
+    if (!PrimaryAssetType.IsValid())
+        PrimaryAssetType = "ItemConfig";
+        
     //Load Items from folders
-    LoadAllItemsFromFolders(GetDefault<UMC_DeveloperSettings>()->PrimaryAssetType);
+    LoadAllItemsFromFolders(PrimaryAssetType);
 }
 
 void UMC_ItemManager::LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType)
