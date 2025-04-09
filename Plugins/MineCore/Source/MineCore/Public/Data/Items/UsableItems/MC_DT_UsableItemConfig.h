@@ -11,7 +11,7 @@ class MINECORE_API UMC_DT_UsableItemConfig : public UMC_DT_ItemConfig
 	GENERATED_BODY()
 
 public:
-	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override { return FPrimaryAssetId("UsableItemConfig", GetFName()); }
+	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override { return Super::GetPrimaryAssetId(); }
 
 	/** The maximum durability the item can have. Must be greater than 0. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Usable Item", meta = (ClampMin = "0.01", InlineEditConditionToggle))

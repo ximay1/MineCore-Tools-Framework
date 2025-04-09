@@ -11,5 +11,5 @@ class MINECORE_API UMC_DT_MiningToolItemConfig : public UMC_DT_UsableItemConfig
 	GENERATED_BODY()
 
 public:
-	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override { return FPrimaryAssetId("MiningToolItemConfig", GetFName()); }
+	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override { return Super::GetPrimaryAssetId(); }
 };
