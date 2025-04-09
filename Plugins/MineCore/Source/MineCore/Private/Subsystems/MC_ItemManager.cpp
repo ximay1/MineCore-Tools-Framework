@@ -42,9 +42,10 @@ void UMC_ItemManager::LoadAllItemsFromFolder(const FPrimaryAssetType& PrimaryAss
         
         // Configure asset search parameters
         FARFilter Filter;
-        Filter.bRecursivePaths = true;                                                     // Search subdirectories recursively
-        Filter.PackagePaths.Append(PrimaryAssetTypeInfo->GetDirectories());         // Target directory paths
-        Filter.ClassPaths.Add(UMC_DT_ItemConfig::StaticClass()->GetClassPathName());  // Filter by specific asset class
+        Filter.bRecursivePaths = true;                                                         // Search subdirectories recursively
+        Filter.ClassPaths.Add(UMC_DT_ItemConfig::StaticClass()->GetClassPathName());      // Filter by specific asset class
+        Algo::Transform(PrimaryAssetTypeInfo->GetDirectories(), Filter.PackagePaths,  // Target directory paths
+            [](const FDirectoryPath& Str) { return FName(*Str.Path); });
 
         // Find all assets matching the filter criteria
         TArray<FAssetData> FoundAssetData;
