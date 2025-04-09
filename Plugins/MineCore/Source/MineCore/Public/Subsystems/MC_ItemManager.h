@@ -19,7 +19,7 @@ public:
 protected:
 
 	/** Load Items Definitions */
-	void LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType = "ItemConfig");
+	void Server_LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType = "ItemConfig");
 	
 	/** Item storage */
 	UPROPERTY()
