@@ -7,11 +7,6 @@ UMC_DeveloperSettings::UMC_DeveloperSettings()
 	SectionName = "Mine Core";
 }
 
-FName UMC_DeveloperSettings::GetCategoryName() const
-{
-	return FName("Project");
-}
-
 #if WITH_EDITOR
 FText UMC_DeveloperSettings::GetSectionText() const
 {
