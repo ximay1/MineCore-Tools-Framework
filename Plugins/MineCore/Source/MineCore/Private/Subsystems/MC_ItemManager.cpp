@@ -4,6 +4,7 @@
 #include "Engine/AssetManager.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "MC_LogChannels.h"
+#include "Engine/AssetManagerSettings.h"
 
 void UMC_ItemManager::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -12,7 +13,7 @@ void UMC_ItemManager::Initialize(FSubsystemCollectionBase& Collection)
     //LoadAllItemsFromFolder()
 }
 
-void UMC_ItemManager::LoadAllItemsFromFolder(const FString& PathFolder, const FPrimaryAssetType& PrimaryAssetType)
+void UMC_ItemManager::LoadAllItemsFromFolder(const FPrimaryAssetType& PrimaryAssetType)
 {
     // Execute only on the server
     if (UKismetSystemLibrary::IsServer(GetWorld()))
@@ -20,10 +21,29 @@ void UMC_ItemManager::LoadAllItemsFromFolder(const FString& PathFolder, const FP
         // Get the Asset Registry module
         FAssetRegistryModule& AssetRegistryModule = FModuleManager::GetModuleChecked<FAssetRegistryModule>("AssetRegistry");
 
+        //Get Asset Manager Settings
+        const UAssetManagerSettings* AssetManagerSettings = GetDefault<UAssetManagerSettings>();
+        
+        // Attempt to locate the asset type configuration from project settings
+        // This verifies the type was properly registered in Asset Manager
+        const FPrimaryAssetTypeInfo* PrimaryAssetTypeInfo = AssetManagerSettings->PrimaryAssetTypesToScan.FindByPredicate(
+            [&PrimaryAssetType](const FPrimaryAssetTypeInfo& TypeInfo)
+            {
+                return TypeInfo.PrimaryAssetType == PrimaryAssetType;
+            });
+
+        // Safety check - this should never happen if types are properly configured
+        // but protects against crashes if project setup is incomplete
+        if (!PrimaryAssetTypeInfo)
+        {
+            // Log warning 
+            UE_LOGFMT(LogItem, Warning, "Missing PrimaryAssetType configuration for: {0}", PrimaryAssetType.ToString());
+        }
+        
         // Configure asset search parameters
         FARFilter Filter;
-        Filter.PackagePaths.Add(*PathFolder);     // Target directory path
-        Filter.bRecursivePaths = true;            // Search subdirectories recursively
+        Filter.bRecursivePaths = true;                                                     // Search subdirectories recursively
+        Filter.PackagePaths.Append(PrimaryAssetTypeInfo->GetDirectories());         // Target directory paths
         Filter.ClassPaths.Add(UMC_DT_ItemConfig::StaticClass()->GetClassPathName());  // Filter by specific asset class
 
         // Find all assets matching the filter criteria
@@ -63,7 +83,7 @@ void UMC_ItemManager::LoadAllItemsFromFolder(const FString& PathFolder, const FP
                     else
                     {
                         // Log warning
-                        UE_LOGFMT(LogItem, Warning, "Failed to cast asset %s to UMC_DT_ItemConfig", AssetId.ToString());
+                        UE_LOGFMT(LogItem, Warning, "Failed to cast asset {0} to UMC_DT_ItemConfig", AssetId.ToString());
                     }
                 }
             }));
