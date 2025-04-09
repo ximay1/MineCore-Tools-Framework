@@ -40,7 +40,8 @@ public class MineCore : ModuleRules
 				"SlateCore",
 				"UMG",
 				"Json",
-				"JsonUtilities"
+				"JsonUtilities",
+				"AssetRegistry"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
