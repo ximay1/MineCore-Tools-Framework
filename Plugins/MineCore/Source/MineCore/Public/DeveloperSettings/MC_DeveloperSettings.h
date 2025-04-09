@@ -12,4 +12,12 @@ class MINECORE_API UMC_DeveloperSettings : public UDeveloperSettings
 public:
 	/** Constructor */
 	UMC_DeveloperSettings();
+	
+	//~ Begin UDeveloperSettings interface
+	virtual FName GetCategoryName() const;
+#if WITH_EDITOR
+	virtual FText GetSectionText() const override;
+	virtual FText GetSectionDescription() const override;
+#endif
+	//~ End UDeveloperSettings interface
 };

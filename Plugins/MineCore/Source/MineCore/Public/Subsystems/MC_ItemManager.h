@@ -15,7 +15,7 @@ class MINECORE_API UMC_ItemManager : public UWorldSubsystem
 public:
 	/** Events */
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
-
+	
 protected:
 
 	/** Load Items Definitions */
