@@ -46,6 +46,7 @@ void UMC_ItemManager::LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAs
         FARFilter Filter;
         Filter.bRecursivePaths = true;                                                         // Search subdirectories recursively
         Filter.ClassPaths.Add(UMC_DT_ItemConfig::StaticClass()->GetClassPathName());      // Filter by specific asset class
+        Filter.bRecursiveClasses = true;                                                       // Include all child classes
         Algo::Transform(PrimaryAssetTypeInfo->GetDirectories(), Filter.PackagePaths,  // Target directory paths
             [](const FDirectoryPath& Str) { return FName(*Str.Path); });
 
@@ -53,42 +54,50 @@ void UMC_ItemManager::LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAs
         TArray<FAssetData> FoundAssetData;
         AssetRegistryModule.Get().GetAssets(Filter, FoundAssetData);
 
-        // Prepare list of asset IDs for asynchronous loading
-        TArray<FPrimaryAssetId> AssetIdsToLoad;
-        AssetIdsToLoad.Reserve(FoundAssetData.Num());
-
-        // Collect valid primary asset IDs
-        for (const FAssetData& AssetData : FoundAssetData)
+        //Checks if the FoundAssetData is greater than 0
+        if (FoundAssetData.Num() > 0)
         {
-            if (AssetData.IsValid())
-            {
-                AssetIdsToLoad.Add(AssetData.GetPrimaryAssetId());
-            }
-        }
+            // Prepare list of asset IDs for asynchronous loading
+            TArray<FPrimaryAssetId> AssetIdsToLoad;
+            AssetIdsToLoad.Reserve(FoundAssetData.Num());
 
-        // Start asynchronous loading of assets
-        UAssetManager::Get().LoadPrimaryAssets(AssetIdsToLoad, {}, FStreamableDelegate::CreateLambda([this, PrimaryAssetType]()
+            // Collect valid primary asset IDs
+            for (const FAssetData& AssetData : FoundAssetData)
             {
-                // Process loaded assets after async load completes
-                TArray<UObject*> LoadedObjects;
-                UAssetManager::Get().GetPrimaryAssetObjectList(PrimaryAssetType, LoadedObjects);
-
-                // Populate the item database
-                for (UObject* LoadedObject : LoadedObjects)
+                if (AssetData.IsValid())
                 {
-                    //Get Primary Asset ID
-                    const FPrimaryAssetId AssetId = LoadedObject->GetPrimaryAssetId();
-                    
-                    if (UMC_DT_ItemConfig* ItemConfig = Cast<UMC_DT_ItemConfig>(LoadedObject))
-                    {
-                        ItemDataStorage.Add(AssetId, ItemConfig);
-                    }
-                    else
-                    {
-                        // Log warning
-                        UE_LOGFMT(LogItem, Warning, "Failed to cast asset {0} to UMC_DT_ItemConfig", AssetId.ToString());
-                    }
+                    AssetIdsToLoad.Add(AssetData.GetPrimaryAssetId());
                 }
-            }));
+            }
+
+            // Start asynchronous loading of assets
+            UAssetManager::Get().LoadPrimaryAssets(AssetIdsToLoad, {}, FStreamableDelegate::CreateLambda([this, PrimaryAssetType]()
+                {
+                    // Process loaded assets after async load completes
+                    TArray<UObject*> LoadedObjects;
+                    UAssetManager::Get().GetPrimaryAssetObjectList(PrimaryAssetType, LoadedObjects);
+
+                    // Populate the item database
+                    for (UObject* LoadedObject : LoadedObjects)
+                    {
+                        //Get Primary Asset ID
+                        const FPrimaryAssetId AssetId = LoadedObject->GetPrimaryAssetId();
+                    
+                        if (UMC_DT_ItemConfig* ItemConfig = Cast<UMC_DT_ItemConfig>(LoadedObject))
+                        {
+                            ItemDataStorage.Add(AssetId, ItemConfig);
+                        }
+                        else
+                        {
+                            // Log warning
+                            UE_LOGFMT(LogItem, Warning, "Failed to cast asset {0} to UMC_DT_ItemConfig", AssetId.ToString());
+                        }
+                    }
+                }));
+        }
+        else
+        {
+            UE_LOGFMT(LogItem, Warning, "No valid assets found in the configured directories");
+        }
     }
 }
