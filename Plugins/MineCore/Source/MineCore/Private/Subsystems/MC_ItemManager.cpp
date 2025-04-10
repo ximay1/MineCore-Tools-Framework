@@ -29,6 +29,18 @@ void UMC_ItemManager::Initialize(FSubsystemCollectionBase& Collection)
     }
 }
 
+int32 UMC_ItemManager::CalculateTotalItemsPower() const
+{
+    int32 TotalPower = 0;
+    
+    //Iterate through the ItemDataStorage and sum up the powers
+    for (const auto& Item : ItemDataStorage)
+    {
+        TotalPower += Item.Value->PowerStats.Power;
+    }
+    return TotalPower;
+}
+
 void UMC_ItemManager::Server_LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType)
 {
     // Get the Asset Registry module
