@@ -43,6 +43,21 @@ enum class EItemCategory : uint8
 	Tool		UMETA(DisplayName = "Tools"),         
 };
 
+/** Structure representing the power stats */
+USTRUCT(BlueprintType)
+struct FItemPowerStats
+{
+	GENERATED_BODY()
+
+	/** Power of Item */
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Item Power")
+	int32 Power = {};
+	
+	/** Base Power of Item */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Power", meta = (ClampMin = 0))
+	int32 BasePower = {};
+};
+
 /** Base class for item configurations. Defines common properties for all items. */
 UCLASS()
 class MINECORE_API UMC_DT_ItemConfig : public UPrimaryDataAsset
@@ -51,23 +66,28 @@ class MINECORE_API UMC_DT_ItemConfig : public UPrimaryDataAsset
 
 public:
 	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override { return FPrimaryAssetId("ItemConfig", GetFName()); }
-
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	
 	/** Class of item */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
 	TSubclassOf<UMC_Item> ItemClass;
 
 	/** Item tier */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
-	EItemTier ItemTier;
+	EItemTier ItemTier = {};
 	
 	/** The category of the item (e.g., weapon, resource, armor, etc.) */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
-	EItemCategory ItemCategory;
+	EItemCategory ItemCategory = {};
 
 	/** Rarity of the item */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (InlineEditConditionToggle))
-	EItemRarity ItemRarity;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
+	EItemRarity ItemRarity = {};
+	
+	/** Power of the Item */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
+	FItemPowerStats PowerStats;
+	
 	/** Weight */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")
 	float Weight = 0.0f;
@@ -91,4 +111,8 @@ public:
 	/** Checks if the item is stackable */
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	FORCEINLINE bool IsStackable() { return MaxStackSize > 1; }
+
+	/** Recalculate power */
+	UFUNCTION(BlueprintCallable, Category = "Item Config")
+	virtual int32 RecalculatePower();
 };
