@@ -32,22 +32,22 @@ void AMC_ItemBag::Server_InitializeRandomizedBag()
 	}
 }
 
-void AMC_ItemBag::Server_InitializeBagWithItems(const TArray<UMC_DT_ItemConfig*>& SpecificItems)
+void AMC_ItemBag::Server_InitializeBagWithItemDefinitions(const TArray<FItemDefinition>& ItemDefinitions)
 {
 	//Add these Item Configs to the inventory
-    for (UMC_DT_ItemConfig* ItemConfig : SpecificItems)
+    for (const FItemDefinition& ItemConfig : ItemDefinitions)
     {
-    	InventoryComponent->Server_AddItemDefinitionToFirstAvailableSlot(FItemDefinition(ItemConfig));
+    	InventoryComponent->Server_AddItemDefinitionToFirstAvailableSlot(ItemConfig);
     }
 }
 
-void AMC_ItemBag::Server_InitializeItemBag(const bool bShouldRandomize, const TArray<UMC_DT_ItemConfig*>& SpecificItems)
+void AMC_ItemBag::Server_InitializeBagWithItems(const TArray<UMC_Item*>& Items)
 {
-	//Initialize Item Bag
-	if (bShouldRandomize)
-		Server_InitializeRandomizedBag();
-	else
-		Server_InitializeBagWithItems(SpecificItems);
+	//Add these Items to the inventory
+	for (UMC_Item* Item : Items)
+	{
+		InventoryComponent->Server_AddItemToFirstAvailableSlot(Item);
+	}
 }
 
 void AMC_ItemBag::BeginPlay()

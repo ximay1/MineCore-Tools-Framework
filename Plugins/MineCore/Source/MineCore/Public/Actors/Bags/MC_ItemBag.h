@@ -22,11 +22,11 @@ public:
 
 	/** Initializes bag with predefined items (no randomization) */ 
 	UFUNCTION(BlueprintCallable, Category = "Item Bag")
-	virtual void Server_InitializeBagWithItems(const TArray<UMC_DT_ItemConfig*>& SpecificItems);
+	virtual void Server_InitializeBagWithItemDefinitions(const TArray<FItemDefinition>& ItemDefinitions);
 	
-	/** Initializes item bag using either random items or predefined list based on bShouldRandomize */
-	UFUNCTION(BlueprintCallable, Category = "Item Bag")
-	virtual void Server_InitializeItemBag(const bool bShouldRandomize, const TArray<UMC_DT_ItemConfig*>& SpecificItems);
+	/** Initializes bag with items (no randomization) */ 
+    UFUNCTION(BlueprintCallable, Category = "Item Bag")
+    virtual void Server_InitializeBagWithItems(const TArray<UMC_Item*>& Items);
 	
 	/** Get InventoryComponent */
 	UFUNCTION(BlueprintGetter, Category = "Item Bag")
