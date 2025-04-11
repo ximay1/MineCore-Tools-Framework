@@ -89,7 +89,7 @@ void UMC_ItemManager::Server_GenerateWeightedRandomItems(const int32 NumItemsToG
 
 void UMC_ItemManager::GenerateItemIdentifier(const FString& ItemName, EItemTier Tier, EItemRarity Rarity, FName& OutName)
 {
-    OutName = FName(FString::Printf(ItemName + TEXT("_%d_%d"), static_cast<uint8>(Tier), static_cast<uint8>(Rarity)));
+    OutName = FName(FString::Printf(TEXT("%s_%d_%d"), *ItemName, static_cast<uint8>(Tier), static_cast<uint8>(Rarity)));
 }
 
 void UMC_ItemManager::Server_LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType)
