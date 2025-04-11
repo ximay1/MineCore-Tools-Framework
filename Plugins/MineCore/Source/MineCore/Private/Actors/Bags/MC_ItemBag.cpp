@@ -16,7 +16,7 @@ AMC_ItemBag::AMC_ItemBag()
 	InventoryComponent = CreateDefaultSubobject<UMC_InventoryComponent>(FName("Inventory"));
 }
 
-void AMC_ItemBag::Server_InitializeRandomizedBag(const FItemBagDefinition& Params)
+void AMC_ItemBag::Server_InitializeRandomizedBag()
 {
 	//Get Item Manager
 	UMC_ItemManager* ItemManager = GetWorld()->GetSubsystem<UMC_ItemManager>();
@@ -32,7 +32,7 @@ void AMC_ItemBag::Server_InitializeRandomizedBag(const FItemBagDefinition& Param
 	}
 }
 
-void AMC_ItemBag::Server_InitializeBagWithItems(const FItemBagDefinition& Params, const TArray<UMC_DT_ItemConfig*>& SpecificItems)
+void AMC_ItemBag::Server_InitializeBagWithItems(const TArray<UMC_DT_ItemConfig*>& SpecificItems)
 {
 	//Add these Item Configs to the inventory
     for (UMC_DT_ItemConfig* ItemConfig : SpecificItems)
@@ -41,16 +41,13 @@ void AMC_ItemBag::Server_InitializeBagWithItems(const FItemBagDefinition& Params
     }
 }
 
-void AMC_ItemBag::Server_InitializeItemBag(const FItemBagDefinition& Params, const bool bShouldRandomize, const TArray<UMC_DT_ItemConfig*>& SpecificItems)
+void AMC_ItemBag::Server_InitializeItemBag(const bool bShouldRandomize, const TArray<UMC_DT_ItemConfig*>& SpecificItems)
 {
-	//Set Static Mesh
-	BagMeshComponent->SetStaticMesh(Params.BagMesh);
-
 	//Initialize Item Bag
 	if (bShouldRandomize)
-		Server_InitializeRandomizedBag(Params);
+		Server_InitializeRandomizedBag();
 	else
-		Server_InitializeBagWithItems(Params, SpecificItems);
+		Server_InitializeBagWithItems(SpecificItems);
 }
 
 void AMC_ItemBag::BeginPlay()

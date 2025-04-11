@@ -7,17 +7,6 @@
 /** Forward Declarations */
 class UMC_InventoryComponent;
 
-/** Contains all initialization data for an ItemBag actor */
-USTRUCT(BlueprintType)
-struct FItemBagDefinition
-{
-	GENERATED_BODY()
-	
-	/** Physical mesh representing the bag */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<UStaticMesh> BagMesh;
-};
-
 UCLASS()
 class MINECORE_API AMC_ItemBag : public AActor
 {
@@ -29,15 +18,15 @@ public:
 
 	/** Initializes bag with random items based on weight parameters */
 	UFUNCTION(BlueprintCallable, Category = "Item Bag")
-	virtual void Server_InitializeRandomizedBag(const FItemBagDefinition& Params);
+	virtual void Server_InitializeRandomizedBag();
 
 	/** Initializes bag with predefined items (no randomization) */ 
 	UFUNCTION(BlueprintCallable, Category = "Item Bag")
-	virtual void Server_InitializeBagWithItems(const FItemBagDefinition& Params, const TArray<UMC_DT_ItemConfig*>& SpecificItems);
+	virtual void Server_InitializeBagWithItems(const TArray<UMC_DT_ItemConfig*>& SpecificItems);
 	
 	/** Initializes item bag using either random items or predefined list based on bShouldRandomize */
 	UFUNCTION(BlueprintCallable, Category = "Item Bag")
-	virtual void Server_InitializeItemBag(const FItemBagDefinition& Params, const bool bShouldRandomize, const TArray<UMC_DT_ItemConfig*>& SpecificItems);
+	virtual void Server_InitializeItemBag(const bool bShouldRandomize, const TArray<UMC_DT_ItemConfig*>& SpecificItems);
 	
 	/** Get InventoryComponent */
 	UFUNCTION(BlueprintGetter, Category = "Item Bag")
@@ -52,10 +41,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	/** Primary inventory system attached to this bag item. Handles all item storage and transfer operations */
-	UPROPERTY(BlueprintReadOnly, Category = "Item Bag")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Bag")
 	TObjectPtr<UMC_InventoryComponent> InventoryComponent;
 
 	/** Visual representation of the bag in the game world. */
-	UPROPERTY(BlueprintReadOnly, Category = "Item Bag")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Bag")
 	TObjectPtr<UStaticMeshComponent> BagMeshComponent;
 };
