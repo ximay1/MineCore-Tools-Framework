@@ -8,6 +8,7 @@
 class UMC_Item;
 class UMC_DT_ItemConfig;
 class UMC_DT_DefaultInventoryData;
+class AMC_ItemBag;
 enum class EItemTier : uint8;
 enum class EItemCategory : uint8;
 enum class EItemRarity : uint8;
@@ -311,6 +312,10 @@ protected:
 	UFUNCTION()
 	void OnRep_Items_Array();
 
+	/** Item Bag class to spawn */
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component")
+	TSubclassOf<AMC_ItemBag> ItemBagClass;
+
 #if WITH_EDITORONLY_DATA
 	
 	/** This data asset contains default inventory, it will be applied on the begin play */
@@ -320,6 +325,6 @@ protected:
 #endif
 	
 	/** Maximum number of slots in the inventory */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory Component")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Component")
 	uint8 MaxSlots;
 };
