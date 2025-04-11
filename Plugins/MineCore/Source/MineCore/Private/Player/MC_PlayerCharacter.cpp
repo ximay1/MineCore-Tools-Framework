@@ -24,7 +24,7 @@ void AMC_PlayerCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	//Initialize Inventory
-	InventoryComponent->Server_InitializeInventory();
+	InventoryComponent->Server_InitializeInventory(MaxSlots);
 
 	//Initialize Mining System Component
 	MiningSystemComponent->InitializeMiningSystemComponent();
