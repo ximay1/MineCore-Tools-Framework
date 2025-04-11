@@ -29,16 +29,62 @@ void UMC_ItemManager::Initialize(FSubsystemCollectionBase& Collection)
     }
 }
 
-int32 UMC_ItemManager::CalculateTotalItemsPower() const
+int32 UMC_ItemManager::CalculateTotalPower(TArray<int32>& OutIndividualPowers) const
 {
     int32 TotalPower = 0;
+
+    // Pre-allocate memory to prevent multiple reallocations
+    OutIndividualPowers.Reserve(ItemDataStorage.Num());
     
-    //Iterate through the ItemDataStorage and sum up the powers
-    for (const auto& Item : ItemDataStorage)
+    // Aggregate power values and populate output array
+    for (const auto& [ItemId, ItemConfig] : ItemDataStorage)
     {
-        TotalPower += Item.Value->PowerStats.Power;
+        const int32 ItemPower = ItemConfig->PowerStats.Power;
+        OutIndividualPowers.Add(ItemPower);
+        TotalPower += ItemPower;
     }
+    
     return TotalPower;
+}
+
+void UMC_ItemManager::GenerateWeightedRandomItems(const int32 NumItemsToGenerate, TArray<UMC_DT_ItemConfig*>& OutSelectedItems) const
+{
+    // Initialize containers
+    TArray<int32> PowerWeights;
+    TArray<UMC_DT_ItemConfig*> AllItemConfigs;
+    
+    // Extract all configs from map
+    ItemDataStorage.GenerateValueArray(AllItemConfigs);
+    
+    // Calculate total weight (power) and get individual weights
+    const int32 TotalWeight = CalculateTotalPower(PowerWeights);
+
+    // Guard against invalid input
+    if(TotalWeight <= 0 || AllItemConfigs.IsEmpty()) 
+    {
+        UE_LOGFMT(LogItem, Warning, "Invalid items for weighted selection");
+        return;
+    }
+
+    // Perform weighted random selection
+    for(int32 SelectionCount = 0; SelectionCount < NumItemsToGenerate; SelectionCount++)
+    {
+        // Generate random threshold [1, TotalWeight]
+        const int32 RandomWeightThreshold = FMath::RandRange(1, TotalWeight);
+        
+        // Find item crossing the weight threshold
+        int32 CumulativeWeight = 0;
+        for(int32 ItemIndex = 0; ItemIndex < PowerWeights.Num(); ItemIndex++)
+        {
+            CumulativeWeight += PowerWeights[ItemIndex];
+            
+            if(CumulativeWeight >= RandomWeightThreshold)
+            {
+                OutSelectedItems.Add(AllItemConfigs[ItemIndex]);
+                break;
+            }
+        }
+    }
 }
 
 void UMC_ItemManager::Server_LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType)
