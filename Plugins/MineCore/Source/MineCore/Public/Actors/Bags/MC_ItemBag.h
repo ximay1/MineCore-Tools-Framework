@@ -27,9 +27,17 @@ public:
 	/** Constructor */
 	AMC_ItemBag();
 
-	/** Initialize Item Bag */
+	/** Initializes bag with random items based on weight parameters */
 	UFUNCTION(BlueprintCallable, Category = "Item Bag")
-	virtual void Server_InitializeItemBag(const FItemBagDefinition& Params);
+	virtual void Server_InitializeRandomizedBag(const FItemBagDefinition& Params);
+
+	/** Initializes bag with predefined items (no randomization) */ 
+	UFUNCTION(BlueprintCallable, Category = "Item Bag")
+	virtual void Server_InitializeBagWithItems(const FItemBagDefinition& Params, const TArray<UMC_DT_ItemConfig*>& SpecificItems);
+	
+	/** Initializes item bag using either random items or predefined list based on bShouldRandomize */
+	UFUNCTION(BlueprintCallable, Category = "Item Bag")
+	virtual void Server_InitializeItemBag(const FItemBagDefinition& Params, const bool bShouldRandomize, const TArray<UMC_DT_ItemConfig*>& SpecificItems);
 	
 	/** Get InventoryComponent */
 	UFUNCTION(BlueprintGetter, Category = "Item Bag")
