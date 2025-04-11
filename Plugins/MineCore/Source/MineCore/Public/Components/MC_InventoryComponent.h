@@ -316,6 +316,6 @@ protected:
 #endif
 	
 	/** Maximum number of slots in the inventory */
-	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component", meta = (AllowPrivateAccess))
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
 	uint8 MaxSlots;
 };
