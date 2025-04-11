@@ -20,7 +20,7 @@ enum class EItemTier : uint8
 	Tier7	UMETA(DisplayName = "Tier 7"),
 	Tier8	UMETA(DisplayName = "Tier 8"),
 	Tier9	UMETA(DisplayName = "Tier 9"),
-	Tier10	UMETA(DisplayName = "Tier 10"),
+	Tier10	UMETA(DisplayName = "Tier 10")
 };
 
 /** Enum representing the rarity of an item */
@@ -32,7 +32,7 @@ enum class EItemRarity : uint8
 	Rare		UMETA(DisplayName = "Rare"),
 	Epic		UMETA(DisplayName = "Epic"),
 	Legendary	UMETA(DisplayName = "Legendary"),
-	Mythic		UMETA(DisplayName = "Mythic"),
+	Mythic		UMETA(DisplayName = "Mythic")
 };
 
 /** Item representing the category of an item */
