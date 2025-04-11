@@ -1,5 +1,6 @@
 #include "Actors/Bags/MC_ItemBag.h"
 #include "Components/MC_InventoryComponent.h"
+#include "Subsystems/MC_ItemManager.h"
 
 AMC_ItemBag::AMC_ItemBag()
 {
@@ -20,7 +21,18 @@ void AMC_ItemBag::Server_InitializeItemBag(const FItemBagDefinition& Params)
 	//Set Static Mesh
 	BagMeshComponent->SetStaticMesh(Params.BagMesh);
 
-	//TODO: Generate items here
+	//Get Item Manager
+	UMC_ItemManager* ItemManager = GetWorld()->GetSubsystem<UMC_ItemManager>();
+
+	//Generate Items
+	TArray<UMC_DT_ItemConfig*> ItemConfigs;
+	ItemManager->Server_GenerateWeightedRandomItems(6, ItemConfigs);
+
+	//Add these Item Configs to the inventory
+	for (UMC_DT_ItemConfig*& ItemConfig : ItemConfigs)
+	{
+		InventoryComponent->Server_AddItemDefinitionToFirstAvailableSlot(FItemDefinition(ItemConfig));
+	}
 }
 
 void AMC_ItemBag::BeginPlay()
