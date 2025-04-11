@@ -87,6 +87,11 @@ void UMC_ItemManager::GenerateWeightedRandomItems(const int32 NumItemsToGenerate
     }
 }
 
+void UMC_ItemManager::GenerateItemIdentifier(const FString& ItemName, EItemTier Tier, EItemRarity Rarity, FName& OutName)
+{
+    OutName = FName(FString::Printf(ItemName + TEXT("_%d_%d"), static_cast<uint8>(Tier), static_cast<uint8>(Rarity)));
+}
+
 void UMC_ItemManager::Server_LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType)
 {
     // Get the Asset Registry module
@@ -154,7 +159,12 @@ void UMC_ItemManager::Server_LoadAllItemsFromFolders(const FPrimaryAssetType& Pr
                 
                     if (UMC_DT_ItemConfig* ItemConfig = Cast<UMC_DT_ItemConfig>(LoadedObject))
                     {
-                        ItemDataStorage.Add(AssetId, ItemConfig);
+                        //Build FName
+                        FName KeyName;
+                        GenerateItemIdentifier(ItemConfig->ItemName.ToString(), ItemConfig->ItemTier, ItemConfig->ItemRarity, KeyName);
+
+                        //Add item
+                        ItemDataStorage.Add(KeyName, ItemConfig);
                     }
                     else
                     {

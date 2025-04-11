@@ -27,12 +27,19 @@ public:
 	/** Generates ItemsNum random items using power values as weights */
 	UFUNCTION(BlueprintCallable, Category = "Item Manager")
 	virtual void GenerateWeightedRandomItems(const int32 NumItemsToGenerate, TArray<UMC_DT_ItemConfig*>& OutSelectedItems) const;
+	
+	/** Generates unique item identifier from components (Name_Tier_Rarity) */
+	UFUNCTION(BlueprintCallable, Category = "Item Manager")
+	void GenerateItemIdentifier(const FString& ItemName, EItemTier Tier, EItemRarity Rarity, FName& OutName);
     
 protected:
 	/** Loads all item definitions from folders */
 	void Server_LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType = "ItemConfig");
     
-	/** All loaded item configs */
+	/** All loaded item configs
+	 * Key is FName which is builded from [ItemName]_[Tier]_[Rarity]
+	 * Example : Sword_4_2
+	 */
 	UPROPERTY()
-	TMap<FPrimaryAssetId, UMC_DT_ItemConfig*> ItemDataStorage;
+	TMap<FName, UMC_DT_ItemConfig*> ItemDataStorage;
 };
