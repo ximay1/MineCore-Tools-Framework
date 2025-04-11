@@ -29,7 +29,7 @@ void UMC_ItemManager::Initialize(FSubsystemCollectionBase& Collection)
     }
 }
 
-int32 UMC_ItemManager::CalculateTotalPower(TArray<int32>& OutIndividualPowers) const
+int32 UMC_ItemManager::Server_CalculateTotalPower(TArray<int32>& OutIndividualPowers) const
 {
     int32 TotalPower = 0;
 
@@ -47,7 +47,7 @@ int32 UMC_ItemManager::CalculateTotalPower(TArray<int32>& OutIndividualPowers) c
     return TotalPower;
 }
 
-void UMC_ItemManager::GenerateWeightedRandomItems(const int32 NumItemsToGenerate, TArray<UMC_DT_ItemConfig*>& OutSelectedItems) const
+void UMC_ItemManager::Server_GenerateWeightedRandomItems(const int32 NumItemsToGenerate, TArray<UMC_DT_ItemConfig*>& OutSelectedItems) const
 {
     // Initialize containers
     TArray<int32> PowerWeights;
@@ -57,7 +57,7 @@ void UMC_ItemManager::GenerateWeightedRandomItems(const int32 NumItemsToGenerate
     ItemDataStorage.GenerateValueArray(AllItemConfigs);
     
     // Calculate total weight (power) and get individual weights
-    const int32 TotalWeight = CalculateTotalPower(PowerWeights);
+    const int32 TotalWeight = Server_CalculateTotalPower(PowerWeights);
 
     // Guard against invalid input
     if(TotalWeight <= 0 || AllItemConfigs.IsEmpty()) 

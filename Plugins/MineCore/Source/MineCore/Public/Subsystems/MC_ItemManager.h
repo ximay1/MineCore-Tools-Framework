@@ -22,11 +22,11 @@ public:
 
 	/** Calculates total power sum + returns individual item powers */
 	UFUNCTION(BlueprintCallable, Category = "Item Manager") 
-	virtual int32 CalculateTotalPower(TArray<int32>& ItemsPowerArray) const;
+	virtual int32 Server_CalculateTotalPower(TArray<int32>& ItemsPowerArray) const;
 
 	/** Generates ItemsNum random items using power values as weights */
 	UFUNCTION(BlueprintCallable, Category = "Item Manager")
-	virtual void GenerateWeightedRandomItems(const int32 NumItemsToGenerate, TArray<UMC_DT_ItemConfig*>& OutSelectedItems) const;
+	virtual void Server_GenerateWeightedRandomItems(const int32 NumItemsToGenerate, TArray<UMC_DT_ItemConfig*>& OutSelectedItems) const;
 	
 	/** Generates unique item identifier from components (Name_Tier_Rarity) */
 	UFUNCTION(BlueprintCallable, Category = "Item Manager")
