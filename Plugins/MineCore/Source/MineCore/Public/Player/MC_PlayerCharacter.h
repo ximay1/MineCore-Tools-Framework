@@ -30,10 +30,6 @@ public:
 	FORCEINLINE UMC_MiningSystemComponent* GetMiningSystemComponent() const { return MiningSystemComponent; }
 
 protected:
-	/** Max Slots in the Inventory Component */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory Component")
-	uint8 MaxSlots = 40;
-	
 	/** InventoryComponent Component */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory Component")
 	TObjectPtr<UMC_InventoryComponent> InventoryComponent;
