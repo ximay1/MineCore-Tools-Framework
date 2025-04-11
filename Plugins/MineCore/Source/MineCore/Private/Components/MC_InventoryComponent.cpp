@@ -1,6 +1,7 @@
 #include "Components/MC_InventoryComponent.h"
 #include "MC_LogChannels.h"
 #include "MineCoreMacros.h"
+#include "Actors/Bags/MC_ItemBag.h"
 #include "Components/MC_MiningSystemComponent.h"
 #include "Development/Data/MC_DT_DefaultInventoryData.h"
 #include "Items/MC_Item.h"
@@ -370,12 +371,66 @@ UMC_Item* UMC_InventoryComponent::FindBestItemInInventory(const TSubclassOf<UMC_
 
 void UMC_InventoryComponent::Server_DropItemBySlot(uint8 Slot)
 {
-	//TODO: Create a bag at player's location
+	//Check if the ItemBagClass is nullptr
+	if (!IsValid(ItemBagClass))
+	{
+		UE_LOGFMT(LogInventory, Warning, "We can't create Item Bag because ItemBagClass is nullptr");
+		return;
+	}
+	
+	//Get Item from slot
+	FInventorySlot* ItemToDrop = Items_Array.FindByPredicate([Slot](const FInventorySlot& InventorySlot)
+	{
+		return InventorySlot.Slot == Slot;
+	});
+
+	//Remove Item from slot
+	if (Items_Array.RemoveSingle(*ItemToDrop))
+	{
+		UE_LOGFMT(LogInventory, Error, "You wanted to drop item, which doesn't exist in the inventory. {0} at {1}", ItemToDrop->Item->GetName(), ItemToDrop->Slot);
+	}
+	
+	//Add offset to the bag locaton (we dont' want to spawn the bag in the player)
+	FVector BagLocation = Cast<AActor>(GetOuter())->GetActorLocation();
+	BagLocation.X += 20.0;
+
+	//Spawn Bag in the world
+	AMC_ItemBag* ItemBag = GetWorld()->SpawnActor<AMC_ItemBag>(ItemBagClass, BagLocation, {}, {});
+
+	//Initialize ItemBag
+	ItemBag->Server_InitializeBagWithItems({ItemToDrop->Item});
 }
 
 void UMC_InventoryComponent::Server_DropItemInstance(UMC_Item* Item)
 {
-	//TODO: Create a bag at player's location
+	//Check if the ItemBagClass is nullptr
+	if (!IsValid(ItemBagClass))
+	{
+		UE_LOGFMT(LogInventory, Warning, "We can't create Item Bag because ItemBagClass is nullptr");
+		return;
+	}
+
+	//Find InventorySlot
+	FInventorySlot* ItemToDrop = Items_Array.FindByPredicate([Item](const FInventorySlot& InventorySlot)
+	{
+		return InventorySlot.Item == Item;
+	});
+	
+	//Remove Item from slot
+	if (Items_Array.RemoveSingle(*ItemToDrop))
+	{
+		UE_LOGFMT(LogInventory, Error, "You wanted to drop item, which doesn't exists in the inventory. {0} at {1}", ItemToDrop->Item->GetName(), ItemToDrop->Slot);
+	}
+    
+    //Add offset to the bag locaton (we dont' want to spawn the bag in the player)
+    FVector BagLocation = Cast<AActor>(GetOuter())->GetActorLocation();
+    BagLocation.X += 20.0;
+
+    //Spawn Bag in the world
+    AMC_ItemBag* ItemBag = GetWorld()->SpawnActor<AMC_ItemBag>(ItemBagClass, BagLocation, {}, {});
+
+    //Initialize ItemBag
+    ItemBag->Server_InitializeBagWithItems({ItemToDrop->Item});
 }
 
 UMC_Item* UMC_InventoryComponent::Server_ConstructItem(const FItemDefinition& ItemDefinition)
