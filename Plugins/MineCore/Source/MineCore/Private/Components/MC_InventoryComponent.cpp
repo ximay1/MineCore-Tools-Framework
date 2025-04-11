@@ -407,8 +407,11 @@ void UMC_InventoryComponent::Server_DestroyItem_Implementation(const FInventoryS
 	Items_Array.RemoveSingle(ItemToDestroy);
 }
 
-void UMC_InventoryComponent::Server_InitializeInventory_Implementation()
+void UMC_InventoryComponent::Server_InitializeInventory_Implementation(const uint8 NewMaxSlots)
 {
+	//Set Max slots
+	MaxSlots = NewMaxSlots;
+		
 #if WITH_EDITOR
 
 	// Validate the default inventory data asset reference

@@ -269,7 +269,7 @@ public:
 	
 	/** Initializes the inventory system by loading default items and setting up initial state. */	
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
-	virtual void Server_InitializeInventory();
+	virtual void Server_InitializeInventory(const uint8 NewMaxSlots);
 
 	/** Creates item instance from definition data */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")

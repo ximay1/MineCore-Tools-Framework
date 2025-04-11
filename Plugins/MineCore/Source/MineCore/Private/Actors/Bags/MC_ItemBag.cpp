@@ -43,6 +43,6 @@ void AMC_ItemBag::BeginPlay()
 	if (HasAuthority())
 	{
 		//Initialize Inventory Compnent
-		InventoryComponent->Server_InitializeInventory();
+		InventoryComponent->Server_InitializeInventory(10);
 	}
 }
