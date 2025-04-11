@@ -195,6 +195,10 @@ public:
 	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
 	FORCEINLINE uint8 GetMaxSlots() const { return MaxSlots; }
 
+	/** Set Max Slots */
+    UFUNCTION(BlueprintSetter, Category = "Inventory Component")
+    FORCEINLINE void SetMaxSlots(uint8 NewMaxSlots) { MaxSlots = NewMaxSlots; }
+
 	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	bool FindValidSlot(uint8& OutSlot) const;
@@ -269,7 +273,7 @@ public:
 	
 	/** Initializes the inventory system by loading default items and setting up initial state. */	
 	UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Inventory Component")
-	virtual void Server_InitializeInventory(const uint8 NewMaxSlots);
+	virtual void Server_InitializeInventory();
 
 	/** Creates item instance from definition data */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")

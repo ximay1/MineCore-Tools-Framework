@@ -30,11 +30,11 @@ public:
 	
 	/** Get InventoryComponent */
 	UFUNCTION(BlueprintGetter, Category = "Item Bag")
-	FORCEINLINE UMC_InventoryComponent* GetInventoryComponent() { return InventoryComponent; }
+	FORCEINLINE UMC_InventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
 
 	/** Get BagMeshComponent */
 	UFUNCTION(BlueprintGetter, Category = "Item Bag")
-	FORCEINLINE UStaticMeshComponent* GetBagMeshComponent() { return BagMeshComponent; }
+	FORCEINLINE UStaticMeshComponent* GetBagMeshComponent() const { return BagMeshComponent; }
 
 protected:
 	/** Events */
