@@ -28,4 +28,8 @@ public:
 	/** Returns true if all inventory slots are occupied. */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Helper Library")
 	static bool IsInventoryFull(const UMC_InventoryComponent* InventoryComponent);
+
+	/** Serializes inventory data into a JSON. */
+	UFUNCTION(Blueprintcallable, Category = "Inventory Helper Library")
+	static void ConvertInventoryToJSON(const APlayerController* const PlayerController);
 };
