@@ -30,7 +30,7 @@ public:
 	ItemConfigClass* GetItemConfig() const;
 
 	UFUNCTION(BlueprintGetter, Category = "Item")
-	FORCEINLINE int32 GetCurrentStack() { return CurrentStackCount; }
+	FORCEINLINE int32 GetCurrentStack() const { return CurrentStackCount; }
 	
 	/** Checks if the current item has a higher or equal tier than the given item. */
 	UFUNCTION(BlueprintCallable, Category = "Item")
