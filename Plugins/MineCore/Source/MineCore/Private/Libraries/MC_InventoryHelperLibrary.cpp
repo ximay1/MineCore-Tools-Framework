@@ -25,3 +25,9 @@ bool UMC_InventoryHelperLibrary::CanItemsStack(const UMC_Item* ItemA, const UMC_
 	
 	return bCanStackBySize && bCanStackByType;
 }
+
+int32 UMC_InventoryHelperLibrary::GetRemainingStackSpace(const UMC_Item* ItemA)
+{
+	return ItemA->GetItemConfig()->MaxStackSize - ItemA->GetCurrentStack();
+}
+

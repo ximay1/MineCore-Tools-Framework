@@ -16,4 +16,8 @@ public:
 	/** Checks if two items can be stacked (same type and stackable). */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Helper Library")
 	static bool CanItemsStack(const UMC_Item* ItemA, const UMC_Item* ItemB);
+	
+	/** Returns remaining stack capacity of an item (MaxStack - CurrentStack). */
+	UFUNCTION(BlueprintGetter, Category = "Inventory Helper Library")
+	static int32 GetRemainingStackSpace(const UMC_Item* ItemA);
 };
