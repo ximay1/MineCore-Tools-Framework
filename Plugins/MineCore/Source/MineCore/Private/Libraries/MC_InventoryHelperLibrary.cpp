@@ -155,3 +155,22 @@ void UMC_InventoryHelperLibrary::ConvertInventoryToJSON(const APlayerController*
 		UE_LOGFMT(LogJson, Error, "Failed to serialize inventory to JSON.");
 	}
 }
+float UMC_InventoryHelperLibrary::CalculateTotalWeight(const UMC_InventoryComponent* const InventoryComponent)
+{
+	float TotalWeight = 0.0f;
+
+	// Safety check - return 0 weight for invalid inventory
+	if (!InventoryComponent)
+	{
+		UE_LOG(LogInventory, Warning, TEXT("CalculateTotalWeight: Invalid InventoryComponent"));
+		return 0.0f;
+	}
+
+	// Sum weights of all valid items in inventory
+	for (const FInventorySlot& InventorySlot : InventoryComponent->GetItemsArray())
+	{
+		TotalWeight += InventorySlot.Item->GetItemConfig()->Weight;
+	}
+
+	return TotalWeight;
+}

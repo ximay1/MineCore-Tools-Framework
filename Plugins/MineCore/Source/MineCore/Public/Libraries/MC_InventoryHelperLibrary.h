@@ -32,4 +32,8 @@ public:
 	/** Serializes inventory data into a JSON. */
 	UFUNCTION(Blueprintcallable, Category = "Inventory Helper Library")
 	static void ConvertInventoryToJSON(const APlayerController* const PlayerController);
+	
+	/** Calculates the total weight of all items (if they have weight). */
+	UFUNCTION(Blueprintcallable, Category = "Inventory Helper Library")
+	static float CalculateTotalWeight(const UMC_InventoryComponent* const InventoryComponent);
 };
