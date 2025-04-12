@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Items/MC_Item.h"
 #include "MC_InventoryComponent.generated.h"
 
 /** Forward Declarations */
-class UMC_Item;
 class UMC_DT_ItemConfig;
 class UMC_DT_DefaultInventoryData;
 class AMC_ItemBag;
@@ -166,6 +166,10 @@ public:
 	bool operator==(const FItemDefinition& Other) const
 	{
 		return ItemConfig == Other.ItemConfig;
+	}
+	bool operator==(const FInventorySlot& Other) const
+	{
+		return ItemConfig == Other.Item->GetItemConfig();
 	}
 };
 
