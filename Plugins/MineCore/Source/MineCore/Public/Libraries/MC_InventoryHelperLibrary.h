@@ -24,4 +24,8 @@ public:
 	/** Finds all items matching a given ItemDefinition in the inventory. */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Helper Library")
 	static void FindItemsByDefinition(const UMC_InventoryComponent* InventoryComponent, const FItemDefinition& ItemDefinition, TArray<FInventorySlot>& OutItems);
+
+	/** Returns true if all inventory slots are occupied. */
+	UFUNCTION(BlueprintGetter, Category = "Inventory Helper Library")
+	static bool IsInventoryFull(const UMC_InventoryComponent* InventoryComponent);
 };

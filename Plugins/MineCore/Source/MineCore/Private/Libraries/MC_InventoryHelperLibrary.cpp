@@ -55,3 +55,17 @@ void UMC_InventoryHelperLibrary::FindItemsByDefinition(const UMC_InventoryCompon
 		}
 	}
 }
+
+bool UMC_InventoryHelperLibrary::IsInventoryFull(const UMC_InventoryComponent* InventoryComponent)
+{
+	if (!InventoryComponent)
+	{
+		UE_LOG(LogInventory, Warning, TEXT("IsInventoryFull: Invalid InventoryComponent"));
+		return false;
+	}
+
+	const int32 CurrentItemCount = InventoryComponent->GetItemsArray().Num();
+	const int32 MaxSlots = InventoryComponent->GetMaxSlots();
+    
+	return CurrentItemCount >= MaxSlots;
+}
