@@ -29,6 +29,9 @@ public:
 	template<typename ItemConfigClass = UMC_DT_ItemConfig>
 	ItemConfigClass* GetItemConfig() const;
 
+	UFUNCTION(BlueprintGetter, Category = "Item")
+	FORCEINLINE int32 GetCurrentStack() { return CurrentStackCount; }
+	
 	/** Checks if the current item has a higher or equal tier than the given item. */
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	FORCEINLINE bool IsBetterThan(const UMC_Item* const Item) const { return (this->ItemConfig->ItemTier >= Item->ItemConfig->ItemTier); }
