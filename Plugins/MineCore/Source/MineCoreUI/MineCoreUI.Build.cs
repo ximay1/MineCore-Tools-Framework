@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class MineCore : ModuleRules
+public class MineCoreUI : ModuleRules
 {
-	public MineCore(ReadOnlyTargetRules Target) : base(Target)
+	public MineCoreUI(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -26,7 +26,9 @@ public class MineCore : ModuleRules
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
+				"Slate",
+				"SlateCore",
+				"UMG"
 			}
 			);
 			
@@ -35,16 +37,7 @@ public class MineCore : ModuleRules
 			new string[]
 			{
 				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
-				"UMG",
-				"Json",
-				"JsonUtilities",
-				"AssetRegistry",
-				"DeveloperSettings",
-				"MineCoreUI"
-				// ... add private dependencies that you statically link with here ...	
+				"Engine"
 			}
 			);
 		
