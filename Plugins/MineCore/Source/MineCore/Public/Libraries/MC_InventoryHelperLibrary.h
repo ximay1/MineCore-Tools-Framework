@@ -20,4 +20,8 @@ public:
 	/** Returns remaining stack capacity of an item (MaxStack - CurrentStack). */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Helper Library")
 	static int32 GetRemainingStackSpace(const UMC_Item* ItemA);
+
+	/** Finds all items matching a given ItemDefinition in the inventory. */
+	UFUNCTION(BlueprintGetter, Category = "Inventory Helper Library")
+	static void FindItemsByDefinition(const UMC_InventoryComponent* InventoryComponent, const FItemDefinition& ItemDefinition, TArray<FInventorySlot>& OutItems);
 };

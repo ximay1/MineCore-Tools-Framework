@@ -1,5 +1,6 @@
 #include "Libraries/MC_InventoryHelperLibrary.h"
 
+#include "Components/MC_InventoryComponent.h"
 #include "Items/MC_Item.h"
 
 bool UMC_InventoryHelperLibrary::CanItemsStack(const UMC_Item* ItemA, const UMC_Item* ItemB)
@@ -31,3 +32,26 @@ int32 UMC_InventoryHelperLibrary::GetRemainingStackSpace(const UMC_Item* ItemA)
 	return ItemA->GetItemConfig()->MaxStackSize - ItemA->GetCurrentStack();
 }
 
+void UMC_InventoryHelperLibrary::FindItemsByDefinition(const UMC_InventoryComponent* InventoryComponent, const FItemDefinition& ItemDefinition, TArray<FInventorySlot>& OutItems)
+{
+	// Clear output array to ensure we don't return stale data
+	OutItems.Empty();
+
+	// Validate input inventory component
+	if (!InventoryComponent)
+	{
+		UE_LOG(LogInventory, Warning, TEXT("FindItemsByDefinition: Invalid InventoryComponent"));
+		return;
+	}
+
+	// Search through all inventory slots
+	for (const FInventorySlot& InventorySlot : InventoryComponent->GetItemsArray())
+	{
+		// Compare slot's item definition with the target definition
+		if (InventorySlot.Item && InventorySlot == ItemDefinition)
+		{
+			// Add matching item to results
+			OutItems.Add(InventorySlot);
+		}
+	}
+}
