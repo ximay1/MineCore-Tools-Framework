@@ -17,6 +17,10 @@ class MINECORE_API UMC_ItemManager : public UWorldSubsystem
 	GENERATED_BODY()
 
 public:
+	/** Returns this subsystem */
+	UFUNCTION(BlueprintCallable)
+	static FORCEINLINE UMC_ItemManager* Get(UWorld* World) { return World->GetSubsystem<UMC_ItemManager>(); }
+	
 	/** Initializes subsystem and loads required assets */
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
