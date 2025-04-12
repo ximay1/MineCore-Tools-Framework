@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "MC_PlayerCharacter.generated.h"
 
+/** Forward Declarations */
 class UMC_InventoryComponent;
 class UMC_MiningSystemComponent;
 

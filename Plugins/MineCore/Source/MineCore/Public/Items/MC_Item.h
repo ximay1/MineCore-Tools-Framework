@@ -12,7 +12,6 @@ class MINECORE_API UMC_Item : public UObject
 	GENERATED_BODY()
 
 public:
-
 	/** Events */
 	virtual bool IsSupportedForNetworking() const override { return true; }
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

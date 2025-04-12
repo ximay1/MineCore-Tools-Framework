@@ -1,11 +1,11 @@
 #include "Subsystems/MC_ItemManager.h"
+#include "MC_LogChannels.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Data/Items/MC_DT_ItemConfig.h"
-#include "Engine/AssetManager.h"
-#include "Kismet/KismetSystemLibrary.h"
-#include "MC_LogChannels.h"
 #include "DeveloperSettings/MC_DeveloperSettings.h"
+#include "Engine/AssetManager.h"
 #include "Engine/AssetManagerSettings.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void UMC_ItemManager::Initialize(FSubsystemCollectionBase& Collection)
 {

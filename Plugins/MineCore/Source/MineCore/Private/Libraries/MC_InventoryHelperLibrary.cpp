@@ -1,6 +1,6 @@
 #include "Libraries/MC_InventoryHelperLibrary.h"
-#include "GameFramework/PlayerController.h"
 #include "Components/MC_InventoryComponent.h"
+#include "GameFramework/PlayerController.h"
 #include "Items/MC_Item.h"
 #include "Player/MC_PlayerCharacter.h"
 
