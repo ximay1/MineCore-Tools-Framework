@@ -36,9 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	FORCEINLINE bool IsBetterThan(const UMC_Item* const Item) const { return (this->ItemConfig->ItemTier >= Item->ItemConfig->ItemTier); }
 
-	/** Checks if the current item is stackable */
-	UFUNCTION(BlueprintCallable, Category = "Item")
-	virtual bool IsStackable() { return ItemConfig->IsStackable(); }
+	/** Checks if the item is stackable */
+	UFUNCTION(BlueprintGetter, Category = "Item")
+	FORCEINLINE bool IsStackable() { return ItemConfig->MaxStackSize > 1; }
 
 	/** Increases item stack count by specified amount. Server-only */
 	UFUNCTION(BlueprintCallable, Category = "Item")

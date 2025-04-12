@@ -107,10 +107,6 @@ public:
 	/** Icon representing the item. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (AssetBundles = "UI"))
 	TSoftObjectPtr<UTexture2D> ItemIcon;
-	
-	/** Checks if the item is stackable */
-	UFUNCTION(BlueprintCallable, Category = "Item")
-	FORCEINLINE bool IsStackable() { return MaxStackSize > 1; }
 
 	/** Recalculate power */
 	UFUNCTION(BlueprintCallable, Category = "Item Config")
