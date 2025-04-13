@@ -30,7 +30,7 @@ protected:
 	 * The system will automatically look for widgets following the pattern [InventorySlotName]_[Index]
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Widget")
-	FString InventorySlotName;
+	FString InventorySlotName = "W_InventorySlot";
 	
 	/** Bind Widgets */
 	/** Cached Inventory Slots */

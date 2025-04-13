@@ -2,4 +2,5 @@
 
 void UMCUI_InventorySlot::InitializeInventorySlotWidget(UMC_Item* Item)
 {
+	
 }
