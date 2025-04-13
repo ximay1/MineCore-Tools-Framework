@@ -34,5 +34,5 @@ protected:
 	/** Bind Widgets */
 	/** Cached Inventory Slots */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget")
-	TMap<UMCUI_InventorySlot*, UMC_Item*> InventorySlots;
+	TArray<UMCUI_InventorySlot*> InventorySlots;
 };

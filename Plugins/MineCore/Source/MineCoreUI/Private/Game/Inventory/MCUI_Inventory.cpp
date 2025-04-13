@@ -25,14 +25,13 @@ void UMCUI_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryCompo
 			// Verify the widget is of the correct inventory slot type
 			if (UMCUI_InventorySlot* InventorySlot = Cast<UMCUI_InventorySlot>(Widget))
 			{
-				//Get Item for this slot
-				if (UMC_Item* Item = InventoryComponent->GetAt(FoundInventorySlots))
-				{
-					InventorySlots.Add(InventorySlot, Item);
-					//TODO: Init InventorySlot here
-				}
+				//Add Inventory Slot to the array
+				InventorySlots.Add(InventorySlot);
 
-				InventorySlots.Add(InventorySlot, nullptr);
+				//Get Item amd Initialize Inventory Slot
+				InventorySlot->InitializeInventorySlotWidget(InventoryComponent->GetAt(FoundInventorySlots));
+					
+				InventorySlots.Add(InventorySlot);
 				FoundInventorySlots++; // Increment only after successful validation
 				
 				// DEV NOTE: We increment index only when finding EXACT sequence (0,1,2...)
