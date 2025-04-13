@@ -1,0 +1,29 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "CommonActivatableWidget.h"
+#include "MCUI_Game_Layout.generated.h"
+
+UCLASS()
+class MINECOREUI_API UMCUI_Game_Layout : public UCommonActivatableWidget
+{
+	GENERATED_BODY()
+
+public:
+	/** Push Inventory */
+	UFUNCTION(BlueprintCallable, Category = "Game Layout")
+	void PushInventory(TSubclassOf<UCommonActivatableWidget> WidgetClass);
+
+	/** Push Items Info */
+	UFUNCTION(BlueprintCallable, Category = "Game Layout")
+	void PushItemsInfo(TSubclassOf<UCommonActivatableWidget> WidgetClass);
+	
+protected:
+	/** Bind Widgets */
+	/** UCommonActivatableWidgetStack */
+	UPROPERTY(BlueprintReadOnly, Category = "Game Layout", meta = (BindWidget))
+	TObjectPtr<UCommonActivatableWidgetStack> CAWS_Inventory;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Game Layout", meta = (BindWidget))
+	TObjectPtr<UCommonActivatableWidgetStack> CAWS_ItemsInfo;
+};
