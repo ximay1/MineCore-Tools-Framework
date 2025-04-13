@@ -13,12 +13,12 @@ class MINECOREUI_API UMCUI_Inventory : public UCommonActivatableWidget
 
 protected:
 	/** Events */
-	virtual void NativeConstruct() override;
+	virtual void InitializeInventoryWidget(UMC_InventoryComponent* InventoryComponent);
 	
 	/** Caches all inventory slot widgets matching the naming pattern: [InventorySlotName]_[Index]. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
-	void CacheInventorySlots();
-
+	void CacheInventorySlots(UMC_InventoryComponent* InventoryComponent);
+	
 	/**
 	 * Base name for inventory slot widgets (without the numeric suffix).
 	 * 
@@ -34,5 +34,5 @@ protected:
 	/** Bind Widgets */
 	/** Cached Inventory Slots */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget")
-	TArray<UMCUI_InventorySlot*> InventorySlots;
+	TMap<UMCUI_InventorySlot*, UMC_Item*> InventorySlots;
 };

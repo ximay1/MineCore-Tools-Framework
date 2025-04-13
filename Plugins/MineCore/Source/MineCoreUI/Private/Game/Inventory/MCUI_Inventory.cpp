@@ -2,21 +2,22 @@
 #include "Blueprint/WidgetTree.h"
 #include "Game/Inventory/MCUI_InventorySlot.h"
 #include "MCUI_LogChannels.h"
+#include "Components/MC_InventoryComponent.h"
 
-void UMCUI_Inventory::NativeConstruct()
+void UMCUI_Inventory::InitializeInventoryWidget(UMC_InventoryComponent* InventoryComponent)
 {
-	Super::NativePreConstruct();
-
 	//Cache Inventory Slots
-	CacheInventorySlots();
+    CacheInventorySlots(InventoryComponent);
 }
 
-void UMCUI_Inventory::CacheInventorySlots()
+void UMCUI_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryComponent)
 {
-	int32 FoundInventorySlots = 0; // Tracks the current expected slot index during search
-    
+	// Tracks the current expected slot index during search
+	uint8 FoundInventorySlots = 0;
+	const uint8 MaxItemInventorySlots = InventoryComponent->GetMaxSlots();
+	
 	// Iterate through all widgets in this widget's hierarchy
-	WidgetTree->ForEachWidget([this, &FoundInventorySlots](UWidget* Widget)
+	WidgetTree->ForEachWidget([this, &FoundInventorySlots, InventoryComponent](UWidget* Widget)
 	{
 		// Match widgets following the naming pattern: [InventorySlotName]_[Index]
 		if (Widget->GetName() == FString::Printf(TEXT("%s_%d"), *InventorySlotName, FoundInventorySlots))
@@ -24,9 +25,16 @@ void UMCUI_Inventory::CacheInventorySlots()
 			// Verify the widget is of the correct inventory slot type
 			if (UMCUI_InventorySlot* InventorySlot = Cast<UMCUI_InventorySlot>(Widget))
 			{
-				InventorySlots.Add(InventorySlot);
+				//Get Item for this slot
+				if (UMC_Item* Item = InventoryComponent->GetAt(FoundInventorySlots))
+				{
+					InventorySlots.Add(InventorySlot, Item);
+					//TODO: Init InventorySlot here
+				}
+
+				InventorySlots.Add(InventorySlot, nullptr);
 				FoundInventorySlots++; // Increment only after successful validation
-            
+				
 				// DEV NOTE: We increment index only when finding EXACT sequence (0,1,2...)
 			}
 			else
@@ -40,4 +48,26 @@ void UMCUI_Inventory::CacheInventorySlots()
 			}
 		}
 	});
+
+	// Validate if all expected inventory slots were successfully cached
+	if (InventorySlots.Num() == MaxItemInventorySlots)
+	{
+		//Log
+		UE_LOGFMT(LogWidget, Log, 
+			"Successfully cached all {0} inventory slots (Expected: {1})", 
+			InventorySlots.Num(), 
+			MaxItemInventorySlots);
+	}
+	else
+	{
+		//Log Error
+		UE_LOGFMT(LogWidget, Error, 
+			"Inventory slot cache incomplete! Found {0} slots (Expected: {1}). "
+			"Possible causes:\n"
+			"- Missing slot widgets in hierarchy\n"
+			"- Incorrect naming convention (should be: {Name}_{Index})\n"
+			"- Slot widgets not derived from UMCUI_InventorySlot",
+			InventorySlots.Num(), 
+			MaxItemInventorySlots);
+	}
 }
