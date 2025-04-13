@@ -17,7 +17,7 @@ protected:
 	
 	/** Caches all inventory slot widgets matching the naming pattern: [InventorySlotName]_[Index]. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
-	void CacheInventorySlots(UMC_InventoryComponent* InventoryComponent);
+	virtual void CacheInventorySlots(UMC_InventoryComponent* InventoryComponent);
 	
 	/**
 	 * Base name for inventory slot widgets (without the numeric suffix).
