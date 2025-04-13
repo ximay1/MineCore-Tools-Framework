@@ -204,6 +204,10 @@ public:
     UFUNCTION(BlueprintSetter, Category = "Inventory Component")
     FORCEINLINE void SetMaxSlots(uint8 NewMaxSlots) { MaxSlots = NewMaxSlots; }
 
+	/** Get Item from the given (slot) index */
+	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
+	FORCEINLINE UMC_Item* GetAt(int32 Slot) { return Items.FindRef(Slot); }
+	
 	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
 	bool FindValidSlot(uint8& OutSlot) const;
