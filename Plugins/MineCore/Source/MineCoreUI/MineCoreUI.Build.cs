@@ -29,7 +29,8 @@ public class MineCoreUI : ModuleRules
 				"Slate",
 				"SlateCore",
 				"UMG",
-				"CommonUI"
+				"CommonUI",
+				"MineCore"
 			}
 			);
 			
