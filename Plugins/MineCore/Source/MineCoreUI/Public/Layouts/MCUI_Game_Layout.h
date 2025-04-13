@@ -4,6 +4,9 @@
 #include "CommonActivatableWidget.h"
 #include "MCUI_Game_Layout.generated.h"
 
+/** Forward Declarations */
+class UCommonActivatableWidgetStack;
+
 UCLASS()
 class MINECOREUI_API UMCUI_Game_Layout : public UCommonActivatableWidget
 {
