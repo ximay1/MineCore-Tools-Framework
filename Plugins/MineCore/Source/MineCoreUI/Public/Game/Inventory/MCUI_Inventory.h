@@ -6,6 +6,7 @@
 
 /** Forward Declarations */
 class UMCUI_InventorySlot;
+
 UCLASS()
 class MINECOREUI_API UMCUI_Inventory : public UCommonActivatableWidget
 {
