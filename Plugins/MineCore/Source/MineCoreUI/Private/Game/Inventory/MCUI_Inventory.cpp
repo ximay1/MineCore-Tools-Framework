@@ -8,15 +8,15 @@ void UMCUI_Inventory::NativeConstruct()
 	Super::NativePreConstruct();
 
 	//Cache Inventory Slots
-	CacheInventorySlots(InventorySlotName);
+	CacheInventorySlots();
 }
 
-void UMCUI_Inventory::CacheInventorySlots(const FString& InventorySlotName)
+void UMCUI_Inventory::CacheInventorySlots()
 {
 	int32 FoundInventorySlots = 0; // Tracks the current expected slot index during search
     
 	// Iterate through all widgets in this widget's hierarchy
-	WidgetTree->ForEachWidget([this, &InventorySlotName, &FoundInventorySlots](UWidget* Widget)
+	WidgetTree->ForEachWidget([this, &FoundInventorySlots](UWidget* Widget)
 	{
 		// Match widgets following the naming pattern: [InventorySlotName]_[Index]
 		if (Widget->GetName() == FString::Printf(TEXT("%s_%d"), *InventorySlotName, FoundInventorySlots))
