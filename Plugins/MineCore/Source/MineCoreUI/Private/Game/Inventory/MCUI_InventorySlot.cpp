@@ -5,9 +5,13 @@
 
 void UMCUI_InventorySlot::InitializeInventorySlotWidget(UMC_Item* Item)
 {
-	//Cache item
-    CachedItem = Item;
+	//Check if the Item is valid
+	if (IsValid(Item))
+	{
+		//Cache item
+		CachedItem = Item;
 
-	//Initialize Inventory Slot Button
-	InventorySlotButton->InitializeInventorySlotButtonWidget(Item);
+		//Initialize Inventory Slot Button
+		InventorySlotButton->InitializeInventorySlotButtonWidget(Item);
+	}
 }
