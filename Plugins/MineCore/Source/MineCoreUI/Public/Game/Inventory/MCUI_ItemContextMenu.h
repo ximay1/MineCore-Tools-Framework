@@ -17,18 +17,14 @@ class MINECOREUI_API UMCUI_ItemContextMenu : public UCommonActivatableWidget
 	GENERATED_BODY()
 
 public:
-	/** Initializes this Item Context Menu Widget with the specified item */
+	/** Initializes this ItemConfig Context Menu Widget with the specified item */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Slot Widget")
-	virtual void InitializeItemContextMenu(UMC_DT_ItemConfig* Item);
+	virtual void InitializeItemContextMenu(UMC_DT_ItemConfig* ItemConfig);
 
 	/** Common Text Block Description Style */
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Slot Widget")
 	TSubclassOf<UCommonTextStyle> CommonTextDescriptonStyle_Class;
 
-	/** Common Text Block Description Scroll Style */
-	UPROPERTY(EditDefaultsOnly, Category = "Inventory Slot Widget")
-	TSubclassOf<UCommonTextScrollStyle> CommonTextDescriptonScrollStyle_Class; 
-	
 protected:
 	/** Bind Widgets */
 	/** Vertical Boxes */
