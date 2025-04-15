@@ -111,4 +111,7 @@ public:
 	/** Recalculate power */
 	UFUNCTION(BlueprintCallable, Category = "Item Config")
 	virtual int32 RecalculatePower();
+
+	/** Returns manually specified FProperties that should be included in item statistics. OutProperties - Output array to populate with stat properties */
+	virtual void GetStatsProperties(TArray<FProperty>& OutProperties);
 };
