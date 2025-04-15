@@ -14,6 +14,6 @@ int32 UMC_DT_ItemConfig::RecalculatePower()
 	return PowerStats.Power = PowerStats.BasePower + (static_cast<uint8>(ItemRarity) + 1) * (static_cast<uint8>(ItemTier) + 1);
 }
 
-void UMC_DT_ItemConfig::GetStatsProperties(TArray<FProperty>& OutProperties)
+void UMC_DT_ItemConfig::GetStatsProperties(TMap<FText, FProperty>& OutProperties)
 {
 }
