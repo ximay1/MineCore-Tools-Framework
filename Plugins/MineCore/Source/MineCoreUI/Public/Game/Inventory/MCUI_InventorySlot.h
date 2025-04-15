@@ -15,7 +15,7 @@ class MINECOREUI_API UMCUI_InventorySlot : public UCommonActivatableWidget
 	GENERATED_BODY()
 
 public:
-	/** Initializes this inventory slot widget with the specified item */
+	/** Initializes this Inventory Slot Widget with the specified item */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Slot Widget")
 	virtual void InitializeInventorySlotWidget(UMC_Item* Item);
 	
