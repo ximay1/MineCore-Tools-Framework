@@ -36,4 +36,7 @@ protected:
 
 	/** Create Description for this widget */
 	void CreateDescription(const FText& Description);
+
+	/** Create Stats for this widget */
+	void CreateStats(UMC_DT_ItemConfig* ItemConfig);
 };

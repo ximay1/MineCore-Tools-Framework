@@ -113,5 +113,5 @@ public:
 	virtual int32 RecalculatePower();
 
 	/** Returns manually specified FProperties that should be included in item statistics. OutProperties - Output array to populate with stat properties with their display names for UI purposes */
-	virtual void GetStatsProperties(TMap<FText, FProperty*>& OutProperties);
+	virtual void GetStatsProperties(TMap<FString, FString>& OutProperties);
 };
