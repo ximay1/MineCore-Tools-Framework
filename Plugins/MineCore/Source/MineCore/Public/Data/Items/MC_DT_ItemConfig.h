@@ -71,7 +71,10 @@ class MINECORE_API UMC_DT_ItemConfig : public UPrimaryDataAsset
 
 public:
 	FORCEINLINE virtual FPrimaryAssetId GetPrimaryAssetId() const override { return FPrimaryAssetId("ItemConfig", GetFName()); }
+
+#if WITH_EDITORONLY_DATA
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
 	
 	/** Class of item */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config")

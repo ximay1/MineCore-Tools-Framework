@@ -6,6 +6,8 @@
 
 /** Forward Declarations */
 class UMC_DT_ItemConfig;
+enum class EItemTier : uint8;
+enum class EItemRarity : uint8;
 
 /** 
  * Manages item data and generation systems. Handles item loading, 
@@ -18,7 +20,7 @@ class MINECORE_API UMC_ItemManager : public UWorldSubsystem
 
 public:
 	/** Returns this subsystem */
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Item Manager")
 	static FORCEINLINE UMC_ItemManager* Get(UWorld* World) { return World->GetSubsystem<UMC_ItemManager>(); }
 	
 	/** Initializes subsystem and loads required assets */
@@ -38,6 +40,7 @@ public:
 protected:
 
 	/** Return Primary Asset Type for primary data assets which contain information about items */
+	UFUNCTION(BlueprintCallable, Category = "Item Manager")
 	FPrimaryAssetType GetPrimaryDataAssetType() const;
 	
 	/** Called when item assets finish asynchronous loading. Populates the item database with loaded configs. */
