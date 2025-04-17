@@ -7,6 +7,11 @@
 /** Forward Declarations */
 class UMC_Item;
 
+#pragma region MACROS
+#define ADD_STAT_PROPERTY(DisplayName, Value) OutProperties.Add(DisplayName, Value);
+
+#pragma endregion 
+
 /** Enum representing the tier of an item or resource node. */
 UENUM(BlueprintType)
 enum class EItemTier : uint8
