@@ -13,6 +13,6 @@ public:
 	
 	/** Serializes the inventory to a JSON file in the Saved folder. */
 	UFUNCTION(Exec)
-	void SerializeInventoryToJSON();
+	void SerializeInventoryToJSON() const;
 };
 

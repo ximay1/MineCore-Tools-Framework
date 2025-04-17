@@ -37,7 +37,7 @@ public:
 
 	/** Checks if the item is stackable */
 	UFUNCTION(BlueprintGetter, Category = "Item")
-	FORCEINLINE bool IsStackable() { return ItemConfig->MaxStackSize > 1; }
+	FORCEINLINE bool IsStackable() const { return ItemConfig->MaxStackSize > 1; }
 
 	/** Increases item stack count by specified amount. Server-only */
 	UFUNCTION(BlueprintCallable, Category = "Item")
