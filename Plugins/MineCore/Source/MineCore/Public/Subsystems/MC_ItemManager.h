@@ -34,7 +34,7 @@ public:
 	
 	/** Generates unique item identifier from components (Name_Tier_Rarity) */
 	UFUNCTION(BlueprintCallable, Category = "Item Manager")
-	void GenerateItemIdentifier(const FString& ItemName, EItemTier Tier, EItemRarity Rarity, FName& OutName);
+	void GenerateItemIdentifier(const FString& ItemName, EItemTier Tier, EItemRarity Rarity, FString& OutName) const;
     
 protected:
 	/** Loads all item definitions from folders */
@@ -45,5 +45,5 @@ protected:
 	 * Example : Sword_4_2
 	 */
 	UPROPERTY()
-	TMap<FName, UMC_DT_ItemConfig*> ItemDataStorage;
+	TMap<FString, UMC_DT_ItemConfig*> ItemDataStorage;
 };
