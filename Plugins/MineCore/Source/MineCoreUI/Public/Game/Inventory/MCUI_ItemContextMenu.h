@@ -11,6 +11,7 @@ class UCommonTextBlock;
 class UCommonTextStyle;
 class UCommonTextScrollStyle;
 class UImage;
+class UMCUI_DT_RarityIconSet;
 
 UCLASS()
 class MINECOREUI_API UMCUI_ItemContextMenu : public UCommonActivatableWidget
@@ -54,6 +55,10 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget")
 	TObjectPtr<UCommonTextBlock> CommonTextBlock_ItemWeight;
+	
+	/** This data asset contains information about icons for given rarity */
+	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget")
+	TObjectPtr<UMCUI_DT_RarityIconSet> DT_RarityIconSet;
 	
 	/** Create Description for this widget */
 	void CreateDescription(const FText& Description);
