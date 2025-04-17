@@ -23,10 +23,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Item Context Menu Widget")
 	virtual void InitializeItemContextMenu(UMC_DT_ItemConfig* ItemConfig);
 
-	/** Common Text Block Description Style */
-	UPROPERTY(EditDefaultsOnly, Category = "Item Context Menu Widget")
-	TSubclassOf<UCommonTextStyle> CommonTextDescriptonStyle_Class;
-
 protected:
 	/** Bind Widgets */
 	/** Vertical Boxes */
@@ -59,12 +55,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget")
 	TObjectPtr<UCommonTextBlock> CommonTextBlock_ItemWeight;
 	
+	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget")
+	TObjectPtr<UCommonTextBlock> CommonTextBlock_ItemDescription;
+	
 	/** Data asset containing icons for item rarity */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Context Menu Widget")
 	TObjectPtr<UMCUI_DT_RarityIconSet> DT_RarityIconSet;
-	
-	/** Create Description for this widget */
-	void CreateDescription(const FText& Description);
 
 	/** Create Stats for this widget */
 	void CreateStats(UMC_DT_ItemConfig* ItemConfig);

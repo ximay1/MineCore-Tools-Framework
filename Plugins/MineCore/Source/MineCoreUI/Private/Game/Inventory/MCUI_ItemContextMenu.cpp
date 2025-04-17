@@ -31,9 +31,8 @@ void UMCUI_ItemContextMenu::InitializeItemContextMenu(UMC_DT_ItemConfig* ItemCon
 		{EItemCategory::Tool,      LOCTEXT("ItemCategory::Tool", "Tool")}
 	};
     
-	// Initialize UI components
-	CreateDescription(ItemConfig->ItemDescription);  // Item description text
-	CreateStats(ItemConfig);                         // Additional stat widgets
+	// Initialize UI
+	CreateStats(ItemConfig);
 
 	// Set visual assets
 	Image_ItemIcon_Background->SetBrushResourceObject(ItemConfig->ItemIconBackground.LoadSynchronous());
@@ -45,21 +44,7 @@ void UMCUI_ItemContextMenu::InitializeItemContextMenu(UMC_DT_ItemConfig* ItemCon
 	CommonTextBlock_ItemCategory->SetText(ItemCategoryNames.FindRef(ItemConfig->ItemCategory));
 	CommonTextBlock_ItemPower->SetText(FText::Format(LOCTEXT("ItemPower", "Item Power: {0}"), ItemConfig->PowerStats.Power));  
 	CommonTextBlock_ItemWeight->SetText(FText::Format(LOCTEXT("ItemWeight", "Item Weight: {0}"), ItemConfig->Weight));
-}
-
-void UMCUI_ItemContextMenu::CreateDescription(const FText& Description)
-{
-	//Create Common Text Block
-	UCommonTextBlock* CommonTextBlock_Description = NewObject<UCommonTextBlock>(VerticalBox_Description, FName("Common_Text_Block_Description"));
-	
-	// Configure CommonTextBlock_Description properties
-	CommonTextBlock_Description->SetText(Description);
-	CommonTextBlock_Description->SetStyle(CommonTextDescriptonStyle_Class);
-	CommonTextBlock_Description->SetAutoWrapText(true);
-
-	//Add CommonTextBlock_Description to the VerticalBox_Description 
-	UVerticalBoxSlot* CommonTextBlock_Description_VerticalBoxSlot = VerticalBox_Description->AddChildToVerticalBox(CommonTextBlock_Description);
-	CommonTextBlock_Description_VerticalBoxSlot->SetSize(FSlateChildSize());
+	CommonTextBlock_ItemDescription->SetText(ItemConfig->ItemDescription);
 }
 
 void UMCUI_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig)
