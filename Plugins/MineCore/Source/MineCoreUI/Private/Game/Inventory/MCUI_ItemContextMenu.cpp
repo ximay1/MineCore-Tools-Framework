@@ -6,6 +6,7 @@
 #include "Data/Items/MC_DT_ItemConfig.h"
 #include "MCUI_LogChannels.h"
 #include "Components/Image.h"
+#include "Data/Inventory/MCUI_DT_RarityIconSet.h"
 
 #define LOCTEXT_NAMESPACE "ItemContextMenu"
 
