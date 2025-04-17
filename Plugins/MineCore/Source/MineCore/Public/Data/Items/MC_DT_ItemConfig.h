@@ -113,6 +113,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (AssetBundles = "UI"))
 	TSoftObjectPtr<UTexture2D> ItemIcon;
 
+	/** Background image displayed behind the item's icon in UI. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Config", meta = (AssetBundles = "UI"))
+	TSoftObjectPtr<UTexture2D> ItemIconBackground;
+
 	/** Recalculate power */
 	UFUNCTION(BlueprintCallable, Category = "Item Config")
 	virtual int32 RecalculatePower();
