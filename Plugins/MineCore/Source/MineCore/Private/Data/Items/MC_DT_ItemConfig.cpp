@@ -16,5 +16,4 @@ int32 UMC_DT_ItemConfig::RecalculatePower()
 
 void UMC_DT_ItemConfig::GetStatsProperties(TMap<FString, FString>& OutProperties)
 {
-	ADD_STAT_PROPERTY(TEXT("Something"), FString::Printf(TEXT("%.2f"), Weight))
 }
