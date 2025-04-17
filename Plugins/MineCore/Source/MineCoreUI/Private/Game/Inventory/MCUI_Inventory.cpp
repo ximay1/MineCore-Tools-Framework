@@ -1,8 +1,8 @@
 #include "Game/Inventory/MCUI_Inventory.h"
-#include "Blueprint/WidgetTree.h"
-#include "Game/Inventory/MCUI_InventorySlot.h"
 #include "MCUI_LogChannels.h"
+#include "Blueprint/WidgetTree.h"
 #include "Components/MC_InventoryComponent.h"
+#include "Game/Inventory/MCUI_InventorySlot.h"
 
 void UMCUI_Inventory::InitializeInventoryWidget(UMC_InventoryComponent* InventoryComponent)
 {
@@ -41,7 +41,7 @@ void UMCUI_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryCompo
 				// Log Error
 				UE_LOGFMT(LogWidget, Error, 
 					"Inventory slot naming conflict! Widget '{0}' (Path: {1}) "
-					"matches slot naming pattern but isn't UMCUI_InventorySlot type. ",
+					"matches slot naming pattern but isn't MCUI_InventorySlot type. ",
 					Widget->GetName(),
 					Widget->GetPathName());
 			}
@@ -65,7 +65,7 @@ void UMCUI_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryCompo
 			"Possible causes:\n"
 			"- Missing slot widgets in hierarchy\n"
 			"- Incorrect naming convention (should be: {Name}_{Index})\n"
-			"- Slot widgets not derived from UMCUI_InventorySlot",
+			"- Slot widgets not derived from MCUI_InventorySlot",
 			InventorySlots.Num(), 
 			MaxItemInventorySlots);
 	}

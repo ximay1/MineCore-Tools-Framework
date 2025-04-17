@@ -6,7 +6,9 @@
 
 /** Forward Declarations */
 class UMCUI_InventorySlot;
+class UMC_InventoryComponent;
 
+/** Base class for Inventory Widget */
 UCLASS()
 class MINECOREUI_API UMCUI_Inventory : public UCommonActivatableWidget
 {
@@ -14,6 +16,7 @@ class MINECOREUI_API UMCUI_Inventory : public UCommonActivatableWidget
 
 protected:
 	/** Events */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
 	virtual void InitializeInventoryWidget(UMC_InventoryComponent* InventoryComponent);
 	
 	/** Caches all inventory slot widgets matching the naming pattern: [InventorySlotName]_[Index]. */
