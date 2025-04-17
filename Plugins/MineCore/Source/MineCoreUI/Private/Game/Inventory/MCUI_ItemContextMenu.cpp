@@ -1,12 +1,12 @@
 #include "Game/Inventory/MCUI_ItemContextMenu.h"
-#include "Components/VerticalBox.h"
 #include "CommonTextBlock.h"
-#include "Components/ScaleBox.h"
-#include "Components/VerticalBoxSlot.h"
-#include "Data/Items/MC_DT_ItemConfig.h"
 #include "MCUI_LogChannels.h"
 #include "Components/Image.h"
+#include "Components/ScaleBox.h"
+#include "Components/VerticalBox.h"
+#include "Components/VerticalBoxSlot.h"
 #include "Data/Inventory/MCUI_DT_RarityIconSet.h"
+#include "Data/Items/MC_DT_ItemConfig.h"
 
 #define LOCTEXT_NAMESPACE "ItemContextMenu"
 
@@ -47,7 +47,7 @@ void UMCUI_ItemContextMenu::InitializeItemContextMenu(UMC_DT_ItemConfig* ItemCon
 	CommonTextBlock_ItemDescription->SetText(ItemConfig->ItemDescription);
 }
 
-void UMCUI_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig)
+void UMCUI_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig) const
 {
 	//Checks if the ItemConfig isn't nullptr
 	if (!ItemConfig)

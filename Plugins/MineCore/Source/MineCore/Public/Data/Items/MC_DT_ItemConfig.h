@@ -9,7 +9,6 @@ class UMC_Item;
 
 #pragma region STATS_PROPERTY_MACROS
 #define ADD_STAT_PROPERTY(DisplayName, Value) OutProperties.Add(DisplayName, Value);
-
 #pragma endregion 
 
 /** Enum representing the tier of an item or resource node. */

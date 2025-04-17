@@ -63,5 +63,5 @@ protected:
 	TObjectPtr<UMCUI_DT_RarityIconSet> DT_RarityIconSet;
 
 	/** Create Stats for this widget */
-	void CreateStats(UMC_DT_ItemConfig* ItemConfig);
+	void CreateStats(UMC_DT_ItemConfig* ItemConfig) const;
 };
