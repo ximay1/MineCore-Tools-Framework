@@ -37,5 +37,5 @@ public:
 	TSoftObjectPtr<UTexture2D> MythicIcon;
 
 	/** Returns the texture icon associated with the specified item rarity */
-	const TSoftObjectPtr<UTexture2D>& GetIcon(EItemRarity Rarity) const;
+	const TSoftObjectPtr<UTexture2D>& GetIcon(const EItemRarity Rarity) const;
 };
