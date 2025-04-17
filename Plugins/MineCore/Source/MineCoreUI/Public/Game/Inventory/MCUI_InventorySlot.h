@@ -9,6 +9,7 @@ class UMC_Item;
 class UCommonButtonBase;
 class UMCUI_InventorySlotButton;
 
+/** Inventory Slot Widget that displays and manages a single item. */
 UCLASS()
 class MINECOREUI_API UMCUI_InventorySlot : public UCommonActivatableWidget
 {

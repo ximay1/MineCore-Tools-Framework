@@ -1,5 +1,4 @@
 #include "Game/Inventory/MCUI_InventorySlot.h"
-#include "CommonButtonBase.h"
 #include "Common/Buttons/MCUI_InventorySlotButton.h"
 #include "Items/MC_Item.h"
 
