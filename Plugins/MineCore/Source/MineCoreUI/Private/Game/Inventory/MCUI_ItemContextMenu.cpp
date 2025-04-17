@@ -2,7 +2,6 @@
 #include "CommonTextBlock.h"
 #include "MCUI_LogChannels.h"
 #include "Components/Image.h"
-#include "Components/ScaleBox.h"
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 #include "Data/Inventory/MCUI_DT_RarityIconSet.h"

@@ -7,6 +7,7 @@
 /** Forward Declarations */
 class UCommonActivatableWidgetStack;
 
+/** Main Game Layout Widget managing core UI stacks and navigation. */
 UCLASS()
 class MINECOREUI_API UMCUI_Game_Layout : public UCommonActivatableWidget
 {
