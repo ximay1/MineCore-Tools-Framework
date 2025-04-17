@@ -4,6 +4,7 @@
 #include "Engine/DeveloperSettings.h"
 #include "MC_DeveloperSettings.generated.h"
 
+/** Configuration settings for MineCore plugin */
 UCLASS(Config = Game, DefaultConfig)
 class MINECORE_API UMC_DeveloperSettings : public UDeveloperSettings
 {
