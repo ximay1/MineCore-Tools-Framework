@@ -7,7 +7,7 @@
 /** Forward Declarations */
 class UMC_Item;
 
-#pragma region MACROS
+#pragma region STATS_PROPERTY_MACROS
 #define ADD_STAT_PROPERTY(DisplayName, Value) OutProperties.Add(DisplayName, Value);
 
 #pragma endregion 
