@@ -74,16 +74,16 @@ bool UMC_InventoryHelperLibrary::IsInventoryFull(const UMC_InventoryComponent* I
 void UMC_InventoryHelperLibrary::ConvertInventoryToJSON(const APlayerController* const PlayerController)
 {
 	// Set the path to the "Saved" folder where the JSON file will be stored
-	FString SavedFolderDir = FPaths::ProjectSavedDir() / TEXT("Mine Core") / FString::Printf(TEXT("Inventory_%s.json"), *FGuid::NewGuid().ToString(EGuidFormats::Digits).Left(8));
+	const FString SavedFolderDir = FPaths::ProjectSavedDir() / TEXT("Mine Core") / FString::Printf(TEXT("Inventory_%s.json"), *FGuid::NewGuid().ToString(EGuidFormats::Digits).Left(8));
 
 	// Create a JSON root object
-	TSharedPtr<FJsonObject> RootJsonObject = MakeShareable(new FJsonObject());
+	const TSharedPtr<FJsonObject> RootJsonObject = MakeShareable(new FJsonObject());
 
 	// Create an array to store inventory item data
 	TArray<TSharedPtr<FJsonValue>> ItemsJsonArray;
 
 	// Get the player character
-	AMC_PlayerCharacter* PlayerCharacter = Cast<AMC_PlayerCharacter>(PlayerController->GetPawn());
+	const AMC_PlayerCharacter* PlayerCharacter = Cast<AMC_PlayerCharacter>(PlayerController->GetPawn());
 	if (!PlayerCharacter)
 	{
 		UE_LOGFMT(LogJson, Error, "Failed to get MC Player Character.");
@@ -95,9 +95,9 @@ void UMC_InventoryHelperLibrary::ConvertInventoryToJSON(const APlayerController*
 	PlayerCharacter->GetInventoryComponent()->GetInventoryItemsMap(Items);
 
 	// Retrieve references to enum classes used for item properties
-	UEnum* EnumTier = FindFirstObject<UEnum>(TEXT("EItemTier"));
-	UEnum* EnumRarity = FindFirstObject<UEnum>(TEXT("EItemRarity"));
-	UEnum* EnumCategory = FindFirstObject<UEnum>(TEXT("EItemCategory"));
+	const UEnum* EnumTier = FindFirstObject<UEnum>(TEXT("EItemTier"));
+	const UEnum* EnumRarity = FindFirstObject<UEnum>(TEXT("EItemRarity"));
+	const UEnum* EnumCategory = FindFirstObject<UEnum>(TEXT("EItemCategory"));
 
 	// Validate enum references
 	if (!EnumTier || !EnumRarity || !EnumCategory)
@@ -110,11 +110,11 @@ void UMC_InventoryHelperLibrary::ConvertInventoryToJSON(const APlayerController*
 	for (const auto& ItemPair : Items)
 	{
 		// Extract slot number and item pointer
-		uint8 Slot = ItemPair.Key;
-		UMC_Item* ItemPtr = ItemPair.Value;
+		const uint8 Slot = ItemPair.Key;
+		const UMC_Item* ItemPtr = ItemPair.Value;
 		
 		// Create a JSON object to store item properties
-		TSharedPtr<FJsonObject> ItemJsonObject = MakeShareable(new FJsonObject());
+		const TSharedPtr<FJsonObject> ItemJsonObject = MakeShareable(new FJsonObject());
 
 		// Set item properties
 		ItemJsonObject->SetNumberField(TEXT("Slot"), Slot);
@@ -135,7 +135,7 @@ void UMC_InventoryHelperLibrary::ConvertInventoryToJSON(const APlayerController*
 
 	// Create a string to store the serialized JSON data
 	FString OutputString;
-	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
+	const TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&OutputString);
 
 	// Serialize the root JSON object into the output string
 	if (FJsonSerializer::Serialize(RootJsonObject.ToSharedRef(), Writer))
