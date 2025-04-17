@@ -29,7 +29,7 @@ public:
 
     /** Initialize properties in the resource node */
     UFUNCTION(BlueprintCallable, Category = "Resource Node")
-    virtual void Server_InitializeProperites(const FPrimaryAssetId& NewResourceNodeConfigID);
+    virtual void Server_InitializeProperties(const FPrimaryAssetId& NewResourceNodeConfigID);
 
     /** Initialize resource node */
     UFUNCTION(BlueprintCallable, Category = "Resource Node")
@@ -55,16 +55,16 @@ protected:
     virtual void Server_ResourceNode_Refresh();
 
     /** Updates the static mesh's material based on the current resource node state. */
-    void Server_SetStaticMeshForCurrentState();
+    void Server_SetStaticMeshForCurrentState() const;
 
     /** Applies resource node config. Sets up timers for state refresh and initializes the material. */
     void Server_ApplyResourceNodeConfig();
     
     /** Validates the PlayerController. */
-    bool Server_EnsureValidPlayerController(APlayerController* PlayerController);
+    bool Server_EnsureValidPlayerController(const APlayerController* PlayerController);
 
     /** Clears and removes the mining timer associated with a player. */
-    void Server_TryToClearTimerHandle(APlayerController* PlayerController);
+    void Server_TryToClearTimerHandle(const APlayerController* PlayerController);
 
     /** Cleans up the MiningTimers map by removing invalid PlayerController keys. */
     void Server_RemoveInvalidMiningTimers();

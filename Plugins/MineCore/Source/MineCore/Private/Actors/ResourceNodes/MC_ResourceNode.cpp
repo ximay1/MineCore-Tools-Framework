@@ -34,7 +34,7 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation()
     UE_LOGFMT(LogResourceNode, Error, "Displaying mining denied widget on the client");
 }
 
-void AMC_ResourceNode::Server_InitializeProperites(const FPrimaryAssetId& NewResourceNodeConfigID)
+void AMC_ResourceNode::Server_InitializeProperties(const FPrimaryAssetId& NewResourceNodeConfigID)
 {
     //Check if the NewPrimaryAssetID is valid
     if (NewResourceNodeConfigID.IsValid())
@@ -105,7 +105,7 @@ void AMC_ResourceNode::Server_StartMining_Implementation(APlayerController* Play
     }
     else
     {
-        //If the player can't mine, we have to show a error widget
+        //If the player can't mine, we have to show an error widget
         Client_DisplayMiningDeniedWidget();
 
         //Stop Mining. Timer won't be set here.
@@ -130,7 +130,7 @@ void AMC_ResourceNode::Server_StopMining(APlayerController* PlayerController)
     else
     {
         // Log Error
-        UE_LOGFMT(LogResourceNode, Error, "Player Controlelr is nullptr. File - {0}, Line - {1}", __FILE__, __LINE__);
+        UE_LOGFMT(LogResourceNode, Error, "Player Controller is nullptr. File - {0}, Line - {1}", __FILE__, __LINE__);
     }
 }
 
@@ -198,7 +198,7 @@ void AMC_ResourceNode::Server_ResourceNode_Refresh()
     Server_SetStaticMeshForCurrentState();
 }
 
-void AMC_ResourceNode::Server_SetStaticMeshForCurrentState()
+void AMC_ResourceNode::Server_SetStaticMeshForCurrentState() const
 {
     //Find and check
     if (UStaticMesh* StaticMesh = ResourceNodeConfig->ResourceNodeMaterials.FindChecked(ResourceNodeState))
@@ -228,7 +228,7 @@ void AMC_ResourceNode::Server_ApplyResourceNodeConfig()
     Server_SetStaticMeshForCurrentState();
 }
 
-bool AMC_ResourceNode::Server_EnsureValidPlayerController(APlayerController* PlayerController)
+bool AMC_ResourceNode::Server_EnsureValidPlayerController(const APlayerController* PlayerController)
 {
     //Check if the player controller is valid
     if (IsValid(PlayerController))
@@ -249,7 +249,7 @@ bool AMC_ResourceNode::Server_EnsureValidPlayerController(APlayerController* Pla
     }
 }
 
-void AMC_ResourceNode::Server_TryToClearTimerHandle(APlayerController* PlayerController)
+void AMC_ResourceNode::Server_TryToClearTimerHandle(const APlayerController* PlayerController)
 {
     //Clear Timer
     GetWorld()->GetTimerManager().ClearTimer(*MiningTimers.Find(PlayerController));
