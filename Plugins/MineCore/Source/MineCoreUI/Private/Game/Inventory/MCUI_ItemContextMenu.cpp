@@ -83,6 +83,7 @@ void UMCUI_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig)
 	}
 
 	// Create a widget for each stat
+	int Counter = 0;
 	for (const auto& [StatName, StatValue] : StatsProperties)
 	{
 		// Create Common Text Block widget
@@ -93,7 +94,10 @@ void UMCUI_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig)
 
 		// Add to vertical box with top margin
 		UVerticalBoxSlot* StatSlot = VerticalBox_Stats->AddChildToVerticalBox(StatText);
-		StatSlot->SetPadding(FMargin(0.0f, 15.0f, 0.0f, 0.0f));
+		StatSlot->SetPadding(FMargin(0.0, Counter * 15.0, 0.0, 0.0));
+
+		//Increase Counter
+		Counter++;
 	}
 }
 
