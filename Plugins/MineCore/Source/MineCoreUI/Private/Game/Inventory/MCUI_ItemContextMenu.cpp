@@ -38,7 +38,8 @@ void UMCUI_ItemContextMenu::InitializeItemContextMenu(UMC_DT_ItemConfig* ItemCon
 	// Set visual assets
 	Image_ItemIcon_Background->SetBrushResourceObject(ItemConfig->ItemIconBackground.LoadSynchronous());
 	Image_ItemIcon->SetBrushResourceObject(ItemConfig->ItemIcon.LoadSynchronous());
-
+	Image_ItemRarity->SetBrushResourceObject(DT_RarityIconSet->GetIcon(ItemConfig->ItemRarity).LoadSynchronous());
+	
 	// Set dynamic text content
 	CommonTextBlock_ItemName->SetText(ItemConfig->ItemName);
 	CommonTextBlock_ItemCategory->SetText(ItemCategoryNames.FindRef(ItemConfig->ItemCategory));

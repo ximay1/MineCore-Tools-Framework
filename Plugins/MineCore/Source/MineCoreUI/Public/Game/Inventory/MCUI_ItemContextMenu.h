@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget")
 	TObjectPtr<UImage> Image_ItemIcon;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget")
+	TObjectPtr<UImage> Image_ItemRarity;
+
 	/** Common Text Blocks */
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget")
 	TObjectPtr<UCommonTextBlock> CommonTextBlock_ItemName;
