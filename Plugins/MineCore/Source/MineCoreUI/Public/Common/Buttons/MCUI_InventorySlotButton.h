@@ -8,6 +8,7 @@
 class UImage;
 class UMC_Item;
 
+/** Button Widget representing a single inventory slot. */
 UCLASS()
 class MINECOREUI_API UMCUI_InventorySlotButton : public UCommonButtonBase
 {
