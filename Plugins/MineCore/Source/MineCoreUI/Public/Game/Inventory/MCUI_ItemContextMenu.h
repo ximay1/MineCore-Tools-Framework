@@ -59,8 +59,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget")
 	TObjectPtr<UCommonTextBlock> CommonTextBlock_ItemWeight;
 	
-	/** This data asset contains information about icons for given rarity */
-	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget")
+	/** Data asset containing icons for item rarity */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Context Menu Widget")
 	TObjectPtr<UMCUI_DT_RarityIconSet> DT_RarityIconSet;
 	
 	/** Create Description for this widget */
