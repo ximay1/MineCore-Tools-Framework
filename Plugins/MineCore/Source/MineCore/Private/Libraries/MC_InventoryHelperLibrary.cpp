@@ -7,8 +7,8 @@
 bool UMC_InventoryHelperLibrary::CanItemsStack(const UMC_Item* ItemA, const UMC_Item* ItemB)
 {
 	// Retrieve item config data for both items
-	UMC_DT_ItemConfig* ItemConfigA = ItemA->GetItemConfig();
-	UMC_DT_ItemConfig* ItemConfigB = ItemB->GetItemConfig();
+	const UMC_DT_ItemConfig* ItemConfigA = ItemA->GetItemConfig();
+	const UMC_DT_ItemConfig* ItemConfigB = ItemB->GetItemConfig();
 
 	// Validate that both item configs exist
 	checkf(ItemConfigA && ItemConfigB, TEXT("CanItemsStack: Missing item configuration for one or both items"));

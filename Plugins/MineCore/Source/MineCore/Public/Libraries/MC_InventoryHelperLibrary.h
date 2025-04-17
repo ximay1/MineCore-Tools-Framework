@@ -6,6 +6,9 @@
 
 /** Forward Declarations */
 class UMC_Item;
+struct FInventorySlot;
+struct FItemDefinition;
+class UMC_InventoryComponent;
 
 UCLASS()
 class MINECORE_API UMC_InventoryHelperLibrary : public UBlueprintFunctionLibrary
