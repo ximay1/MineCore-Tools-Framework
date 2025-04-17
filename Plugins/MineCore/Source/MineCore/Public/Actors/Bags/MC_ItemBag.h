@@ -7,6 +7,7 @@
 /** Forward Declarations */
 class UMC_InventoryComponent;
 
+/** Physical container actor that holds items in the world. Handles item spawning and inventory management. */
 UCLASS()
 class MINECORE_API AMC_ItemBag : public AActor
 {
