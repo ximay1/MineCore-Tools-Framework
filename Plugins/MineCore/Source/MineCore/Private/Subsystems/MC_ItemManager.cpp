@@ -14,20 +14,8 @@ void UMC_ItemManager::Initialize(FSubsystemCollectionBase& Collection)
     // Execute only on the server
     if (UKismetSystemLibrary::IsServer(GetWorld()))
     {
-        //Get Default UMC_DeveloperSettings
-        const UMC_DeveloperSettings* MineCore_DeveloperSettings = GetDefault<UMC_DeveloperSettings>();
-    
-        //Get PrimaryAssetType
-        FPrimaryAssetType PrimaryAssetType = MineCore_DeveloperSettings->PrimaryAssetType;
-
-        //If PrimaryAssetType isn't valid, assign default value "ItemConfig"
-        if (!PrimaryAssetType.IsValid())
-        {
-            PrimaryAssetType = "ItemConfig";
-        }
-        
         //Load Items from folders
-        Server_LoadAllItemsFromFolders(PrimaryAssetType);
+        Server_LoadAllItemsFromFolders(GetPrimaryDataAssetType());
     }
 }
 
@@ -94,6 +82,52 @@ void UMC_ItemManager::GenerateItemIdentifier(const FString& ItemName, EItemTier 
     OutName = FString::Printf(TEXT("%s_%d_%d"), *ItemName, static_cast<uint8>(Tier), static_cast<uint8>(Rarity));
 }
 
+FPrimaryAssetType UMC_ItemManager::GetPrimaryDataAssetType() const
+{
+    //Get Default UMC_DeveloperSettings
+    const UMC_DeveloperSettings* MineCore_DeveloperSettings = GetDefault<UMC_DeveloperSettings>();
+    
+    //Get PrimaryAssetType
+    FPrimaryAssetType Result = MineCore_DeveloperSettings->PrimaryAssetType;
+
+    //If PrimaryAssetType isn't valid, assign default value "ItemConfig"
+    if (!Result.IsValid())
+    {
+        Result = "ItemConfig";
+    }
+
+    return Result;
+}
+
+void UMC_ItemManager::ItemsLoaded_Delegate()
+{
+    // Process loaded assets after async load completes
+    TArray<UObject*> LoadedObjects;
+    if (UAssetManager::Get().GetPrimaryAssetObjectList(GetPrimaryDataAssetType(), LoadedObjects))
+    {
+        ItemDataStorage.Reserve(LoadedObjects.Num());
+            
+        // Populate the item database
+        for (UObject* LoadedObject : LoadedObjects)
+        {
+            if (UMC_DT_ItemConfig* ItemConfig = Cast<UMC_DT_ItemConfig>(LoadedObject))
+            {
+                //Build FString
+                FString KeyName;
+                GenerateItemIdentifier(ItemConfig->ItemName.ToString(), ItemConfig->ItemTier, ItemConfig->ItemRarity, KeyName);
+                        
+                //Add item
+                ItemDataStorage.Add(KeyName, ItemConfig);
+            }
+            else
+            {
+                // Log warning
+                UE_LOGFMT(LogItem, Warning, "Failed to cast asset {0} to UMC_DT_ItemConfig", LoadedObject->GetPrimaryAssetId().ToString());
+            }
+        }
+    }
+}
+
 void UMC_ItemManager::Server_LoadAllItemsFromFolders(const FPrimaryAssetType& PrimaryAssetType)
 {
     // Get the Asset Registry module
@@ -115,7 +149,7 @@ void UMC_ItemManager::Server_LoadAllItemsFromFolders(const FPrimaryAssetType& Pr
     if (!PrimaryAssetTypeInfo)
     {
         // Log warning 
-        UE_LOGFMT(LogItem, Warning, "Missing PrimaryAssetType configuration for: {0}", PrimaryAssetType.ToString());
+        UE_LOGFMT(LogItem, Warning, "Missing tempPrimaryAssetType configuration for: {0}", PrimaryAssetType.ToString());
     }
     
     // Configure asset search parameters
@@ -145,33 +179,9 @@ void UMC_ItemManager::Server_LoadAllItemsFromFolders(const FPrimaryAssetType& Pr
                 AssetIdsToLoad.Add(AssetData.GetPrimaryAssetId());
             }
         }
-
+        
         // Start asynchronous loading of assets
-        UAssetManager::Get().LoadPrimaryAssets(AssetIdsToLoad, {}, FStreamableDelegate::CreateLambda([this, PrimaryAssetType]()
-            {
-                // Process loaded assets after async load completes
-                TArray<UObject*> LoadedObjects;
-                UAssetManager::Get().GetPrimaryAssetObjectList(PrimaryAssetType, LoadedObjects);
-
-                // Populate the item database
-                for (UObject* LoadedObject : LoadedObjects)
-                {
-                    if (UMC_DT_ItemConfig* ItemConfig = Cast<UMC_DT_ItemConfig>(LoadedObject))
-                    {
-                        //Build FName
-                        FString KeyName;
-                        GenerateItemIdentifier(ItemConfig->ItemName.ToString(), ItemConfig->ItemTier, ItemConfig->ItemRarity, KeyName);
-
-                        //Add item
-                        ItemDataStorage.Add(KeyName, ItemConfig);
-                    }
-                    else
-                    {
-                        // Log warning
-                        UE_LOGFMT(LogItem, Warning, "Failed to cast asset {0} to UMC_DT_ItemConfig", LoadedObject->GetPrimaryAssetId().ToString());
-                    }
-                }
-            }));
+        UAssetManager::Get().LoadPrimaryAssets(AssetIdsToLoad, {}, FStreamableDelegate::CreateUObject(this, &UMC_ItemManager::ItemsLoaded_Delegate));
     }
     else
     {
