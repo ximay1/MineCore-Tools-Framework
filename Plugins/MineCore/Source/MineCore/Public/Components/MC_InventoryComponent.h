@@ -70,7 +70,7 @@ struct FInventoryItemFilter
 
 	/** Constructors */
 	FInventoryItemFilter();
-	FInventoryItemFilter(TSubclassOf<UMC_Item> InItemClass, EItemTier InMinTier, EItemTier InMaxTier, EItemCategory InItemCategory, EItemRarity InItemRarity);
+	FInventoryItemFilter(const TSubclassOf<UMC_Item>& InItemClass, EItemTier InMinTier, EItemTier InMaxTier, EItemCategory InItemCategory, EItemRarity InItemRarity);
 
 #pragma region INCLUSION_FILTERS
 	/** The class type of the item to search for */
@@ -206,7 +206,7 @@ public:
 
 	/** Get Item from the given (slot) index */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
-	FORCEINLINE UMC_Item* GetAt(int32 Slot) { return Items.FindRef(Slot); }
+	FORCEINLINE UMC_Item* GetAt(const int32 Slot) const { return Items.FindRef(Slot); }
 	
 	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
@@ -214,7 +214,7 @@ public:
 	
 	/** Checks if the slot is valid */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	FORCEINLINE bool IsValidSlot(uint8 Slot) { return Slot <= MaxSlots; }
+	FORCEINLINE bool IsValidSlot(const uint8 Slot) const { return Slot <= MaxSlots; }
 
 	/** Checks if the inventory slot is valid */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
@@ -326,7 +326,7 @@ protected:
 
 #if WITH_EDITORONLY_DATA
 	
-	/** This data asset contains default inventory, it will be applied on the begin play */
+	/** This data asset contains default inventory, it will be applied in the Begin Play */
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component")
 	TObjectPtr<UMC_DT_DefaultInventoryData> DefaultInventory;
 	

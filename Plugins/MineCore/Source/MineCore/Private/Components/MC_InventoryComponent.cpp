@@ -11,10 +11,10 @@
 
 FInventoryItemFilter::FInventoryItemFilter()
 	: ItemClass(nullptr)
-	, MinTier((EItemTier)0)
-	, MaxTier((EItemTier)0)
-	, ItemCategory((EItemCategory)0)
-	, ItemRarity((EItemRarity)0)
+	, MinTier(static_cast<EItemTier>(0))
+	, MaxTier(static_cast<EItemTier>(0))
+	, ItemCategory(static_cast<EItemCategory>(0))
+	, ItemRarity(static_cast<EItemRarity>(0))
 	, bUseItemClass(false)
 	, bUseMinTier(false)
 	, bUseMaxTier(false)
@@ -23,7 +23,7 @@ FInventoryItemFilter::FInventoryItemFilter()
 {
 }
 
-FInventoryItemFilter::FInventoryItemFilter(TSubclassOf<UMC_Item> InItemClass, EItemTier InMinTier, EItemTier InMaxTier, EItemCategory InItemCategory, EItemRarity InItemRarity)
+FInventoryItemFilter::FInventoryItemFilter(const TSubclassOf<UMC_Item>& InItemClass, const EItemTier InMinTier, const EItemTier InMaxTier, const EItemCategory InItemCategory, const EItemRarity InItemRarity)
 	: ItemClass(InItemClass)
 	, MinTier(InMinTier)
 	, MaxTier(InMaxTier)
@@ -91,7 +91,7 @@ bool UMC_InventoryComponent::IsValidInventorySlot(const FInventorySlot& Inventor
 	return IsValid(InventorySlot.Item) && IsValidSlot(InventorySlot.Slot);
 }
 
-void UMC_InventoryComponent::Server_AddItemDefinitionToSlot_Implementation(uint8 Slot, const FItemDefinition& ItemDefinition)
+void UMC_InventoryComponent::Server_AddItemDefinitionToSlot_Implementation(const uint8 Slot, const FItemDefinition& ItemDefinition)
 {
 	Server_AddItemToSlot(FInventorySlot(Slot, Server_ConstructItem(ItemDefinition)));
 }
@@ -171,12 +171,12 @@ void UMC_InventoryComponent::Server_AddItemToFirstAvailableSlot_Implementation(U
 	Items_Array.Add(FInventorySlot(Slot, Item));
 }
 
-void UMC_InventoryComponent::Server_AddItemDefinitionStacksToSlot_Implementation(uint8 SlotIndex, const FItemDefinition& ItemDefinition, int32 StacksToAdd)
+void UMC_InventoryComponent::Server_AddItemDefinitionStacksToSlot_Implementation(const uint8 SlotIndex, const FItemDefinition& ItemDefinition, const int32 StacksToAdd)
 {
 	Server_AddItemStacksToSlot(FInventorySlot(SlotIndex, Server_ConstructItem(ItemDefinition)), StacksToAdd);
 }
 
-void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(const FInventorySlot& TargetInventorySlot, int32 StacksToAdd)
+void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(const FInventorySlot& TargetInventorySlot, const int32 StacksToAdd)
 {
 	// Validate input parameters
 	if (!IsValidSlot(TargetInventorySlot.Slot)|| StacksToAdd <= 0)
@@ -200,7 +200,7 @@ void UMC_InventoryComponent::Server_AddItemStacksToSlot_Implementation(const FIn
 	}
 }
 
-void UMC_InventoryComponent::Server_RemoveItemFromInventory_Implementation(uint8 Slot, EItemAction ItemAction)
+void UMC_InventoryComponent::Server_RemoveItemFromInventory_Implementation(uint8 Slot, const EItemAction ItemAction)
 {
 #if !UE_BUILD_SHIPPING
 	// Declare a flag to track the validity of the slot
@@ -390,7 +390,7 @@ void UMC_InventoryComponent::Server_DropItemBySlot(uint8 Slot)
 		UE_LOGFMT(LogInventory, Error, "You wanted to drop item, which doesn't exist in the inventory. {0} at {1}", ItemToDrop->Item->GetName(), ItemToDrop->Slot);
 	}
 	
-	//Add offset to the bag locaton (we dont' want to spawn the bag in the player)
+	//Add offset to the bag location (we don't' want to spawn the bag in the player)
 	FVector BagLocation = Cast<AActor>(GetOuter())->GetActorLocation();
 	BagLocation.X += 20.0;
 
@@ -422,7 +422,7 @@ void UMC_InventoryComponent::Server_DropItemInstance(UMC_Item* Item)
 		UE_LOGFMT(LogInventory, Error, "You wanted to drop item, which doesn't exists in the inventory. {0} at {1}", ItemToDrop->Item->GetName(), ItemToDrop->Slot);
 	}
     
-    //Add offset to the bag locaton (we dont' want to spawn the bag in the player)
+    //Add offset to the bag location (we don't' want to spawn the bag in the player)
     FVector BagLocation = Cast<AActor>(GetOuter())->GetActorLocation();
     BagLocation.X += 20.0;
 
