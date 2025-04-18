@@ -4,9 +4,35 @@
 #include "GameFramework/HUD.h"
 #include "MC_HUD.generated.h"
 
+class UMCUI_ItemContextMenu;
+class UMCUI_Game_Layout;
+
 UCLASS()
 class MINECORE_API AMC_HUD : public AHUD
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintGetter, Category = "HUD")
+	UMCUI_Game_Layout* GetGameLayout() const { return GameLayout; }
 	
+protected:
+	/** Events */
+	virtual void BeginPlay() override;
+
+	/** MCUI_Game_Layout Widget Object */
+	UPROPERTY(BlueprintReadOnly, Category = "HUD")
+	TObjectPtr<UMCUI_Game_Layout> GameLayout;
+	
+	/** MCUI_Game_Layout Widget Class */
+	UPROPERTY(EditDefaultsOnly, Category = "HUD", meta = (AllowedClasses = "MCUI_Game_Layout"))
+	TSubclassOf<UUserWidget> GameLayout_Class;
+
+	/** MCUI_ItemContextMenu Class */
+	UPROPERTY(BlueprintReadWrite, Category = "HUD")
+	TObjectPtr<UMCUI_ItemContextMenu> ItemContextMenu;
+	
+	/** MCUI_ItemContextMenu Class */
+	UPROPERTY(EditDefaultsOnly, Category = "HUD", meta = (AllowedClasses = "MCUI_ItemContextMenu"))
+	TSubclassOf<UUserWidget> ItemContextMenu_Class;
 };
