@@ -16,11 +16,11 @@ class MINECOREUI_API UMCUI_Game_Layout : public UCommonActivatableWidget
 public:
 	/** Push Inventory */
 	UFUNCTION(BlueprintCallable, Category = "Game Layout")
-	void PushInventory(TSubclassOf<UCommonActivatableWidget> WidgetClass);
+	void PushInventory(UPARAM(meta = (AllowedClasses = "MCUI_Inventory")) TSubclassOf<UCommonActivatableWidget> WidgetClass) const;
 
 	/** Push Items Info */
 	UFUNCTION(BlueprintCallable, Category = "Game Layout")
-	void PushItemsInfo(TSubclassOf<UCommonActivatableWidget> WidgetClass);
+	void PushItemContextMenu(UPARAM(meta = (AllowedClasses = "MCUI_ItemContextMenu")) TSubclassOf<UCommonActivatableWidget> WidgetClass) const;
 	
 protected:
 	/** Bind Widgets */
@@ -29,5 +29,5 @@ protected:
 	TObjectPtr<UCommonActivatableWidgetStack> CAWS_Inventory;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Game Layout", meta = (BindWidget))
-	TObjectPtr<UCommonActivatableWidgetStack> CAWS_ItemsInfo;
+	TObjectPtr<UCommonActivatableWidgetStack> CAWS_ItemContextInfo;
 };
