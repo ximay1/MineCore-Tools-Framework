@@ -13,6 +13,10 @@ class MINECORE_API AMC_HUD : public AHUD
 	GENERATED_BODY()
 
 public:
+	/** Constructor */
+	AMC_HUD();
+	
+	/** Get GameLayout */
 	UFUNCTION(BlueprintGetter, Category = "HUD")
 	UMCUI_Game_Layout* GetGameLayout() const { return GameLayout; }
 	
