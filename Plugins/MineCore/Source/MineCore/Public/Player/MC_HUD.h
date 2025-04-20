@@ -5,6 +5,7 @@
 #include "MC_HUD.generated.h"
 
 class UMC_ItemContextMenu;
+class UCommonActivatableWidget;
 class UMC_Game_Layout;
 
 UCLASS()
@@ -38,5 +39,5 @@ protected:
 	
 	/** MCUI_ItemContextMenu Class */
 	UPROPERTY(EditDefaultsOnly, Category = "HUD", meta = (AllowedClasses = "MCUI_ItemContextMenu"))
-	TSubclassOf<UUserWidget> ItemContextMenu_Class;
+	TSubclassOf<UCommonActivatableWidget> ItemContextMenu_Class;
 };

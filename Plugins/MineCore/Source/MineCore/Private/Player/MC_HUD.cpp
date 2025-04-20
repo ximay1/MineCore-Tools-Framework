@@ -17,4 +17,7 @@ void AMC_HUD::BeginPlay()
 
 	//Add to viewport
 	GameLayout->AddToViewport();
+
+	//Debug
+	ItemContextMenu = GameLayout->PushItemContextMenu(ItemContextMenu_Class);
 }
