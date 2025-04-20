@@ -4,6 +4,7 @@
 #include "CommonActivatableWidget.h"
 #include "MC_ItemContextMenu.generated.h"
 
+class UCommonButtonBase;
 /** Forward Declarations */
 class UMC_DT_ItemConfig;
 class UVerticalBox;
@@ -25,6 +26,9 @@ public:
 	virtual void InitializeItemContextMenu(UMC_DT_ItemConfig* ItemConfig);
 
 protected:
+	/** Events */
+	virtual void NativeOnInitialized() override;
+	
 	/** Bind Widgets */
 	/** Vertical Boxes */
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
@@ -58,6 +62,10 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
 	TObjectPtr<UCommonTextBlock> CommonTextBlock_ItemDescription;
+
+	/** Buttons */
+	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
+	TObjectPtr<UCommonButtonBase> W_GenericButton_Close;
 	
 	/** Data asset containing icons for item rarity */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Context Menu Widget")
@@ -65,4 +73,8 @@ protected:
 
 	/** Create Stats for this widget */
 	void CreateStats(UMC_DT_ItemConfig* ItemConfig) const;
+
+private:
+	/** Delegates */
+	void CloseButton_OnClicked_Delegate();
 };

@@ -1,3 +1,4 @@
+#include "CommonButtonBase.h"
 #include "CommonTextBlock.h"
 #include "MC_LogChannels.h"
 #include "Components/Image.h"
@@ -46,6 +47,14 @@ void UMC_ItemContextMenu::InitializeItemContextMenu(UMC_DT_ItemConfig* ItemConfi
 	CommonTextBlock_ItemDescription->SetText(ItemConfig->ItemDescription);
 }
 
+void UMC_ItemContextMenu::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	//Bind Events
+	W_GenericButton_Close->OnClicked().AddUObject(this, &UMC_ItemContextMenu::CloseButton_OnClicked_Delegate);
+}
+
 void UMC_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig) const
 {
 	//Checks if the ItemConfig isn't nullptr
@@ -85,6 +94,12 @@ void UMC_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig) const
 		//Increase Counter
 		Counter++;
 	}
+}
+
+void UMC_ItemContextMenu::CloseButton_OnClicked_Delegate()
+{
+	//Destroy this widget
+	RemoveFromParent();
 }
 
 #undef LOCTEXT_NAMESPACE
