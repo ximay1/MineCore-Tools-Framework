@@ -6,5 +6,5 @@
 UCLASS()
 class MINECORE_API UMineCoreLibrary : public UBlueprintFunctionLibrary
 {
-	
+	GENERATED_BODY()
 };
