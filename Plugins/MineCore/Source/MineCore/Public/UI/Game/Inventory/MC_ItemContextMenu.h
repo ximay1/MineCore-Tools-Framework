@@ -76,5 +76,6 @@ protected:
 
 private:
 	/** Delegates */
+	UFUNCTION()
 	void CloseButton_OnClicked_Delegate();
 };

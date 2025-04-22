@@ -5,8 +5,11 @@
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 #include "Data/Items/MC_DT_ItemConfig.h"
+#include "Player/MC_HUD.h"
 #include "UI/Data/Inventory/MC_DT_RarityIconSet.h"
 #include "UI/Game/Inventory/MC_ItemContextMenu.h"
+#include "UI/Layouts/MC_Game_Layout.h"
+#include "Widgets/CommonActivatableWidgetContainer.h"
 
 #define LOCTEXT_NAMESPACE "ItemContextMenu"
 
@@ -99,7 +102,7 @@ void UMC_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig) const
 void UMC_ItemContextMenu::CloseButton_OnClicked_Delegate()
 {
 	//Destroy this widget
-	RemoveFromParent();
+	Cast<AMC_HUD>(GetOwningPlayer()->GetHUD())->GetGameLayout()->GetCAWS_ItemContextInfo()->RemoveWidget(*this);
 }
 
 #undef LOCTEXT_NAMESPACE

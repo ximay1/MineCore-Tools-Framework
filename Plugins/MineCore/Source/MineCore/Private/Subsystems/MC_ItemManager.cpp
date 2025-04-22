@@ -150,6 +150,7 @@ void UMC_ItemManager::Server_LoadAllItemsFromFolders(const FPrimaryAssetType& Pr
     {
         // Log warning 
         UE_LOGFMT(LogItem, Warning, "Missing tempPrimaryAssetType configuration for: {0}", PrimaryAssetType.ToString());
+        return;
     }
     
     // Configure asset search parameters
