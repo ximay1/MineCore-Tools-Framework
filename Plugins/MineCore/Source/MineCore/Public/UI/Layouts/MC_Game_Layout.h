@@ -25,6 +25,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Game Layout")
 	UMC_ItemContextMenu* PushItemContextMenu(UPARAM(meta = (AllowedClasses = "MCUI_ItemContextMenu")) TSubclassOf<UCommonActivatableWidget> WidgetClass) const;
 
+	/** Get CAWS_Inventory */
+	UFUNCTION(BlueprintCallable, Category = "Game Layout")
+	UCommonActivatableWidgetStack* GetCAWS_Inventory() const { return CAWS_Inventory; }
+	
 	/** Get CAWS_ItemContextInfo */
 	UFUNCTION(BlueprintCallable, Category = "Game Layout")
 	UCommonActivatableWidgetStack* GetCAWS_ItemContextInfo() const { return CAWS_ItemContextInfo; }
