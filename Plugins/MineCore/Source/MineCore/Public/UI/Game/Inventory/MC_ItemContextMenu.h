@@ -65,7 +65,7 @@ protected:
 
 	/** Buttons */
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
-	TObjectPtr<UCommonButtonBase> W_GenericButton_Close;
+	TObjectPtr<UCommonButtonBase> Button_Close;
 	
 	/** Data asset containing icons for item rarity */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Context Menu Widget")

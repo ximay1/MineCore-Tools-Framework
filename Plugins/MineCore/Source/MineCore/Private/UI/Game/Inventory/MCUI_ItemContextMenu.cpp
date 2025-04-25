@@ -56,7 +56,7 @@ void UMC_ItemContextMenu::NativeOnInitialized()
 	Super::NativeOnInitialized();
 
 	//Bind Events
-	W_GenericButton_Close->OnClicked().AddUObject(this, &UMC_ItemContextMenu::CloseButton_OnClicked_Delegate);
+	Button_Close->OnClicked().AddUObject(this, &UMC_ItemContextMenu::CloseButton_OnClicked_Delegate);
 }
 
 void UMC_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig) const
