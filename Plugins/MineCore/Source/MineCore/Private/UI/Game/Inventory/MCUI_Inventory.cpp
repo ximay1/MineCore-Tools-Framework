@@ -1,8 +1,10 @@
 #include "CommonButtonBase.h"
+#include "CommonTextBlock.h"
 #include "MC_LogChannels.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/MC_InventoryComponent.h"
 #include "Player/MC_HUD.h"
+#include "Player/MC_PlayerCharacter.h"
 #include "Player/MC_PlayerController.h"
 #include "UI/Game/Inventory/MC_Inventory.h"
 #include "UI/Game/Inventory/MC_InventorySlot.h"
@@ -27,7 +29,16 @@ void UMC_Inventory::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//float WeightPercent 
+	//Get Player Character
+	AMC_PlayerCharacter* PlayerCharacter = Cast<AMC_PlayerCharacter>(GetOwningPlayer()->GetCharacter()); 
+	
+	//Get Weight as the percent value
+	float MaxWeight = PlayerCharacter->GetMaxWeight();
+	float CurrentWeight = PlayerCharacter->GetInventoryComponent()->GetCurrentItemsWeight();
+	float WeightPercent = MaxWeight != 0.0f ? (CurrentWeight / MaxWeight) * 100.0f : 0.0f;
+	
+	//Set Text
+	CommonTextBlock_WeightPercent->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), WeightPercent)));
 }
 
 void UMC_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryComponent)
