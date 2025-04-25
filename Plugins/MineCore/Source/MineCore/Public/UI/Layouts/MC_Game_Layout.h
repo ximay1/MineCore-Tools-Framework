@@ -8,6 +8,7 @@
 class UCommonActivatableWidgetStack;
 class UMC_ItemContextMenu;
 class UMC_Inventory;
+class UCommonButtonBase;
 
 /** Main Game Layout Widget managing core UI stacks and navigation. */
 UCLASS()
@@ -36,4 +37,8 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Game Layout", meta = (BindWidget))
 	TObjectPtr<UCommonActivatableWidgetStack> CAWS_ItemContextInfo;
+
+	/** Buttons */
+	UPROPERTY(BlueprintReadOnly, Category = "Game Layout", meta = (BindWidget))
+	TObjectPtr<UCommonButtonBase> Button_Bag;
 };
