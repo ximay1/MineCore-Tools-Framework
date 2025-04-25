@@ -30,6 +30,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Mining System Component")
 	FORCEINLINE UMC_MiningSystemComponent* GetMiningSystemComponent() const { return MiningSystemComponent; }
 
+	/** Get MaxWeight */
+	UFUNCTION(BlueprintGetter, Category = "Player")
+	FORCEINLINE float GetMaxWeight() { return MaxWeight; }
+	
 protected:
 	/** InventoryComponent Component */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory Component")
