@@ -21,11 +21,12 @@ protected:
 	/** Events */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
 	virtual void InitializeInventoryWidget(UMC_InventoryComponent* InventoryComponent);
+	virtual void NativeOnInitialized() override;
 	
 	/** Caches all inventory slot widgets matching the naming pattern: [InventorySlotName]_[Index]. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
 	virtual void CacheInventorySlots(UMC_InventoryComponent* InventoryComponent);
-	
+
 	/**
 	 * Base name for inventory slot widgets (without the numeric suffix).
 	 * 
@@ -54,4 +55,9 @@ protected:
 	/** Buttons */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget", meta = (BindWidget))
 	TObjectPtr<UCommonButtonBase> Button_Close;
+
+private:
+	/** Delegates */
+	UFUNCTION()
+	void ButtonClose_OnClicked_Delegate();
 };

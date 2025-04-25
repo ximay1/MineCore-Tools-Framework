@@ -1,13 +1,26 @@
+#include "CommonButtonBase.h"
 #include "MC_LogChannels.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/MC_InventoryComponent.h"
+#include "Player/MC_HUD.h"
+#include "Player/MC_PlayerController.h"
 #include "UI/Game/Inventory/MC_Inventory.h"
 #include "UI/Game/Inventory/MC_InventorySlot.h"
+#include "UI/Layouts/MC_Game_Layout.h"
+#include "Widgets/CommonActivatableWidgetContainer.h"
 
 void UMC_Inventory::InitializeInventoryWidget(UMC_InventoryComponent* InventoryComponent)
 {
 	//Cache Inventory Slots
     CacheInventorySlots(InventoryComponent);
+}
+
+void UMC_Inventory::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	//Bind Events
+	Button_Close->OnClicked().AddUObject(this, &UMC_Inventory::ButtonClose_OnClicked_Delegate);
 }
 
 void UMC_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryComponent)
@@ -69,4 +82,9 @@ void UMC_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryCompone
 			InventorySlots.Num(), 
 			MaxItemInventorySlots);
 	}
+}
+
+void UMC_Inventory::ButtonClose_OnClicked_Delegate()
+{
+	Cast<AMC_PlayerController>(GetOwningPlayer())->GetMCHUD()->GetGameLayout()->GetCAWS_Inventory()->RemoveWidget(*this);
 }
