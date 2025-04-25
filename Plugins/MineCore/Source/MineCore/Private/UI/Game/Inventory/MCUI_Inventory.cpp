@@ -23,6 +23,13 @@ void UMC_Inventory::NativeOnInitialized()
 	Button_Close->OnClicked().AddUObject(this, &UMC_Inventory::ButtonClose_OnClicked_Delegate);
 }
 
+void UMC_Inventory::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	//float WeightPercent 
+}
+
 void UMC_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryComponent)
 {
 	// Tracks the current expected slot index during search

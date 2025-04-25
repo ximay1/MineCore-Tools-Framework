@@ -22,6 +22,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
 	virtual void InitializeInventoryWidget(UMC_InventoryComponent* InventoryComponent);
 	virtual void NativeOnInitialized() override;
+	virtual void NativeConstruct() override;
 	
 	/** Caches all inventory slot widgets matching the naming pattern: [InventorySlotName]_[Index]. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
@@ -42,7 +43,7 @@ protected:
 	/** Cached Inventory Slots */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget")
 	TArray<UMC_InventorySlot*> InventorySlots;
-
+	
 	/** Bind Widgets */
 	/** Progress Bars */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget", meta = (BindWidget))
