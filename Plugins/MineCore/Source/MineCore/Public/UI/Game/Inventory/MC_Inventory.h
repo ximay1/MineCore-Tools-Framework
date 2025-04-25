@@ -7,6 +7,9 @@
 /** Forward Declarations */
 class UMC_InventorySlot;
 class UMC_InventoryComponent;
+class UProgressBar;
+class UCommonTextBlock;
+class UCommonButtonBase;
 
 /** Base class for Inventory Widget */
 UCLASS()
@@ -35,8 +38,20 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Widget")
 	FString InventorySlotName = "W_InventorySlot";
 	
-	/** Bind Widgets */
 	/** Cached Inventory Slots */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget")
 	TArray<UMC_InventorySlot*> InventorySlots;
+
+	/** Bind Widgets */
+	/** Progress Bars */
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget", meta = (BindWidget))
+	TObjectPtr<UProgressBar> ProgressBar_Weight;
+
+	/** Text Blocks */
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget", meta = (BindWidget))
+	TObjectPtr<UCommonTextBlock> CommonTextBlock_WeightPercent;
+
+	/** Buttons */
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget", meta = (BindWidget))
+	TObjectPtr<UCommonButtonBase> Button_Close;
 };
