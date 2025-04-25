@@ -28,8 +28,15 @@ public:
 	/** Get CAWS_ItemContextInfo */
 	UFUNCTION(BlueprintCallable, Category = "Game Layout")
 	UCommonActivatableWidgetStack* GetCAWS_ItemContextInfo() const { return CAWS_ItemContextInfo; }
-	
+
 protected:
+	/** Events */
+	virtual void NativeOnInitialized() override;
+
+	/** MC_Inventory Widget class */
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Game Layout", meta = (AllowedClasses = "MC_Inventory"))
+	TSubclassOf<UCommonActivatableWidget> Inventory_Class;
+	
 	/** Bind Widgets */
 	/** UCommonActivatableWidgetStack */
 	UPROPERTY(BlueprintReadOnly, Category = "Game Layout", meta = (BindWidget))
@@ -41,4 +48,9 @@ protected:
 	/** Buttons */
 	UPROPERTY(BlueprintReadOnly, Category = "Game Layout", meta = (BindWidget))
 	TObjectPtr<UCommonButtonBase> Button_Bag;
+
+private:
+	/** Delegates */
+	UFUNCTION()
+	void ButtonBag_OnClicked_Delegate();
 };
