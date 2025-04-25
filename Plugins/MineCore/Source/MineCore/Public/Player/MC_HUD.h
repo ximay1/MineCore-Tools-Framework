@@ -30,7 +30,7 @@ protected:
 	TObjectPtr<UMC_Game_Layout> GameLayout;
 	
 	/** MCUI_Game_Layout Widget Class */
-	UPROPERTY(EditDefaultsOnly, Category = "HUD", meta = (AllowedClasses = "MCUI_Game_Layout"))
+	UPROPERTY(EditDefaultsOnly, Category = "HUD", meta = (AllowedClasses = "MC_Game_Layout"))
 	TSubclassOf<UUserWidget> GameLayout_Class;
 
 	/** MCUI_ItemContextMenu Class */
@@ -38,6 +38,6 @@ protected:
 	TObjectPtr<UMC_ItemContextMenu> ItemContextMenu;
 	
 	/** MCUI_ItemContextMenu Class */
-	UPROPERTY(EditDefaultsOnly, Category = "HUD", meta = (AllowedClasses = "MCUI_ItemContextMenu"))
+	UPROPERTY(EditDefaultsOnly, Category = "HUD", meta = (AllowedClasses = "MC_ItemContextMenu"))
 	TSubclassOf<UCommonActivatableWidget> ItemContextMenu_Class;
 };
