@@ -43,11 +43,12 @@ void UMC_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryCompone
 
 				//Get Item amd Initialize Inventory Slot
 				InventorySlot->InitializeInventorySlotWidget(InventoryComponent->GetAt(FoundInventorySlots));
-					
+
+				//Add InventorySlot to InventorySlots
 				InventorySlots.Add(InventorySlot);
-				FoundInventorySlots++; // Increment only after successful validation
-				
-				// DEV NOTE: We increment index only when finding EXACT sequence (0,1,2...)
+
+				// Increment only after successful validation
+				FoundInventorySlots++;
 			}
 			else
 			{
