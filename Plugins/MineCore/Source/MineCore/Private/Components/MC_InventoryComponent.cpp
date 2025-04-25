@@ -497,6 +497,12 @@ void UMC_InventoryComponent::OnRep_Items_Array()
 	{
 		// Add the item into the TMap using the slot as the key.
 		Items.Add(Element.Slot, Element.Item);
+
+		//Reset CurrentItemsWeight
+		CurrentItemsWeight = {};
+
+		//Add up the weights
+		CurrentItemsWeight += Element.Item->GetItemConfig()->Weight;
 	}
 	
 	// Refresh the inventory widget to reflect the changes

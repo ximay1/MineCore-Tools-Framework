@@ -335,4 +335,8 @@ protected:
 	/** Maximum number of slots in the inventory */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Component")
 	uint8 MaxSlots;
+
+	/** Current total weight of all items in the inventory. */
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
+	float CurrentItemsWeight = {};
 };
