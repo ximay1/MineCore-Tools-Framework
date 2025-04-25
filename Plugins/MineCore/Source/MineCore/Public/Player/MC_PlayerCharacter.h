@@ -38,4 +38,8 @@ protected:
 	/** Mining System Component */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Mining System Component")
 	TObjectPtr<UMC_MiningSystemComponent> MiningSystemComponent;
+
+	/** Max Weight of items which can be collected by player */
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Player")
+	float MaxWeight = {};
 };
