@@ -207,6 +207,10 @@ public:
 	/** Get Item from the given (slot) index */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
 	FORCEINLINE UMC_Item* GetAt(const int32 Slot) const { return Items.FindRef(Slot); }
+
+	/** Get CurrentItemsWeight */
+	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
+	FORCEINLINE float GetCurrentItemsWeight() { return CurrentItemsWeight; }
 	
 	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
