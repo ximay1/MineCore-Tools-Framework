@@ -178,8 +178,6 @@ UCLASS(ClassGroup=(MineCore), meta=(BlueprintSpawnableComponent))
 class MINECORE_API UMC_InventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
-
-	// TODO: Change UUserWidget class to the base InventoryWidget class
 	
 public:	
 	/** Constructor */
@@ -187,14 +185,6 @@ public:
 
 	/** Events */
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	/** Creates the inventory */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	virtual void Client_CreateInventory();
-
-	/** Refresh Widget Inventory */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
-	virtual void Client_RefreshInventoryWidget();
 
 	/** Get Max Slots */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
@@ -304,14 +294,6 @@ public:
 	FORCEINLINE void BP_GetItemsArray(TArray<FInventorySlot>& OutResult) const { OutResult = GetItemsArray(); }
 	
 protected:
-	/** Widget class representing the Inventory */ 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Component")
-	TSubclassOf<UUserWidget> InventoryClass;
-
-	/** Cached Pointer to the Inventory widget */
-	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
-	TObjectPtr<UUserWidget> InventoryWidget;
-
 	/** Map of items in the inventory. uint8 represents a number of slot. */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Component")
 	TMap<uint8, UMC_Item*> Items;

@@ -56,19 +56,6 @@ void UMC_InventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 	DOREPLIFETIME_CONDITION(UMC_InventoryComponent, Items_Array, COND_OwnerOnly);
 }
 
-void UMC_InventoryComponent::Client_CreateInventory()
-{
-	//TODO: Create Inventory
-}
-
-void UMC_InventoryComponent::Client_RefreshInventoryWidget()
-{
-	/*if (InventoryWidget)
-	{
-		TODO: InventoryWidget->RefreshWidget()
-	}*/
-}
-
 bool UMC_InventoryComponent::FindValidSlot(uint8& OutSlot) const
 {
 	// Iterate through all the slots in the inventory
@@ -504,9 +491,6 @@ void UMC_InventoryComponent::OnRep_Items_Array()
 		//Add up the weights
 		CurrentItemsWeight += Element.Item->GetItemConfig()->Weight;
 	}
-	
-	// Refresh the inventory widget to reflect the changes
-	Client_RefreshInventoryWidget();
 
 	//Get Mining System Component
 	UMC_MiningSystemComponent* MiningSystemComponent = GetOwner()->FindComponentByClass<UMC_MiningSystemComponent>();
