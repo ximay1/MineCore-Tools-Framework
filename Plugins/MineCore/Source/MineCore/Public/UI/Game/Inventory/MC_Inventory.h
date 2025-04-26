@@ -43,6 +43,10 @@ protected:
 	/** Cached Inventory Slots */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget")
 	TArray<UMC_InventorySlot*> InventorySlots;
+
+	/** Updates the inventory weight UI elements, including progress bar and text block. */
+	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
+	void UpdateInventoryWeightUI();
 	
 	/** Bind Widgets */
 	/** Progress Bars */

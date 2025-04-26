@@ -3,6 +3,7 @@
 #include "MC_LogChannels.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/MC_InventoryComponent.h"
+#include "Components/ProgressBar.h"
 #include "Player/MC_HUD.h"
 #include "Player/MC_PlayerCharacter.h"
 #include "Player/MC_PlayerController.h"
@@ -29,16 +30,7 @@ void UMC_Inventory::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//Get Player Character
-	AMC_PlayerCharacter* PlayerCharacter = Cast<AMC_PlayerCharacter>(GetOwningPlayer()->GetCharacter()); 
-	
-	//Get Weight as the percent value
-	float MaxWeight = PlayerCharacter->GetMaxWeight();
-	float CurrentWeight = PlayerCharacter->GetInventoryComponent()->GetCurrentItemsWeight();
-	float WeightPercent = MaxWeight != 0.0f ? (CurrentWeight / MaxWeight) * 100.0f : 0.0f;
-	
-	//Set Text
-	CommonTextBlock_WeightPercent->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), WeightPercent)));
+	UpdateInventoryWeightUI();
 }
 
 void UMC_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryComponent)
@@ -101,6 +93,23 @@ void UMC_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryCompone
 			InventorySlots.Num(), 
 			MaxItemInventorySlots);
 	}
+}
+
+void UMC_Inventory::UpdateInventoryWeightUI()
+{
+	//Get Player Character
+	AMC_PlayerCharacter* PlayerCharacter = Cast<AMC_PlayerCharacter>(GetOwningPlayer()->GetCharacter()); 
+	
+	//Get Weight as the percent value
+	float MaxWeight = PlayerCharacter->GetMaxWeight();
+	float CurrentWeight = PlayerCharacter->GetInventoryComponent()->GetCurrentItemsWeight();
+	float WeightPercent = MaxWeight != 0.0f ? (CurrentWeight / MaxWeight) : 0.0f;
+	
+	//Set Text
+	CommonTextBlock_WeightPercent->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), WeightPercent * 100.0f)));
+
+	//Set percent in the progress bar
+	ProgressBar_Weight->SetPercent(FMath::Max(1.0f, WeightPercent));
 }
 
 void UMC_Inventory::ButtonClose_OnClicked_Delegate()
