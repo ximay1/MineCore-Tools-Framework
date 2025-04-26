@@ -56,7 +56,7 @@ void UMC_ItemContextMenu::NativeOnInitialized()
 	Super::NativeOnInitialized();
 
 	//Bind Events
-	Button_Close->OnClicked().AddUObject(this, &UMC_ItemContextMenu::CloseButton_OnClicked_Delegate);
+	Button_Close->OnClicked().AddUObject(this, &UMC_ItemContextMenu::HandleCloseButtonClicked);
 }
 
 void UMC_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig) const
@@ -100,7 +100,7 @@ void UMC_ItemContextMenu::CreateStats(UMC_DT_ItemConfig* ItemConfig) const
 	}
 }
 
-void UMC_ItemContextMenu::CloseButton_OnClicked_Delegate()
+void UMC_ItemContextMenu::HandleCloseButtonClicked()
 {
 	//Destroy this widget
 	Cast<AMC_PlayerController>(GetOwningPlayer())->GetHUD<AMC_HUD>()->GetGameLayout()->GetCAWS_ItemContextInfo()->RemoveWidget(*this);

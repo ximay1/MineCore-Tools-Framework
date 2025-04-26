@@ -25,8 +25,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Slot Widget")
 	TObjectPtr<UMC_Item> CachedItem;
 
-	/** Bind Widgets */
-	/** InventorySlotButtons */
+	/** UI Elements - Bound in Blueprint */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Slot Widget")
 	TObjectPtr<UMC_InventorySlotButton> InventorySlotButton;
 };

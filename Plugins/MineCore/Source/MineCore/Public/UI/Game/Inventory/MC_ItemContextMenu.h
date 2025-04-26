@@ -4,7 +4,6 @@
 #include "CommonActivatableWidget.h"
 #include "MC_ItemContextMenu.generated.h"
 
-class UCommonButtonBase;
 /** Forward Declarations */
 class UMC_DT_ItemConfig;
 class UVerticalBox;
@@ -13,6 +12,7 @@ class UCommonTextStyle;
 class UCommonTextScrollStyle;
 class UImage;
 class UMC_DT_RarityIconSet;
+class UCommonButtonBase;
 
 /** Context Menu Widget for displaying detailed item information and actions. */
 UCLASS()
@@ -26,18 +26,16 @@ public:
 	virtual void InitializeItemContextMenu(UMC_DT_ItemConfig* ItemConfig);
 
 protected:
-	/** Events */
+	/** UCommonActivatableWidget */
 	virtual void NativeOnInitialized() override;
 	
-	/** Bind Widgets */
-	/** Vertical Boxes */
+	/** UI Elements - Bound in Blueprint */
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
 	TObjectPtr<UVerticalBox> VerticalBox_Stats;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
 	TObjectPtr<UVerticalBox> VerticalBox_Description;
-
-	/** Images */
+	
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
 	TObjectPtr<UImage> Image_ItemIcon_Background;
 	
@@ -46,8 +44,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
 	TObjectPtr<UImage> Image_ItemRarity;
-
-	/** Common Text Blocks */
+	
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
 	TObjectPtr<UCommonTextBlock> CommonTextBlock_ItemName;
 
@@ -62,8 +59,7 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
 	TObjectPtr<UCommonTextBlock> CommonTextBlock_ItemDescription;
-
-	/** Buttons */
+	
 	UPROPERTY(BlueprintReadOnly, Category = "Item Context Menu Widget", meta = (BindWidget))
 	TObjectPtr<UCommonButtonBase> Button_Close;
 	
@@ -75,7 +71,7 @@ protected:
 	void CreateStats(UMC_DT_ItemConfig* ItemConfig) const;
 
 private:
-	/** Delegates */
+	/** Called when close button is clicked */
 	UFUNCTION()
-	void CloseButton_OnClicked_Delegate();
+	void HandleCloseButtonClicked();
 };
