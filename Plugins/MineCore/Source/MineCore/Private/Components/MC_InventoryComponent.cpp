@@ -491,7 +491,9 @@ void UMC_InventoryComponent::OnRep_Items_Array()
 		//Add up the weights
 		CurrentItemsWeight += Element.Item->GetItemConfig()->Weight;
 	}
-
+	
+	OnInventoryUpdatedEvent.Broadcast();
+	
 	//Get Mining System Component
 	UMC_MiningSystemComponent* MiningSystemComponent = GetOwner()->FindComponentByClass<UMC_MiningSystemComponent>();
 	
