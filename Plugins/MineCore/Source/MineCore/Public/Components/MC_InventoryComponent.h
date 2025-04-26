@@ -253,15 +253,15 @@ public:
 	virtual void Server_SplitItemStack(uint8 SourceSlot, int32 StacksToSplit);
 	
 	/** Get all items in the inventory */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
 	FORCEINLINE void GetInventoryItems(TArray<UMC_Item*>& OutItems) const { Items.GenerateValueArray(OutItems); }
 
 	/** Get all items in the inventory as a map */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
 	FORCEINLINE void GetInventoryItemsMap(TMap<uint8, UMC_Item*>& OutItems) const { OutItems = Items; }
 
 	/** Checks if an item exists in the inventory. Returns UMC_Item if found, otherwise nullptr */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
 	FORCEINLINE UMC_Item* GetItemFromInventory(uint8 Slot) const { return Items.FindRef(Slot); }
 
 	/** Finds items in the inventory based on the given filter criteria. */
@@ -296,7 +296,7 @@ public:
 	FORCEINLINE const TArray<FInventorySlot>& GetItemsArray() const { return Items_Array; }
 
 	/** Get Items_Array BP */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
+	UFUNCTION(BlueprintGetter, Category = "Inventory Component", meta = (DisplayName = "Get Items Array"))
 	FORCEINLINE void BP_GetItemsArray(TArray<FInventorySlot>& OutResult) const { OutResult = GetItemsArray(); }
 	
 protected:
