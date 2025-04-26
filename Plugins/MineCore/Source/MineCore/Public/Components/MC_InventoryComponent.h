@@ -60,6 +60,9 @@ enum class EItemRarity : uint8;
 
 #pragma endregion
 
+/** Broadcasts whenever the inventory content changes. */
+DECLARE_MULTICAST_DELEGATE(FOnInventoryUpdated);
+
 /** 
  * This struct defines the filter criteria for searching items in the inventory.
  */
@@ -201,6 +204,9 @@ public:
 	/** Get CurrentItemsWeight */
 	UFUNCTION(BlueprintGetter, Category = "Inventory Component")
 	FORCEINLINE float GetCurrentItemsWeight() { return CurrentItemsWeight; }
+
+	/** Get OnInventoryUpdatedEvent */
+	FORCEINLINE FOnInventoryUpdated& OnInventoryUpdated() const { return OnInventoryUpdatedEvent; }
 	
 	/** Finds the first available (empty) slot in the inventory. Returns true if a valid slot is found, otherwise false. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Component")
@@ -310,6 +316,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory Component")
 	TSubclassOf<AMC_ItemBag> ItemBagClass;
 
+	/** Events */
+	mutable FOnInventoryUpdated OnInventoryUpdatedEvent;
+	
 #if WITH_EDITORONLY_DATA
 	
 	/** This data asset contains default inventory, it will be applied in the Begin Play */
