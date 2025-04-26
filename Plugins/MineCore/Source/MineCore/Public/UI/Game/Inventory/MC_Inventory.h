@@ -11,65 +11,62 @@ class UProgressBar;
 class UCommonTextBlock;
 class UCommonButtonBase;
 
-/** Base class for Inventory Widget */
+/** Base class for inventory widget that displays player's items. */
 UCLASS()
 class MINECORE_API UMC_Inventory : public UCommonActivatableWidget
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 protected:
-	/** Events */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
-	virtual void InitializeInventoryWidget(UMC_InventoryComponent* InventoryComponent);
-	virtual void NativeOnInitialized() override;
-	virtual void NativeConstruct() override;
-	
-	/** Caches all inventory slot widgets matching the naming pattern: [InventorySlotName]_[Index]. */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
-	virtual void CacheInventorySlots(UMC_InventoryComponent* InventoryComponent);
+    //~ Begin UCommonActivatableWidget Interface
+    virtual void NativeOnInitialized() override;
+    virtual void NativeConstruct() override;
+    //~ End UCommonActivatableWidget Interface
 
-	/**
-	 * Base name for inventory slot widgets (without the numeric suffix).
-	 * 
-	 * Example: 
-	 * - If your slots are named "W_InventorySlot_0", "W_InventorySlot_1" etc.
-	 * - Enter here: "W_InventorySlot"
-	 * 
-	 * The system will automatically look for widgets following the pattern [InventorySlotName]_[Index]
-	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory Widget")
-	FString InventorySlotName = "W_InventorySlot";
-	
-	/** Cached Inventory Slots */
-	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget")
-	TArray<UMC_InventorySlot*> InventorySlots;
+    /** Cached Inventory Component */
+    UPROPERTY(BlueprintReadOnly, Category = "Inventory")
+    TWeakObjectPtr<UMC_InventoryComponent> InventoryComponent;
 
-	/** Updates the inventory weight UI elements, including progress bar and text block. */
-	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
-	void UpdateInventoryWeightUI();
+    /** 
+     * Base name for inventory slot widgets (without numeric suffix).
+     * Example: If slots are named "W_InventorySlot_0", "W_InventorySlot_1",
+     * enter "W_InventorySlot" here.
+     */
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory UI")
+    FString InventorySlotName = "W_InventorySlot";
 
-	/** Cached pointer to the inventory, shouldn't be nullptr. */
-	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget")
-	TWeakObjectPtr<UMC_InventoryComponent> InventoryComponent;
-	
-	/** Bind Widgets */
-	/** Progress Bars */
-	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget", meta = (BindWidget))
-	TObjectPtr<UProgressBar> ProgressBar_Weight;
+    /** Cached inventory slot widgets */
+    UPROPERTY(BlueprintReadOnly, Category = "Inventory UI")
+    TArray<UMC_InventorySlot*> InventorySlots;
 
-	/** Text Blocks */
-	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget", meta = (BindWidget))
-	TObjectPtr<UCommonTextBlock> CommonTextBlock_WeightPercent;
+    /** UI Elements - Bound in Blueprint */
+    UPROPERTY(BlueprintReadOnly, Category = "Inventory UI", meta = (BindWidget))
+    TObjectPtr<UProgressBar> ProgressBar_Weight;
 
-	/** Buttons */
-	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget", meta = (BindWidget))
-	TObjectPtr<UCommonButtonBase> Button_Close;
+    UPROPERTY(BlueprintReadOnly, Category = "Inventory UI", meta = (BindWidget))
+    TObjectPtr<UCommonTextBlock> CommonTextBlock_WeightPercent;
+
+    UPROPERTY(BlueprintReadOnly, Category = "Inventory UI", meta = (BindWidget))
+    TObjectPtr<UCommonButtonBase> Button_Close;
+
+    /** Initializes the widget with inventory component reference. */
+    UFUNCTION(BlueprintCallable, Category = "Inventory")
+    virtual void InitializeInventoryWidget();
+
+    /** Caches all inventory slot widgets matching the naming pattern [InventorySlotName]_[Index]. */
+    UFUNCTION(BlueprintCallable, Category = "Inventory")
+    virtual void CacheInventorySlots();
+
+    /** Updates the weight display including progress bar and text */
+    UFUNCTION(BlueprintCallable, Category = "Inventory UI")
+    void UpdateInventoryWeightUI();
 
 private:
-	/** Delegates */
-	UFUNCTION()
-	void ButtonClose_OnClicked_Delegate();
+    /** Called when close button is clicked */
+    UFUNCTION()
+    void HandleCloseButtonClicked();
 
-	UFUNCTION()
-	void InventoryUpdated_Delegate();
+    /** Called when inventory content changes */
+    UFUNCTION()
+    void HandleInventoryUpdated();
 };

@@ -12,10 +12,10 @@
 #include "UI/Layouts/MC_Game_Layout.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 
-void UMC_Inventory::InitializeInventoryWidget(UMC_InventoryComponent* InventoryComponent)
+void UMC_Inventory::InitializeInventoryWidget()
 {
 	//Cache Inventory Slots
-    CacheInventorySlots(InventoryComponent);
+    CacheInventorySlots();
 }
 
 void UMC_Inventory::NativeOnInitialized()
@@ -23,8 +23,8 @@ void UMC_Inventory::NativeOnInitialized()
 	Super::NativeOnInitialized();
 
 	//Bind Events
-	Button_Close->OnClicked().AddUObject(this, &UMC_Inventory::ButtonClose_OnClicked_Delegate);
-	InventoryComponent->OnInventoryUpdated().AddUObject(this, &UMC_Inventory::InventoryUpdated_Delegate);
+	Button_Close->OnClicked().AddUObject(this, &UMC_Inventory::HandleCloseButtonClicked);
+	InventoryComponent->OnInventoryUpdated().AddUObject(this, &UMC_Inventory::HandleInventoryUpdated);
 }
 
 void UMC_Inventory::NativeConstruct()
@@ -35,14 +35,14 @@ void UMC_Inventory::NativeConstruct()
 	UpdateInventoryWeightUI();
 }
 
-void UMC_Inventory::CacheInventorySlots(UMC_InventoryComponent* InventoryComponent)
+void UMC_Inventory::CacheInventorySlots()
 {
 	// Tracks the current expected slot index during search
 	uint8 FoundInventorySlots = 0;
 	const uint8 MaxItemInventorySlots = InventoryComponent->GetMaxSlots();
 	
 	// Iterate through all widgets in this widget's hierarchy
-	WidgetTree->ForEachWidget([this, &FoundInventorySlots, InventoryComponent](UWidget* Widget)
+	WidgetTree->ForEachWidget([this, &FoundInventorySlots](UWidget* Widget)
 	{
 		// Match widgets following the naming pattern: [InventorySlotName]_[Index]
 		if (Widget->GetName() == FString::Printf(TEXT("%s_%d"), *InventorySlotName, FoundInventorySlots))
@@ -114,12 +114,12 @@ void UMC_Inventory::UpdateInventoryWeightUI()
 	ProgressBar_Weight->SetPercent(FMath::Max(1.0f, WeightPercent));
 }
 
-void UMC_Inventory::ButtonClose_OnClicked_Delegate()
+void UMC_Inventory::HandleCloseButtonClicked()
 {
 	Cast<AMC_PlayerController>(GetOwningPlayer())->GetHUD<AMC_HUD>()->GetGameLayout()->GetCAWS_Inventory()->RemoveWidget(*this);
 }
 
-void UMC_Inventory::InventoryUpdated_Delegate()
+void UMC_Inventory::HandleInventoryUpdated()
 {
 	//Update weight UI elements
 	UpdateInventoryWeightUI();

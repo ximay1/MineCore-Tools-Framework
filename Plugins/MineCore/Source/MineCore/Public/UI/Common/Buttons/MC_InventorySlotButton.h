@@ -20,8 +20,7 @@ public:
 	virtual void InitializeInventorySlotButtonWidget(UMC_Item* Item);
 
 protected:
-	/** Bind Widgets */
-	/** Images */
+	/** UI Elements - Bound in Blueprint */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Slot Button Widget", meta = (BindWidget))
 	TObjectPtr<UImage> Image_Background;
 };
