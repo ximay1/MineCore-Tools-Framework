@@ -24,6 +24,7 @@ void UMC_Inventory::NativeOnInitialized()
 
 	//Bind Events
 	Button_Close->OnClicked().AddUObject(this, &UMC_Inventory::ButtonClose_OnClicked_Delegate);
+	InventoryComponent->OnInventoryUpdated().AddUObject(this, &UMC_Inventory::InventoryUpdated_Delegate);
 }
 
 void UMC_Inventory::NativeConstruct()
@@ -116,4 +117,10 @@ void UMC_Inventory::UpdateInventoryWeightUI()
 void UMC_Inventory::ButtonClose_OnClicked_Delegate()
 {
 	Cast<AMC_PlayerController>(GetOwningPlayer())->GetHUD<AMC_HUD>()->GetGameLayout()->GetCAWS_Inventory()->RemoveWidget(*this);
+}
+
+void UMC_Inventory::InventoryUpdated_Delegate()
+{
+	//Update weight UI elements
+	UpdateInventoryWeightUI();
 }

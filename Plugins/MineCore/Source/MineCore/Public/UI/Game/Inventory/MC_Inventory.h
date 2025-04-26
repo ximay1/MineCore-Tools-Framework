@@ -47,6 +47,10 @@ protected:
 	/** Updates the inventory weight UI elements, including progress bar and text block. */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Widget")
 	void UpdateInventoryWeightUI();
+
+	/** Cached pointer to the inventory, shouldn't be nullptr. */
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Widget")
+	TWeakObjectPtr<UMC_InventoryComponent> InventoryComponent;
 	
 	/** Bind Widgets */
 	/** Progress Bars */
@@ -65,4 +69,7 @@ private:
 	/** Delegates */
 	UFUNCTION()
 	void ButtonClose_OnClicked_Delegate();
+
+	UFUNCTION()
+	void InventoryUpdated_Delegate();
 };
