@@ -22,6 +22,9 @@ void UMC_Inventory::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
+	//Cache Inventory Component
+	InventoryComponent = Cast<AMC_PlayerCharacter>(GetOwningPlayer()->GetCharacter())->GetInventoryComponent();
+	
 	//Bind Events
 	Button_Close->OnClicked().AddUObject(this, &UMC_Inventory::HandleCloseButtonClicked);
 	InventoryComponent->OnInventoryUpdated().AddUObject(this, &UMC_Inventory::HandleInventoryUpdated);
@@ -116,7 +119,7 @@ void UMC_Inventory::UpdateInventoryWeightUI()
 
 void UMC_Inventory::HandleCloseButtonClicked()
 {
-	Cast<AMC_PlayerController>(GetOwningPlayer())->GetHUD<AMC_HUD>()->GetGameLayout()->GetCAWS_Inventory()->RemoveWidget(*this);
+	GetOwningPlayer()->GetHUD<AMC_HUD>()->GetGameLayout()->GetCAWS_Inventory()->RemoveWidget(*this);
 }
 
 void UMC_Inventory::HandleInventoryUpdated()
