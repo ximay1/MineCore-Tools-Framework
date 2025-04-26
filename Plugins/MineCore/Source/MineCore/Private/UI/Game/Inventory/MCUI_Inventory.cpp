@@ -114,7 +114,7 @@ void UMC_Inventory::UpdateInventoryWeightUI()
 	CommonTextBlock_WeightPercent->SetText(FText::FromString(FString::Printf(TEXT("%.0f%%"), WeightPercent * 100.0f)));
 
 	//Set percent in the progress bar
-	ProgressBar_Weight->SetPercent(FMath::Max(1.0f, WeightPercent));
+	ProgressBar_Weight->SetPercent(FMath::Clamp(WeightPercent, 0.0f, 1.0f));
 }
 
 void UMC_Inventory::HandleCloseButtonClicked()
