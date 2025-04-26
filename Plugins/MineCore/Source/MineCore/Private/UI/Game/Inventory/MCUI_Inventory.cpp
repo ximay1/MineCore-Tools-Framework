@@ -115,5 +115,5 @@ void UMC_Inventory::UpdateInventoryWeightUI()
 
 void UMC_Inventory::ButtonClose_OnClicked_Delegate()
 {
-	Cast<AMC_PlayerController>(GetOwningPlayer())->GetMCHUD()->GetGameLayout()->GetCAWS_Inventory()->RemoveWidget(*this);
+	Cast<AMC_PlayerController>(GetOwningPlayer())->GetHUD<AMC_HUD>()->GetGameLayout()->GetCAWS_Inventory()->RemoveWidget(*this);
 }
