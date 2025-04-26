@@ -30,6 +30,7 @@ void UMC_Inventory::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	//Initialize weight UI elements
 	UpdateInventoryWeightUI();
 }
 
