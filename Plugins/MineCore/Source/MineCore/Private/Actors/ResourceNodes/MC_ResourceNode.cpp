@@ -5,7 +5,7 @@
 #include "MineCore/Public/Data/ResourceNodes/MC_DT_ResourceNodeConfig.h"
 #include "Player/MC_PlayerCharacter.h"
 
-AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(0))
+AMC_ResourceNode::AMC_ResourceNode() : ResourceNodeState(static_cast<EResourceNodeState>(2))
 {
     //Set Parameters
     PrimaryActorTick.bCanEverTick = false;
@@ -36,19 +36,11 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation()
 
 void AMC_ResourceNode::Server_Initialize(const FPrimaryAssetId& NewResourceNodeConfigID)
 {
-#if !UE_BUILD_SHIPPING
-    // Valid if the ResourceNodeConfigId is set
-    if (!ResourceNodeConfigID.IsValid())
-    {
-        //Log Error
-        UE_LOGFMT(LogResourceNode, Error, "ResourceNodeConfigID is not valid. File - {0}, Line - {1}", __FILE__, __LINE__);
+    checkf(NewResourceNodeConfigID.IsValid(), TEXT("ResourceNodeConfigID is not valid"));
     
-        // If the config is invalid, destroy this actor to prevent issues
-        Destroy(true);
-        return;
-    }
-#endif
-
+    //Set ResourceNodeConfigID
+    ResourceNodeConfigID = NewResourceNodeConfigID;
+    
     //Create delegate
     FStreamableDelegate PrimaryDataAssetDelegate = FStreamableDelegate::CreateLambda([this]()
     {
