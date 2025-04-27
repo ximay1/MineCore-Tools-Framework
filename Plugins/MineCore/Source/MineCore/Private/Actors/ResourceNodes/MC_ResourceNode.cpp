@@ -34,16 +34,7 @@ void AMC_ResourceNode::Client_DisplayMiningDeniedWidget_Implementation()
     UE_LOGFMT(LogResourceNode, Error, "Displaying mining denied widget on the client");
 }
 
-void AMC_ResourceNode::Server_InitializeProperties(const FPrimaryAssetId& NewResourceNodeConfigID)
-{
-    //Check if the NewPrimaryAssetID is valid
-    if (NewResourceNodeConfigID.IsValid())
-    {
-        ResourceNodeConfigID = NewResourceNodeConfigID;
-    }
-}
-
-void AMC_ResourceNode::Server_Initialize()
+void AMC_ResourceNode::Server_Initialize(const FPrimaryAssetId& NewResourceNodeConfigID)
 {
 #if !UE_BUILD_SHIPPING
     // Valid if the ResourceNodeConfigId is set

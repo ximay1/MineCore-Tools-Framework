@@ -26,14 +26,10 @@ public:
     /** Displays a widget informing the player that mining is denied on the client-side. */
     UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Resource Node")
     virtual void Client_DisplayMiningDeniedWidget();
-
-    /** Initialize properties in the resource node */
-    UFUNCTION(BlueprintCallable, Category = "Resource Node")
-    virtual void Server_InitializeProperties(const FPrimaryAssetId& NewResourceNodeConfigID);
-
+    
     /** Initialize resource node */
     UFUNCTION(BlueprintCallable, Category = "Resource Node")
-    virtual void Server_Initialize();
+    virtual void Server_Initialize(const FPrimaryAssetId& NewResourceNodeConfigID);
     
     /** Initiates the mining process on the node. */
     UFUNCTION(BlueprintCallable, Server, Reliable, Category = "Resource Node")
