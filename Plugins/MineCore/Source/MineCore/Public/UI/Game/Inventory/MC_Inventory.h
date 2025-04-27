@@ -18,10 +18,10 @@ class MINECORE_API UMC_Inventory : public UCommonActivatableWidget
     GENERATED_BODY()
 
 protected:
-    /** ~ Begin UCommonActivatableWidget Interface */
+    /** ~ Begin UUserWidget Interface */
     virtual void NativeOnInitialized() override;
     virtual void NativeConstruct() override;
-    /** ~ End UCommonActivatableWidget Interface */
+    /** ~ End UUserWidget Interface */
 
     /** Cached Inventory Component */
     UPROPERTY(BlueprintReadOnly, Category = "Inventory")

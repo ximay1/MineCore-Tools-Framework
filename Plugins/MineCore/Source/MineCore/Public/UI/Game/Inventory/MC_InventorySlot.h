@@ -19,13 +19,26 @@ public:
 	/** Initializes this Inventory Slot Widget with the specified item */
 	UFUNCTION(BlueprintCallable, Category = "Inventory Slot Widget")
 	virtual void InitializeInventorySlotWidget(UMC_Item* Item);
-	
+
 protected:
+	/** ~ Begin UUserWidget Interface */
+	virtual void NativeOnInitialized() override;
+	/** ~ End UUserWidget Interface */
+
+	/** Item Context Menu Class */
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Inventory Slot Widget", meta = (AllowedClasses = "MC_ItemContextMenu"))
+	TSubclassOf<UCommonActivatableWidget> ItemContextMenu_Class;
+	
 	/** The item currently represented by this inventory slot */
 	UPROPERTY(BlueprintReadOnly, Category = "Inventory Slot Widget")
 	TObjectPtr<UMC_Item> CachedItem;
 
 	/** UI Elements - Bound in Blueprint */
-	UPROPERTY(BlueprintReadOnly, Category = "Inventory Slot Widget")
-	TObjectPtr<UMC_InventorySlotButton> InventorySlotButton;
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory Slot Widget", meta = (BindWidget))
+	TObjectPtr<UMC_InventorySlotButton> W_InventorySlotButton;
+
+private:
+	/** Called when W_InventorySlotButton is clicked */
+	UFUNCTION()
+	void HandleInventorySlotButtonClicked();
 };
