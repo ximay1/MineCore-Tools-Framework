@@ -1,6 +1,5 @@
 #include "Actors/ResourceNodes/MC_ResourceNodeSpawner.h"
 
-// Sets default values
 AMC_ResourceNodeSpawner::AMC_ResourceNodeSpawner()
 {
  	//Set Parameters
