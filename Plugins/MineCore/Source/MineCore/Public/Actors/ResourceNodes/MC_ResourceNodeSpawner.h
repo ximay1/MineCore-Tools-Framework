@@ -35,12 +35,12 @@ protected:
 	EResourceSpawnerMode SpawnerMode = EResourceSpawnerMode::RespawnWithCooldown;
 
 	/** Delay between node spawns in RespawnWithCooldown mode (seconds) */
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Resource Node Spanwer", meta=(EditCondition="SpawnerMode == EResourceSpawnerMode::SingleSpawnAndDestroy", Units = "Seconds", ClampMin = "0.1"))
-	float NodeSpawnInterval = 1.0f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Resource Node Spawner", meta=(EditCondition="SpawnerMode == EResourceSpawnerMode::RespawnWithCooldown", Units = "Seconds", ClampMin = "0.1"))
+	float NodeSpawnInterval = 5.0f;
 	
 	/** Delay between node destruction in RespawnWithCooldown mode (seconds) */
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Resource Node Spanwer", meta=(EditCondition="SpawnerMode == EResourceSpawnerMode::SingleSpawnAndDestroy", Units = "Seconds", ClampMin = "0.1"))
-	float NodeDestructionInterval  = 1.0f;
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Resource Node Spawner", meta=(EditCondition="SpawnerMode == EResourceSpawnerMode::RespawnWithCooldown", Units = "Seconds", ClampMin = "0.1"))
+	float NodeDestructionInterval  = 5.0f;
 	
 	/** Initiates spawning of all registered resource nodes */
 	UFUNCTION(BlueprintCallable, Category = "Resource Node Spawner")
