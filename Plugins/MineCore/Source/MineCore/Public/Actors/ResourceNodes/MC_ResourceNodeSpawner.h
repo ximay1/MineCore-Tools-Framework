@@ -41,7 +41,11 @@ protected:
 	/** Delay between node destruction in RespawnWithCooldown mode (seconds) */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Resource Node Spawner", meta=(EditCondition="SpawnerMode == EResourceSpawnerMode::RespawnWithCooldown", Units = "Seconds", ClampMin = "0.1"))
 	float NodeDestructionInterval  = 5.0f;
-	
+
+	/** Number of resource nodes to spawn in a single batch */
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Resource Node Spawner", meta = (ClampMin = "1"))
+	int32 SingleSpawnBatchSize = 1;	
+
 	/** Initiates spawning of all registered resource nodes */
 	UFUNCTION(BlueprintCallable, Category = "Resource Node Spawner")
 	void Server_BeginResourceNodeSpawning();
