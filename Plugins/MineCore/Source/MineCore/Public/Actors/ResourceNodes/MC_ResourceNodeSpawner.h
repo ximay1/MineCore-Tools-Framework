@@ -27,7 +27,7 @@ protected:
 	/** ~ End AActor Interface */
 
 	/** Collection of Primary Asset IDs (Resource Nodes) which will be spawned by this spawner */
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Resource Node Spawner")
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Resource Node Spawner", meta = (AllowedClasses = "MC_DT_ResourceNodeConfig"))
 	TSet<FPrimaryAssetId> ResourceNodeAssetIDs;
 	
 	/** Determines spawner behavior after completing spawn cycle */
