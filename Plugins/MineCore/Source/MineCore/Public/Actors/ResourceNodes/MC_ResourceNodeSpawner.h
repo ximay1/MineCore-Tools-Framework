@@ -46,6 +46,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Resource Node Spawner", meta = (ClampMin = "1"))
 	int32 SingleSpawnBatchSize = 1;	
 
+	/** Maximum distance from spawner where nodes can appear */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource Node Spawner", meta=(ClampMin="0.0", Units="cm"))
+	float MaxSpawnDistance = 1000.0f;
+
 	/** Initiates spawning of all registered resource nodes */
 	UFUNCTION(BlueprintCallable, Category = "Resource Node Spawner")
 	void Server_BeginResourceNodeSpawning();
