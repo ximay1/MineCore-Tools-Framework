@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Actors/ResourceNodes/MC_ResourceNodeSpawner.h"
 
 // Sets default values
