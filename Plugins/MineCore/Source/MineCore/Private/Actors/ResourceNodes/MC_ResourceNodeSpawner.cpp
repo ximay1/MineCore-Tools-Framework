@@ -21,5 +21,16 @@ void AMC_ResourceNodeSpawner::BeginPlay()
 
 void AMC_ResourceNodeSpawner::Server_BeginResourceNodeSpawning()
 {
-	
+	switch (SpawnerMode)
+	{
+		case (EResourceSpawnerMode::SingleSpawnAndDestroy):
+		{
+			
+		}
+		case (EResourceSpawnerMode::RespawnWithCooldown):
+		{
+				
+		}
+			
+	}
 }

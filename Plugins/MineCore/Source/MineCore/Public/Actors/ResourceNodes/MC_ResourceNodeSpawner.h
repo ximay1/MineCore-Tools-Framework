@@ -8,8 +8,8 @@
 UENUM(BlueprintType)
 enum class EResourceSpawnerMode : uint8
 {
-	SingleSpawnAndDestroy	 UMETA(DisplayName = "Single Spawn"),
-	RespawnWithCooldown		 UMETA(DisplayName = "Continuous Respawn")
+	SingleSpawnAndDestroy	 UMETA(DisplayName = "Single Spawn", ToolTip = "Spawns resource nodes once and destroys this spawner immediately after completion"),
+	RespawnWithCooldown		 UMETA(DisplayName = "Continuous Respawn", ToolTip = "Periodically respawns resource nodes (destroying old ones) at configured intervals. Spawner persists indefinitely.")
 };
 
 UCLASS()
